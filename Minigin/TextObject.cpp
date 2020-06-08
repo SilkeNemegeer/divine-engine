@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "SDL_ttf.h"
-
 #include "TextObject.h"
+#include "TransformComponent.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
@@ -10,9 +10,8 @@ divengine::TextObject::TextObject(const std::string& text, const std::shared_ptr
 	: m_NeedsUpdate(true), m_Text(text), m_Font(font), m_Texture(nullptr)
 { }
 
-void divengine::TextObject::Update(float MsPerUpdate)
+void divengine::TextObject::Update()
 {
-	UNREFERENCED_PARAMETER(MsPerUpdate);
 	if (m_NeedsUpdate)
 	{
 		const SDL_Color color = { 255,255,255 }; // only white text is supported now
@@ -35,8 +34,8 @@ void divengine::TextObject::Update(float MsPerUpdate)
 void divengine::TextObject::Render() const
 {
 	if (m_Texture != nullptr)
-	{
-		const auto pos = m_Transform.GetPosition();
+	{	
+		const auto pos = GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 	}
 }
@@ -47,10 +46,3 @@ void divengine::TextObject::SetText(const std::string& text)
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
-
-void divengine::TextObject::SetPosition(const float x, const float y)
-{
-	m_Transform.SetPosition(x, y, 0.0f);
-}
-
-

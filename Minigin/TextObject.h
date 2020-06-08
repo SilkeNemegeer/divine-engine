@@ -1,19 +1,17 @@
 #pragma once
-#include "SceneObject.h"
-#include "Transform.h"
+#include "GameObject.h"
 
 namespace divengine
 {
 	class Font;
 	class Texture2D;
-	class TextObject final : public SceneObject
+	class TextObject final : public GameObject
 	{
 	public:
-		void Update(float MsPerUpdate) override;
+		void Update() override;
 		void Render() const override;
 
 		void SetText(const std::string& text);
-		void SetPosition(float x, float y);
 
 		explicit TextObject(const std::string& text, const std::shared_ptr<Font>& font);
 		virtual ~TextObject() = default;
@@ -24,7 +22,6 @@ namespace divengine
 	private:
 		bool m_NeedsUpdate;
 		std::string m_Text;
-		Transform m_Transform;
 		std::shared_ptr<Font> m_Font;
 		std::shared_ptr<Texture2D> m_Texture;
 	};

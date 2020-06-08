@@ -1,5 +1,4 @@
 #pragma once
-#include "SceneObject.h"
 #include "Structs.h"
 #include <functional>
 namespace divengine
@@ -8,7 +7,7 @@ namespace divengine
 	class TransformComponent;
 
 	//class Texture2D;
-	class GameObject final
+	class GameObject
 	{
 	public:
 		enum class TriggerFlag
@@ -20,8 +19,8 @@ namespace divengine
 
 		typedef std::function<void(GameObject * trigger, GameObject * other, TriggerFlag action)> TriggerCallback;
 
-		void Update();
-		void Render() const;
+		virtual void Update();
+		virtual void Render() const;
 
 		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(const Vector3& newPos);
