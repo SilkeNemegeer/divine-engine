@@ -1,34 +1,48 @@
 #include "MiniginPCH.h"
 #include "TransformComponent.h"
 
-dae::TransformComponent::TransformComponent(const Vector3& position)
+divengine::TransformComponent::TransformComponent(const Vector3& position, float scale)
 	:m_Position{position}
+	,m_Scale{scale}
 {
 }
 
-void dae::TransformComponent::SetPosition(const Vector3& pos)
+void divengine::TransformComponent::SetPosition(const Vector3& pos)
 {
 	m_Position = pos;
 }
 
-void dae::TransformComponent::SetPosition(float x, float y, float z)
+void divengine::TransformComponent::SetPosition(float x, float y, float z)
 {
 	m_Position.x = x;
 	m_Position.y = y;
 	m_Position.z = z;
 }
 
-dae::Vector3 dae::TransformComponent::GetPosition() const
+divengine::Vector3 divengine::TransformComponent::GetPosition() const
 {
 	return m_Position;
 }
 
-void dae::TransformComponent::Update(float MsPerUpdate)
+void divengine::TransformComponent::SetScale(float newScale)
 {
-	UNREFERENCED_PARAMETER(MsPerUpdate);
+	m_Scale = newScale;
 }
 
-void dae::TransformComponent::Render()
+float divengine::TransformComponent::GetScale() const
+{
+	return m_Scale;
+}
+
+void divengine::TransformComponent::Update()
+{
+}
+
+void divengine::TransformComponent::Render()
 {
 
+}
+
+void divengine::TransformComponent::Initialize()
+{
 }

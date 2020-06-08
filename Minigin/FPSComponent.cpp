@@ -4,35 +4,30 @@
 #include "TextComponent.h"
 #include "Time.h"
 
-dae::FPSComponent::FPSComponent()
+divengine::FPSComponent::FPSComponent()
 	:m_FPS{0}
 	,m_MaxTime{0.5f}
 	,m_FPSTimer{0.f}
+	,m_pTextComponent{nullptr}
 {
 }
 
-int dae::FPSComponent::GetFPS() const
+int divengine::FPSComponent::GetFPS() const
 {
 	return m_FPS;
 }
 
-void dae::FPSComponent::Update(float MsPerUpdate)
+void divengine::FPSComponent::Update()
 {
-	UNREFERENCED_PARAMETER(MsPerUpdate);
-	float elapsed = Time::GetInstance().GetDeltaTime();
-	m_FPSTimer += elapsed;
-	if (m_FPSTimer >= m_MaxTime)
-	{
-		m_FPS = int(1.f / Time::GetInstance().GetDeltaTime());
-
-		auto textComp = m_pGameObject->GetComponent<TextComponent>();
-
-		if (textComp)
-			textComp->SetText(std::to_string(m_FPS) + " FPS");
-		m_FPSTimer = 0.f;
-	}
+	if (m_pTextComponent)
+		m_pTextComponent->SetText(std::to_string(Time::GetInstance().GetFps()) + " FPS");
 }
 
-void dae::FPSComponent::Render()
+void divengine::FPSComponent::Initialize()
+{
+	m_pTextComponent = m_pGameObject->GetComponent<TextComponent>();
+}
+
+void divengine::FPSComponent::Render()
 {
 }

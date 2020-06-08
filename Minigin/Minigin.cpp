@@ -6,7 +6,6 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <SDL.h>
 #include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
@@ -14,26 +13,37 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "TransformComponent.h"
+#include "SpriteComponent.h"
 #include "Time.h"
+#include "RigidbodyComponent.h"
+#include "ColliderComponent.h"
+#include "BoxColliderComponent.h"
+#include "CircleColliderComponent.h"
+#include "DebugRenderer.h"
 
 using namespace std;
 using namespace std::chrono;
 
-const float dae::Minigin::MsPerUpdate = 0.02f;
 
-void dae::Minigin::Initialize()
+void divengine::Minigin::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
+	m_GameSettings.m_Height = 480;
+	m_GameSettings.m_Width = 640;
+
+	//m_GameSettings.m_Height = 1080;
+	//m_GameSettings.m_Width = 1920;
+
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		m_GameSettings.m_Width,
+		m_GameSettings.m_Height,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr) 
@@ -41,13 +51,14 @@ void dae::Minigin::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+
 	Renderer::GetInstance().Init(m_Window);
 }
 
 /**
  * Code constructing the scene world starts here
  */
-void dae::Minigin::LoadGame() const
+void divengine::Minigin::LoadGame() const
 {
 	auto& demoScene = SceneManager::GetInstance().CreateScene("Demo");
 
@@ -60,6 +71,41 @@ void dae::Minigin::LoadGame() const
 
 	//Add logo dae
 	go = std::make_shared<GameObject>(Vector3(216, 180, 0));
+	go->AddComponent(new RenderComponent("logo.png"));
+	go->AddComponent(new RigidbodyComponent(true));
+	ColliderComponent* collider = new BoxColliderComponent(glm::vec2(210, 55),glm::vec2(0,10));
+	go->AddComponent(collider);
+	//collider->SetTrigger(true);
+	demoScene.AddObject(go);
+
+	go = std::make_shared<GameObject>(Vector3(216, 0, 0));
+	auto rigidBody = new RigidbodyComponent();
+	//rigidBody->AddForce(glm::vec2(2, 0));
+	go->AddComponent(rigidBody);
+	ColliderComponent* colliderCircle = new CircleColliderComponent(50, glm::vec2(50, 50), false, new PhysicsMaterial2D(0.1f, 0.5f));
+	//ColliderComponent* collider2 = new BoxColliderComponent(glm::vec2(210, 55), glm::vec2(0,10), false, new PhysicsMaterial2D(0.1f, 0.5f));
+	go->SetTriggerCallback([](GameObject* trigger, GameObject* other, GameObject::TriggerFlag flag)
+	{
+			UNREFERENCED_PARAMETER(trigger);
+			UNREFERENCED_PARAMETER(other);
+		switch (flag)
+		{
+		case GameObject::TriggerFlag::enter:
+			std::cout << "Entered\n";
+			break;
+
+		case GameObject::TriggerFlag::leave:
+			std::cout << "Left\n";
+			break;
+
+		case GameObject::TriggerFlag::stay:	
+			std::cout << "Staying\n";
+			break;
+		}
+	});
+	
+	//go->AddComponent(collider2);
+	go->AddComponent(colliderCircle);
 	go->AddComponent(new RenderComponent("logo.png"));
 	demoScene.AddObject(go);
 
@@ -78,9 +124,14 @@ void dae::Minigin::LoadGame() const
 	FPSCounter->AddComponent(new TextComponent("0", font, color));
 	FPSCounter->AddComponent(new FPSComponent());
 	demoScene.AddObject(FPSCounter);
+
+	//Test sprite component
+	auto sprite = std::make_shared<GameObject>(Vector3(100, 50, 0), 5.f);
+	sprite->AddComponent(new SpriteComponent("sprites0.png", 34,16,8, 0.006f));
+	demoScene.AddObject(sprite);
 }
 
-void dae::Minigin::Cleanup()
+void divengine::Minigin::Cleanup()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_Window);
@@ -88,7 +139,7 @@ void dae::Minigin::Cleanup()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run()
+void divengine::Minigin::Run()
 {
 	Initialize();
 
@@ -96,6 +147,11 @@ void dae::Minigin::Run()
 	ResourceManager::GetInstance().Init("../Data/");
 
 	LoadGame();
+	SceneManager::GetInstance().Initialize();
+
+#ifdef _DEBUG
+	DebugRenderer::EnableDebugRendering(true);
+#endif // DEBUG
 
 	try
 	{
@@ -104,25 +160,27 @@ void dae::Minigin::Run()
 		auto& input = InputManager::GetInstance();
 
 		bool doContinue = true;
-		auto lastTime = high_resolution_clock::now();
-		float lag = 0.f;	//update time using fixed timestep (MsPerUpdate = timestep) (lag = totalTime)
+		float timeSinceLastFixedUpdate = 0.f;	//update time using fixed timestep (MsPerUpdate = timestep) (lag = totalTime)
 
+		Time::GetInstance().Start();
 		while (doContinue)
 		{
-			const auto currentTime = high_resolution_clock::now();
-			float deltaTime = duration_cast<duration<float>>(currentTime - lastTime).count();
-			lastTime = currentTime;
-			lag += deltaTime;
-			doContinue = input.ProcessInput();
-			while (lag >= MsPerUpdate)
-			{
-				sceneManager.Update(MsPerUpdate);
+			//Time::GetInstance().StartFrame();
+		
+			Time::GetInstance().Update();
+			timeSinceLastFixedUpdate += Time::GetInstance().GetDeltaTime();
 
-				lag -= MsPerUpdate;
+			doContinue = input.ProcessInput();
+			while (timeSinceLastFixedUpdate >= Time::MS_PER_UPDATE)
+			{
+				//fixed update triggered
+				sceneManager.FixedUpdate();
+				timeSinceLastFixedUpdate -= Time::MS_PER_UPDATE;
 			}
-			Time::GetInstance().SetDeltaTime(deltaTime);
+			sceneManager.Update();
 
 			renderer.Render(); //Will always render
+			//Time::GetInstance().EndFrame();
 		}
 	}
 	catch(const std::exception& exception)
@@ -131,4 +189,10 @@ void dae::Minigin::Run()
 	}
 
 	Cleanup();
+}
+
+divengine::Minigin::GameSettings::GameSettings()
+	:m_Height{}
+	,m_Width{}
+{
 }

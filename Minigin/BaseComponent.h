@@ -1,7 +1,7 @@
 #pragma once
 #include "Structs.h"
 
-namespace dae
+namespace divengine
 {
 	class GameObject;
 
@@ -19,7 +19,8 @@ namespace dae
 
 		GameObject* GetGameObject() const;
 	protected:
-		virtual void Update(float MsPerUpdate) = 0;
+		virtual void Update() = 0;
+		virtual void Initialize() = 0;
 		virtual void Render() = 0;
 
 		GameObject* m_pGameObject;

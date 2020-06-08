@@ -6,13 +6,15 @@
 #include <algorithm>
 #include "TransformComponent.h"
 
-dae::GameObject::GameObject(const Vector3& position)
-:m_Transform(new TransformComponent(position))
+divengine::GameObject::GameObject(const Vector3& position, float scale)
+	:m_Transform(new TransformComponent(position, scale))
+	,m_Tag{""}
+	, m_IsActive(true)
 {
 	AddComponent(m_Transform);
 }
 
-dae::GameObject::~GameObject()
+divengine::GameObject::~GameObject()
 {
 	//delete all the components
 	for (BaseComponent* pComponent: m_pComponents)
@@ -25,17 +27,22 @@ dae::GameObject::~GameObject()
 	}
 }
 
-void dae::GameObject::Update(float MsPerUpdate)
+void divengine::GameObject::Update()
 { 
+	if (!m_IsActive)
+		return;
 	//Update all the components
 	for (BaseComponent* component : m_pComponents)
 	{
-		component->Update(MsPerUpdate);
+		component->Update();
 	}
 }
 
-void dae::GameObject::Render() const
+void divengine::GameObject::Render() const
 {
+	if (!m_IsActive)
+		return;
+
 	const auto pos = m_Transform->GetPosition();
 
 	for (BaseComponent* component : m_pComponents)
@@ -44,22 +51,22 @@ void dae::GameObject::Render() const
 	}
 }
 
-void dae::GameObject::SetPosition(float x, float y, float z)
+void divengine::GameObject::SetPosition(float x, float y, float z)
 {
 	m_Transform->SetPosition(x, y, z);
 }
 
-void dae::GameObject::SetPosition(const Vector3& newPos)
+void divengine::GameObject::SetPosition(const Vector3& newPos)
 {
 	m_Transform->SetPosition(newPos);
 }
 
-dae::Vector3 dae::GameObject::GetPosition() const
+divengine::Vector3 divengine::GameObject::GetPosition() const
 {
 	return m_Transform->GetPosition();
 }
 
-void dae::GameObject::AddComponent(BaseComponent* pComponent)
+void divengine::GameObject::AddComponent(BaseComponent* pComponent)
 {
 	if (pComponent)
 	{
@@ -77,12 +84,33 @@ void dae::GameObject::AddComponent(BaseComponent* pComponent)
 	}
 }
 
-void dae::GameObject::RemoveComponent(BaseComponent* pComponent)
+void divengine::GameObject::RemoveComponent(BaseComponent* pComponent)
 {
 	if (pComponent)
 	{
 		auto it = std::find(m_pComponents.begin(), m_pComponents.end(), pComponent);
 		m_pComponents.erase(it);
 		pComponent->m_pGameObject = nullptr;
+	}
+}
+
+void divengine::GameObject::OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag)
+{
+	if (m_TriggerCallback)
+	{
+		m_TriggerCallback(trigger, other, flag);
+	}
+}
+
+void divengine::GameObject::SetTriggerCallback(TriggerCallback callback)
+{
+	m_TriggerCallback = callback;
+}
+
+void divengine::GameObject::Initialize()
+{
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->Initialize();
 	}
 }

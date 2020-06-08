@@ -3,7 +3,7 @@
 #include "Structs.h"
 #include <SDL.h>
 
-namespace dae
+namespace divengine
 {
 	class Font;
 	class Texture2D;
@@ -21,8 +21,10 @@ namespace dae
 		void SetText(const std::string& text);
 
 	protected:
-		void Update(float MsPerUpdate) override;
+		void Update() override;
 		void Render() override;
+		void Initialize() override;
+
 
 	private:
 		std::string m_Text;

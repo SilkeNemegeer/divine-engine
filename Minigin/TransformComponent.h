@@ -1,12 +1,12 @@
 #pragma once
 #include "BaseComponent.h"
 
-namespace dae
+namespace divengine
 {
 	class TransformComponent : public BaseComponent
 	{
 	public:
-		TransformComponent(const Vector3& position);
+		TransformComponent(const Vector3& position, float scale = 1);
 		virtual ~TransformComponent() = default;
 		TransformComponent(const TransformComponent& other) = delete;
 		TransformComponent(TransformComponent&& other) = delete;
@@ -16,12 +16,16 @@ namespace dae
 		void SetPosition(const Vector3 & pos);
 		void SetPosition(float x, float y, float z);
 		Vector3 GetPosition() const;
+		void SetScale(float newScale);
+		float GetScale() const;
 
 	protected:
-		void Update(float MsPerUpdate) override;
+		void Update() override;
 		void Render() override;
+		void Initialize() override;
 
 	private:
+		float m_Scale;
 		Vector3 m_Position;
 	};
 }

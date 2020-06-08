@@ -1,7 +1,8 @@
 #pragma once
 #include "SceneObject.h"
 #include "Structs.h"
-namespace dae
+#include <functional>
+namespace divengine
 {
 	class BaseComponent;
 	class TransformComponent;
@@ -10,17 +11,34 @@ namespace dae
 	class GameObject final
 	{
 	public:
-		void Update(float MsPerUpdate);
+		enum class TriggerFlag
+		{
+			enter,
+			leave,
+			stay
+		};
+
+		typedef std::function<void(GameObject * trigger, GameObject * other, TriggerFlag action)> TriggerCallback;
+
+		void Update();
 		void Render() const;
 
 		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(const Vector3& newPos);
 		Vector3 GetPosition() const;
 	
+		void SetTag(const std::string& tag) { m_Tag = tag; };
+		const std::string& GetTag() const { return m_Tag; };
+
+		void SetActive(bool isActive) { m_IsActive = isActive; };
+
 		void AddComponent(BaseComponent* pComponent);
 		void RemoveComponent(BaseComponent* pComponent);
+		void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag);
+		void SetTriggerCallback(TriggerCallback callback);
+		void Initialize();
 
-		GameObject(const Vector3& position = Vector3());
+		GameObject(const Vector3& position = Vector3(), float scale = 1);
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -63,7 +81,9 @@ namespace dae
 
 	private:
 		std::vector<BaseComponent*> m_pComponents;
-
+		TriggerCallback m_TriggerCallback;
 		TransformComponent* m_Transform; //a lot of GameObjects have a position, having it here will be more efficient
+		std::string m_Tag;
+		bool m_IsActive;
 	};
 }

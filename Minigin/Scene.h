@@ -1,18 +1,25 @@
 #pragma once
 #include "SceneManager.h"
 
-namespace dae
+namespace divengine
 {
 	class GameObject;
+	class Rigidbody;
+	class ColliderComponent;
 	class Scene
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void AddObject(const std::shared_ptr<GameObject>& object);
+		void AddRigidbody(Rigidbody* pRigidboy);
+		void AddCollider(ColliderComponent* pCollider);
 		std::string Name() const;
 
-		void Update(float MsPerUpdate);
+		std::vector<ColliderComponent*>GetColliders() const{ return m_pColliders; };
+		void Update();
+		void FixedUpdate();
 		void Render() const;
+		void InitializeAll() const;
 
 		~Scene();
 		Scene(const Scene& other) = delete;
@@ -22,10 +29,10 @@ namespace dae
 
 	private: 
 		explicit Scene(const std::string& name);
-
 		std::string m_Name;
 		std::vector < std::shared_ptr<GameObject>> m_Objects{};
-
+		std::vector<Rigidbody*>m_pRigidbodies{};
+		std::vector<ColliderComponent*>m_pColliders{};
 		static unsigned int m_IdCounter; 
 	};
 
