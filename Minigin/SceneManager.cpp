@@ -2,17 +2,28 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void dae::SceneManager::Update(float MsPerUpdate)
+void divengine::SceneManager::Update()
 {
-	m_pCurrentScene->Update(MsPerUpdate);
+	m_pCurrentScene->Update();
 }
 
-void dae::SceneManager::Render()
+void divengine::SceneManager::FixedUpdate()
 {
+	m_pCurrentScene->FixedUpdate();
+}
+
+void divengine::SceneManager::Render()
+{
+	ImGui::ShowDemoWindow();
 	m_pCurrentScene->Render();
 }
 
-void dae::SceneManager::SetAsCurrentScene(const std::string& name)
+void  divengine::SceneManager::Initialize()
+{
+	m_pCurrentScene->InitializeAll();
+}
+
+void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
 {
 	//Find the first scene with the corresponding name
 	for (const auto& scene : m_Scenes)
@@ -25,7 +36,7 @@ void dae::SceneManager::SetAsCurrentScene(const std::string& name)
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+divengine::Scene& divengine::SceneManager::CreateScene(const std::string& name)
 {
 	const auto scene = std::shared_ptr<Scene>(new Scene(name));
 	m_Scenes.push_back(scene);
@@ -34,4 +45,14 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	if(!m_pCurrentScene)
 		m_pCurrentScene = scene;
 	return *scene;
+}
+
+void divengine::SceneManager::AddScene(std::shared_ptr<Scene> scene)
+{
+	if (std::find(m_Scenes.begin(), m_Scenes.end(), scene) != m_Scenes.end())
+		return;
+
+	m_Scenes.push_back(scene);
+	if (!m_pCurrentScene)
+		m_pCurrentScene = scene;
 }

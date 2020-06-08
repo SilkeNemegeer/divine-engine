@@ -19,6 +19,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{c6f8ecea-0220-4c32-a97c-9911b0346933}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\ColliderComponents">
+      <UniqueIdentifier>{dca7b114-4aca-4320-ac20-d1f9d143a4d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -84,6 +87,60 @@
     <ClInclude Include="Minigin.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_sdl.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxColliderComponent.h">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleColliderComponent.h">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsMaterial2D.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderer.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformColliderComponent.h">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -139,6 +196,48 @@
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_sdl.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxColliderComponent.cpp">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleColliderComponent.cpp">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>Components\ColliderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderer.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformColliderComponent.cpp">
+      <Filter>Components\ColliderComponents</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

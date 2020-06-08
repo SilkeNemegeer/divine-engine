@@ -7,7 +7,7 @@
 #include "GameObject.h"
 #include "TransformComponent.h"
 #include "RenderComponent.h"
-dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color)
+divengine::TextComponent::TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color)
 	:m_Text{text}
 	,m_Font{font}
 	,m_NeedsUpdate{true}
@@ -16,15 +16,14 @@ dae::TextComponent::TextComponent(const std::string& text, const std::shared_ptr
 
 }
 
-void dae::TextComponent::SetText(const std::string& text)
+void divengine::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
 
-void dae::TextComponent::Update(float MsPerUpdate)
+void divengine::TextComponent::Update()
 {
-	UNREFERENCED_PARAMETER(MsPerUpdate);
 	if (m_NeedsUpdate)
 	{
 		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Color);
@@ -52,7 +51,11 @@ void dae::TextComponent::Update(float MsPerUpdate)
 	}
 }
 
-void dae::TextComponent::Render()
+void divengine::TextComponent::Render()
 {
 
+}
+
+void divengine::TextComponent::Initialize()
+{
 }

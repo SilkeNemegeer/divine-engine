@@ -2,7 +2,7 @@
 #include "BaseComponent.h"
 #include <string>
 
-namespace dae
+namespace divengine
 {
 	class TextComponent;
 	class FPSComponent : public BaseComponent
@@ -19,10 +19,12 @@ namespace dae
 		int GetFPS() const;
 
 	protected:
-		void Update(float MsPerUpdate) override;
+		void Update() override;
+		void Initialize() override;
 		void Render() override;
 
 	private:
+		TextComponent* m_pTextComponent;
 		int m_FPS;
 		float m_FPSTimer;
 		float m_MaxTime;

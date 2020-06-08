@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 
-using namespace dae;
+using namespace divengine;
 
 unsigned int Scene::m_IdCounter = 0;
 
@@ -15,17 +15,37 @@ void Scene::AddObject(const std::shared_ptr<GameObject>& object)
 	m_Objects.push_back(object);
 }
 
-std::string dae::Scene::Name() const
+void divengine::Scene::AddRigidbody(Rigidbody*rigidBody)
+{
+	m_pRigidbodies.push_back(rigidBody);
+}
+
+void divengine::Scene::AddCollider(ColliderComponent* pCollider)
+{
+	m_pColliders.push_back(pCollider);
+}
+
+std::string divengine::Scene::Name() const
 {
 	return m_Name;
 }
 
-void Scene::Update(float MsPerUpdate)
+void Scene::Update()
 {
 	for(auto& object : m_Objects)
 	{
-		object->Update(MsPerUpdate);
+		object->Update();
 	}
+}
+
+void divengine::Scene::FixedUpdate()
+{
+	//Do collisions for the rigidbodies
+	//for (const auto& rigidbody : m_pRigidbodies)
+	//{
+	//	
+	//}
+
 }
 
 void Scene::Render() const
@@ -33,6 +53,14 @@ void Scene::Render() const
 	for (const auto& object : m_Objects)
 	{
 		object->Render();
+	}
+}
+
+void divengine::Scene::InitializeAll() const
+{
+	for (const auto& object : m_Objects)
+	{
+		object->Initialize();
 	}
 }
 
