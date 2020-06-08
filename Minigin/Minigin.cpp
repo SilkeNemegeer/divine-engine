@@ -78,6 +78,12 @@ void divengine::Minigin::LoadGame() const
 	//collider->SetTrigger(true);
 	demoScene.AddObject(go);
 
+	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+
+	go = std::make_shared<TextObject>("Hello", font);
+	go->SetPosition(Vector3(100, 200, 0));
+	demoScene.AddObject(go);
+
 	go = std::make_shared<GameObject>(Vector3(216, 0, 0));
 	auto rigidBody = new RigidbodyComponent();
 	//rigidBody->AddForce(glm::vec2(2, 0));
@@ -110,7 +116,6 @@ void divengine::Minigin::LoadGame() const
 	demoScene.AddObject(go);
 
 	//Add Programming 4 Assignment text
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	go = std::make_shared<GameObject>(Vector3(80, 20, 0));
 	go->AddComponent(new RenderComponent());
 	go->AddComponent(new TextComponent("Programming 4 Assignment", font));

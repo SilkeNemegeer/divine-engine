@@ -12,21 +12,27 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Managers\Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{c6f8ecea-0220-4c32-a97c-9911b0346933}</UniqueIdentifier>
     </Filter>
     <Filter Include="Components\ColliderComponents">
       <UniqueIdentifier>{dca7b114-4aca-4320-ac20-d1f9d143a4d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Content\Input">
+      <UniqueIdentifier>{707feb30-7f1d-4d14-9e70-a6d2bbc4ef9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Imgui">
+      <UniqueIdentifier>{7e5de528-96f0-4d81-878f-f457df48c146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Debugging">
+      <UniqueIdentifier>{5bf7be5d-2382-4794-84f2-b177c0f9d34e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -36,16 +42,10 @@
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneObject.h">
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="BaseComponent.h">
@@ -57,19 +57,10 @@
     <ClInclude Include="Texture2D.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Structs.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
@@ -87,35 +78,8 @@
     <ClInclude Include="Minigin.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="imconfig.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_internal.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_sdl.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_rectpack.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_textedit.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="imstb_truetype.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="RigidbodyComponent.h">
       <Filter>Components</Filter>
@@ -135,17 +99,59 @@
     <ClInclude Include="PhysicsMaterial2D.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="DebugRenderer.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="PlatformColliderComponent.h">
       <Filter>Components\ColliderComponents</Filter>
     </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Content\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Content\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_sdl.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugRenderer.h">
+      <Filter>Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Debugging</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -155,9 +161,6 @@
     <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="BaseComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -165,9 +168,6 @@
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
@@ -182,9 +182,6 @@
     <ClCompile Include="MiniginPCH.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
@@ -197,25 +194,7 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_demo.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_draw.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_sdl.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_widgets.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="RigidbodyComponent.cpp">
@@ -233,11 +212,44 @@
     <ClCompile Include="ColliderComponent.cpp">
       <Filter>Components\ColliderComponents</Filter>
     </ClCompile>
-    <ClCompile Include="DebugRenderer.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformColliderComponent.cpp">
       <Filter>Components\ColliderComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Content\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Content\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_sdl.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugRenderer.cpp">
+      <Filter>Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Debugging</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
