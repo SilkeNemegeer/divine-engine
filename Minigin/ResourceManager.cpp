@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 #include "Font.h"
+#include <string>
 
 void divengine::ResourceManager::Init(const std::string& dataPath)
 {
@@ -43,4 +44,9 @@ std::shared_ptr<divengine::Texture2D> divengine::ResourceManager::LoadTexture(co
 std::shared_ptr<divengine::Font> divengine::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
 {
 	return std::make_shared<Font>(m_DataPath + file, size);
+}
+
+const std::string divengine::ResourceManager::GetFullDataPath(const std::string& relativePath) const
+{
+	return m_DataPath + relativePath;
 }

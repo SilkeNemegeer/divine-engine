@@ -13,11 +13,15 @@ divengine::SpriteComponent::SpriteComponent(const std::string& path, float clipW
 	,m_AnimationSpeed{animationSpeed}
 	,m_EnableAnim{true}
 	,m_Path{path}
+	,m_pRenderComp{nullptr}
+	,destRect{}
+	,m_pTransform{nullptr}
 {
 	srcRect.x = srcRect.y = 0;
 	srcRect.y = 64;
 	srcRect.w = (int)clipWidth;
 	srcRect.h = (int)clipHeight;
+	
 }
 
 divengine::SpriteComponent::~SpriteComponent()
@@ -35,8 +39,6 @@ void divengine::SpriteComponent::Update()
 		auto pos = m_pTransform->GetPosition();
 		destRect.x = (int)pos.x;
 		destRect.y = (int)pos.y;
-		//destRect.w = int(srcRect.w * m_pTransform->GetScale());
-		//destRect.h = int(srcRect.h * m_pTransform->GetScale());
 		m_pRenderComp->SetSourceRect(srcRect);
 		m_pRenderComp->SetDestRect(destRect);
 
@@ -67,9 +69,6 @@ void divengine::SpriteComponent::Initialize()
 	destRect.x = (int)transform->GetPosition().x;
 	destRect.y = (int)transform->GetPosition().y;
 
-	Vector2 dimensions = m_pRenderComp->GetTextureDimensions();
-	//destRect.w = int(dimensions.x * transform->GetScale());
-	//destRect.h = int(dimensions.y * transform->GetScale());
 	destRect.w = int(srcRect.w * transform->GetScale());
 	destRect.h = int(srcRect.h * transform->GetScale());
 

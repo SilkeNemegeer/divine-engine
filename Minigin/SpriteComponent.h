@@ -14,11 +14,10 @@ namespace divengine
 			SpriteComponent(const std::string& path, float width, float height, int nrOfFrames, float animationSpeed);
 			~SpriteComponent();
 
-
 		protected:
-			void Update() override;
-			void Initialize() override;
-			void Render() override;
+			virtual void Update() override;
+			virtual void Initialize() override;
+			virtual void Render() override;
 
 			divengine::RenderComponent* m_pRenderComp;
 			TransformComponent* m_pTransform;

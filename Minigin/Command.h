@@ -2,23 +2,13 @@
 #include <iostream>
 #include "GameObject.h"
 
-class Command
+namespace divengine
 {
-public:
-	virtual ~Command() = default;
-	virtual void Execute() = 0;
-	virtual void Undo() = 0;
-};
-
-class JumpCommand : public Command
-{
-public:
-	void Execute() override { Jump(); }
-	void Undo() override {}
-private:
-	void Jump()
+	class Command
 	{
-		std::cout << "Jump called.\n";
-	}
-};
-
+	public:
+		virtual ~Command() = default;
+		virtual void Execute(GameObject* pObject) = 0;
+		virtual void Undo() = 0;
+	};
+}

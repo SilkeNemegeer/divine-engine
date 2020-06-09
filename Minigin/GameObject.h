@@ -1,6 +1,9 @@
 #pragma once
 #include "Structs.h"
 #include <functional>
+#include <string>
+#include <vector>
+
 namespace divengine
 {
 	class BaseComponent;
@@ -21,6 +24,7 @@ namespace divengine
 
 		virtual void Update();
 		virtual void Render() const;
+		virtual void Initialize();
 
 		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(const Vector3& newPos);
@@ -33,9 +37,12 @@ namespace divengine
 
 		void AddComponent(BaseComponent* pComponent);
 		void RemoveComponent(BaseComponent* pComponent);
+
 		void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag);
 		void SetTriggerCallback(TriggerCallback callback);
-		void Initialize();
+
+		//TODO: make oncollision callback
+
 
 		GameObject(const Vector3& position = Vector3(), float scale = 1);
 		virtual ~GameObject();
