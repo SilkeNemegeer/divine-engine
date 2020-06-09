@@ -60,80 +60,7 @@ void divengine::Minigin::Initialize()
  */
 void divengine::Minigin::LoadGame() const
 {
-	auto& demoScene = SceneManager::GetInstance().CreateScene("Demo");
-
-	//Add background
-	auto go = std::make_shared<GameObject>(Vector3(0.f, 0.f,0.f));
-	RenderComponent* pRenderComp = new RenderComponent();
-	pRenderComp->SetTexture("background.jpg");
-	go->AddComponent(pRenderComp);
-	demoScene.AddObject(go);
-
-	//Add logo dae
-	go = std::make_shared<GameObject>(Vector3(216, 180, 0));
-	go->AddComponent(new RenderComponent("logo.png"));
-	go->AddComponent(new RigidbodyComponent(true));
-	ColliderComponent* collider = new BoxColliderComponent(glm::vec2(210, 55),glm::vec2(0,10));
-	go->AddComponent(collider);
-	//collider->SetTrigger(true);
-	demoScene.AddObject(go);
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-
-	go = std::make_shared<TextObject>("Hello", font);
-	go->SetPosition(Vector3(100, 200, 0));
-	demoScene.AddObject(go);
-
-	go = std::make_shared<GameObject>(Vector3(216, 0, 0));
-	auto rigidBody = new RigidbodyComponent();
-	//rigidBody->AddForce(glm::vec2(2, 0));
-	go->AddComponent(rigidBody);
-	ColliderComponent* colliderCircle = new CircleColliderComponent(50, glm::vec2(50, 50), false, new PhysicsMaterial2D(0.1f, 0.5f));
-	//ColliderComponent* collider2 = new BoxColliderComponent(glm::vec2(210, 55), glm::vec2(0,10), false, new PhysicsMaterial2D(0.1f, 0.5f));
-	go->SetTriggerCallback([](GameObject* trigger, GameObject* other, GameObject::TriggerFlag flag)
-	{
-			UNREFERENCED_PARAMETER(trigger);
-			UNREFERENCED_PARAMETER(other);
-		switch (flag)
-		{
-		case GameObject::TriggerFlag::enter:
-			std::cout << "Entered\n";
-			break;
-
-		case GameObject::TriggerFlag::leave:
-			std::cout << "Left\n";
-			break;
-
-		case GameObject::TriggerFlag::stay:	
-			std::cout << "Staying\n";
-			break;
-		}
-	});
-	
-	//go->AddComponent(collider2);
-	go->AddComponent(colliderCircle);
-	go->AddComponent(new RenderComponent("logo.png"));
-	demoScene.AddObject(go);
-
-	//Add Programming 4 Assignment text
-	go = std::make_shared<GameObject>(Vector3(80, 20, 0));
-	go->AddComponent(new RenderComponent());
-	go->AddComponent(new TextComponent("Programming 4 Assignment", font));
-	demoScene.AddObject(go);
-
-	//Add fps counter
-	auto FPSCounter = std::make_shared<GameObject>(Vector3(10, 10, 0));
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	SDL_Color color = { 0, 255, 0 };
-	FPSCounter->AddComponent(new RenderComponent());
-	FPSCounter->AddComponent(new TextComponent("0", font, color));
-	FPSCounter->AddComponent(new FPSComponent());
-	demoScene.AddObject(FPSCounter);
-
-	//Test sprite component
-	auto sprite = std::make_shared<GameObject>(Vector3(100, 50, 0), 5.f);
-	sprite->AddComponent(new SpriteComponent("sprites0.png", 34,16,8, 0.006f));
-	demoScene.AddObject(sprite);
+	//Load levels & components
 }
 
 void divengine::Minigin::Cleanup()
@@ -146,12 +73,12 @@ void divengine::Minigin::Cleanup()
 
 void divengine::Minigin::Run()
 {
-	Initialize();
+	//Initialize();
 
 	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance().Init("../Data/");
+	//ResourceManager::GetInstance().Init("../Data/");
 
-	LoadGame();
+	//LoadGame();
 	SceneManager::GetInstance().Initialize();
 
 #ifdef _DEBUG
@@ -193,6 +120,11 @@ void divengine::Minigin::Run()
 		std::cout << exception.what() << "\n";
 	}
 
+	//Cleanup();
+}
+
+divengine::Minigin::~Minigin()
+{
 	Cleanup();
 }
 

@@ -1,10 +1,5 @@
 #pragma once
 #include "BaseComponent.h"
-
-#pragma warning(push)
-#pragma warning(disable : 4201)
-#include "glm/common.hpp"
-#pragma warning(pop)
 //will immediately respond to gravity
 //if one or more collider component is added, gameobject is moved by the incoming collisions
 namespace divengine

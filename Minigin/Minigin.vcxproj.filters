@@ -31,6 +31,9 @@
     <Filter Include="Debugging">
       <UniqueIdentifier>{5bf7be5d-2382-4794-84f2-b177c0f9d34e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{815527e2-2745-4635-a956-7c6ca3119143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderComponent.h">
@@ -138,9 +141,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="Structs.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -149,6 +149,18 @@
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +262,12 @@
     </ClCompile>
     <ClCompile Include="Debug.cpp">
       <Filter>Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
