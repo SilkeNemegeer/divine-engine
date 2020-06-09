@@ -2,10 +2,10 @@
 #include <XInput.h>
 #include "Singleton.h"
 #include "ControllerComponent.h"
-class Command;
 #include <map>
 namespace divengine
 {
+	class Command;
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
@@ -52,17 +52,18 @@ namespace divengine
 		bool ProcessInput();
 		void AddImGuiKeyboardMappings();
 
-	//	void AddCommand(Command* pCommand, int commandId); //Add a command
+		void AddCommand(Command* pCommand, int commandId); //Add a command
 		//void AddInputMapping(int commandId, int key, WORD controllerButton, TriggerState triggerState = TriggerState::pressed, ControllerComponent* pController = nullptr, int controllerId = 1);
 		
 		bool IsTriggered(WORD button, TriggerState triggerState, int controllerId = 0) const;
-		~InputManager() {};
+		~InputManager();
 
 	private:
 		friend class Singleton<InputManager>;
 
 		InputManager();
 		std::map<int, ActionMapping> m_ActionMappings;
+		std::map<int, Command*> m_pCommands;
 
 		XINPUT_STATE m_ControllerStates[XUSER_MAX_COUNT], m_PreviousControllerStates[XUSER_MAX_COUNT];
 		bool m_ConnectedControllers[XUSER_MAX_COUNT];

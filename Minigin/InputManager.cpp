@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "Command.h"
 #include "Time.h"
+#include "Debug.h"
 
 //References for input ImGui:
 //https://github.com/Tyyppi77/imgui_sdl/blob/master/example.cpp
@@ -98,6 +99,17 @@ void divengine::InputManager::AddImGuiKeyboardMappings()
 	io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 }
 
+void divengine::InputManager::AddCommand(Command* pCommand, int commandId)
+{
+	if (m_pCommands.find(commandId) != m_pCommands.end())
+	{
+		Debug::LogWarning("InputManager::AddCommand: there was already a command with this id!");
+		return;
+	}
+
+	m_pCommands[commandId] = pCommand;
+}
+
 bool divengine::InputManager::IsTriggered(WORD button, TriggerState triggerState, int controllerId) const
 {
 	if (!m_ConnectedControllers[controllerId] || (button <= 0x0000 && button > 0x8000))
@@ -119,6 +131,13 @@ bool divengine::InputManager::IsTriggered(WORD button, TriggerState triggerState
 	}
 }
 
+divengine::InputManager::~InputManager()
+{
+	for (auto pCommand : m_pCommands)
+	{
+		SAFEDELETE(pCommand.second);
+	}
+}
 
 divengine::InputManager::InputManager()
 	:m_ControllerStates{}
