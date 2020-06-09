@@ -2,6 +2,7 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "Debug.h"
+#include "ServiceLocator.h"
 
 divengine::SoundManager::SoundManager()
 	:m_pFmodSystem{}
@@ -37,7 +38,8 @@ FMOD::Sound* divengine::SoundManager::LoadSound(const std::string& path, const s
 
 	//Create new sound
 	FMOD::Sound* pSound = nullptr;
-	FMOD_RESULT result = m_pFmodSystem->createSound(ResourceManager::GetInstance().GetFullDataPath(path).c_str(), mode, 0, &pSound);
+	FMOD_RESULT result = m_pFmodSystem->createSound(ServiceLocator::GetResourceManager().GetFullDataPath(path).c_str(), mode, 0, &pSound);
+	//FMOD_RESULT result = m_pFmodSystem->createSound(ResourceManager::GetInstance().GetFullDataPath(path).c_str(), mode, 0, &pSound);
 
 	if (!CheckResult(result))
 		return nullptr;

@@ -1,10 +1,10 @@
 #pragma once
-#include "Singleton.h"
+//#include "Singleton.h"
 #include <map>
 
 namespace divengine
 {
-	class SoundManager : public Singleton<SoundManager>
+	class SoundManager //: public Singleton<SoundManager>
 	{
 	public:
 		SoundManager(const SoundManager& other) = delete;
@@ -37,7 +37,7 @@ namespace divengine
 		void Update();
 
 	protected:
-		friend class Singleton<SoundManager>;
+		//friend class Singleton<SoundManager>;
 
 	private:
 		void InitializeSystem();

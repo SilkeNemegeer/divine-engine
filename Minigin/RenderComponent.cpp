@@ -4,6 +4,7 @@
 #include "RenderComponent.h"
 #include "GameObject.h"
 #include "TransformComponent.h"
+#include "ServiceLocator.h"
 #include "Texture2D.h"
 #include "SDL_ttf.h"
 
@@ -19,7 +20,8 @@ divengine::RenderComponent::RenderComponent()
 divengine::RenderComponent::RenderComponent(const std::string& filename)
 	:RenderComponent()
 {
-	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+	m_Texture = ServiceLocator::GetResourceManager().LoadTexture(filename);
+	//m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
 	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
 
@@ -61,7 +63,8 @@ void divengine::RenderComponent::Initialize()
 
 void divengine::RenderComponent::SetTexture(const std::string& filename)
 {
-	m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+	m_Texture = ServiceLocator::GetResourceManager().LoadTexture(filename);
+	//m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
 	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
 
