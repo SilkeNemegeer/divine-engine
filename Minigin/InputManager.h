@@ -6,71 +6,74 @@
 namespace divengine
 {
 	class Command;
+
+	enum class TriggerState
+	{
+		down, pressed, released
+	};
+
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
-		enum class TriggerState
-		{
-			down, pressed, released
-		};
-
-		struct ActionMapping
-		{
-			ActionMapping()
-			{
-				button = 0;
-				key = 0;
-				actionId = 0;
-				triggerState = TriggerState::pressed;
-				playerIndex = 0; //player 1
-			}
-			WORD button;
-			int key;
-			int actionId;
-			TriggerState triggerState;
-			int playerIndex;
-		};
-
 		struct InputMapping
 		{
-			InputMapping(int commandId, int key = -1, WORD controllerButton = 0, TriggerState triggerState = TriggerState::pressed, ControllerComponent* pController = nullptr, int controllerId = 1)
-				:ControllerButton{ controllerButton }
+			InputMapping(int commandId, SDL_Scancode key = SDL_Scancode::SDL_NUM_SCANCODES, WORD controllerButton = 0, TriggerState triggerState = TriggerState::pressed
+				, GameObject* pObject = nullptr, int controllerId = 0)
+				:ControllerButton{controllerButton}
+				,CommandId{commandId}
 				,KeyboardButton{key}
-				,CommandID{commandId}
-				,TriggerState{triggerState}
+				,Trigger{triggerState}
+				,pObject{pObject}
 				,PlayerIndex{controllerId}
-				,Controller{pController}
-			{};
+			{
+			}
 			WORD ControllerButton;
-			int KeyboardButton;
-			int CommandID;
-			TriggerState TriggerState;
+			SDL_Scancode KeyboardButton;
+			TriggerState Trigger;
 			int PlayerIndex;
-			ControllerComponent* Controller;
+			int CommandId;
+			GameObject* pObject;
 		};
 
 		bool ProcessInput();
-		void AddImGuiKeyboardMappings();
 
 		void AddCommand(Command* pCommand, int commandId); //Add a command
-		//void AddInputMapping(int commandId, int key, WORD controllerButton, TriggerState triggerState = TriggerState::pressed, ControllerComponent* pController = nullptr, int controllerId = 1);
+		void AddInputMapping(int commandId, SDL_Scancode key = SDL_Scancode::SDL_NUM_SCANCODES, WORD controllerButton = 0, TriggerState triggerState = TriggerState::pressed, GameObject* pObject = nullptr, int controllerId = 0);
 		
 		bool IsTriggered(WORD button, TriggerState triggerState, int controllerId = 0) const;
+		bool IsKeyTriggered(SDL_Scancode key, TriggerState triggerState) const;
+
+		//TODO: mouse button detection
+		//TODO: make controller vibration
+		//void AddVibration();
+		//TODO: call refresh connections only when asked, not always
+
+		glm::vec2 GetMousePos() { return m_MousePos; };
+		glm::vec2 GetThumbStickPos(int controllerId = 0, bool leftStick = true);
 		~InputManager();
 
 	private:
 		friend class Singleton<InputManager>;
 
 		InputManager();
-		std::map<int, ActionMapping> m_ActionMappings;
+		void AddImGuiKeyboardMappings();
+
+		void ProcessSDLInput(SDL_Event& e);
+
+		std::vector<InputMapping*> m_pInputMappings;
 		std::map<int, Command*> m_pCommands;
+		const Uint8* m_pCurrentSDLKeyBoardState;
+		Uint8 m_pPrevSDLKeyboardState[SDL_NUM_SCANCODES];
+		glm::vec2 m_MousePos;
+		bool m_KeyboardState1Active;
+
+		SDL_Event m_CurrentEvent;
 
 		XINPUT_STATE m_ControllerStates[XUSER_MAX_COUNT], m_PreviousControllerStates[XUSER_MAX_COUNT];
 		bool m_ConnectedControllers[XUSER_MAX_COUNT];
 
 		void RefreshControllers();
 		void UpdateControllerState();
-
 	};
 
 }

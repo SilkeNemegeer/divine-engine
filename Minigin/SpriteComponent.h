@@ -27,6 +27,7 @@ namespace divengine
 			bool m_EnableAnim;
 			const std::string m_Path;
 
+
 		private:
 	};
 }

@@ -9,15 +9,21 @@
 //https://github.com/Tyyppi77/imgui_sdl/blob/master/example.cpp
 //https://github.com/ocornut/imgui/blob/master/examples/imgui_impl_sdl.cpp
 
+//References XINPUT:
+//https://docs.microsoft.com/en-us/windows/win32/xinput/getting-started-with-xinput
+//https://docs.microsoft.com/en-us/windows/win32/api/xinput/ns-xinput-xinput_gamepad
+
 bool divengine::InputManager::ProcessInput()
 {
 	RefreshControllers();
-	UpdateControllerState();
 
 	ImGuiIO& io = ImGui::GetIO();
 	int wheel = 0;
 
 	SDL_Event e;
+	memcpy(m_pPrevSDLKeyboardState, m_pCurrentSDLKeyBoardState, SDL_NUM_SCANCODES); //Copy current key states to previous key states
+	m_pCurrentSDLKeyBoardState = SDL_GetKeyboardState(NULL); //Get current keyboard state
+
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			return false;
@@ -26,7 +32,10 @@ bool divengine::InputManager::ProcessInput()
 		if (!io.WantCaptureKeyboard || !io.WantCaptureMouse)
 		{
 			//capture other input (not imgui input)
-
+			ProcessSDLInput(e);
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			m_MousePos = glm::vec2(x, y);
 		}
 
 		if (e.type == SDL_WINDOWEVENT)
@@ -55,8 +64,7 @@ bool divengine::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 			
-		}
-		
+		}	
 	}
 
 	int mouseX, mouseY;
@@ -67,7 +75,7 @@ bool divengine::InputManager::ProcessInput()
 	io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
 	io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 	io.MouseWheel = static_cast<float>(wheel);
-
+	UpdateControllerState();
 	return true;
 }
 
@@ -99,6 +107,35 @@ void divengine::InputManager::AddImGuiKeyboardMappings()
 	io.KeyMap[ImGuiKey_Z] = SDL_SCANCODE_Z;
 }
 
+void divengine::InputManager::ProcessSDLInput(SDL_Event& e)
+{
+	m_CurrentEvent = e;
+
+	switch (m_CurrentEvent.type)
+	{
+	case SDL_KEYDOWN:
+		break;
+
+	case SDL_KEYUP:
+		break;
+
+	case SDL_MOUSEMOTION:
+		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		break;
+
+	case SDL_MOUSEBUTTONUP:
+		break;
+
+	case SDL_QUIT:
+		break;
+	}
+
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+}
+
 void divengine::InputManager::AddCommand(Command* pCommand, int commandId)
 {
 	if (m_pCommands.find(commandId) != m_pCommands.end())
@@ -108,6 +145,11 @@ void divengine::InputManager::AddCommand(Command* pCommand, int commandId)
 	}
 
 	m_pCommands[commandId] = pCommand;
+}
+
+void divengine::InputManager::AddInputMapping(int commandId, SDL_Scancode key, WORD controllerButton, TriggerState triggerState, GameObject* pObject, int controllerId)
+{
+	m_pInputMappings.push_back(new InputMapping(commandId, key, controllerButton, triggerState, pObject, controllerId));
 }
 
 bool divengine::InputManager::IsTriggered(WORD button, TriggerState triggerState, int controllerId) const
@@ -120,15 +162,85 @@ bool divengine::InputManager::IsTriggered(WORD button, TriggerState triggerState
 
 	switch (triggerState)
 	{
-		case divengine::InputManager::TriggerState::down:
+		case divengine::TriggerState::down:
 			return (currentStateTriggered && oldStateTriggered);
-		case divengine::InputManager::TriggerState::pressed:
+		case divengine::TriggerState::pressed:
 			return (currentStateTriggered && !oldStateTriggered);
-		case divengine::InputManager::TriggerState::released:
+		case divengine::TriggerState::released:
 			return (!currentStateTriggered && oldStateTriggered);
 		default:
 			return false;
 	}
+}
+
+bool divengine::InputManager::IsKeyTriggered(SDL_Scancode key, TriggerState triggerState) const
+{
+	if (!m_pCurrentSDLKeyBoardState || !m_pPrevSDLKeyboardState)
+		return false;
+	
+	switch (triggerState)
+	{
+	case TriggerState::down:
+	{
+		if (m_pCurrentSDLKeyBoardState[key] != 0 && m_pPrevSDLKeyboardState[key] != 0)
+		{
+			return true;
+		}
+	}
+	break;
+
+	case TriggerState::pressed:
+	{
+		if (m_pCurrentSDLKeyBoardState[key] != 0 && m_pPrevSDLKeyboardState[key] == 0)
+			return true;
+	}
+		break;
+
+	case TriggerState::released:
+	{
+		if (m_pCurrentSDLKeyBoardState[key] == 0 && m_pPrevSDLKeyboardState[key] != 0)
+			return true;
+	}
+		break;
+	}
+	return false;
+}
+
+glm::vec2 divengine::InputManager::GetThumbStickPos(int controllerId, bool leftStick)
+{
+	glm::vec2 pos{};
+	if (leftStick)
+	{
+		pos = glm::vec2(m_ControllerStates[controllerId].Gamepad.sThumbLX, m_ControllerStates[controllerId].Gamepad.sThumbLY);
+
+		//Check deadzone
+		if ((pos.x > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && pos.x < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+			pos.x = 0;
+
+		if ((pos.y > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) && (pos.y < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
+			pos.y = 0;
+	}
+	else
+	{
+		pos = glm::vec2(m_ControllerStates[controllerId].Gamepad.sThumbRX, m_ControllerStates[controllerId].Gamepad.sThumbRY);
+		//Check deadzone
+		if ((pos.x > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) && pos.x < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+			pos.x = 0;
+
+		if ((pos.y > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) && pos.y < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+			pos.y = 0;
+	}
+	//Clip to [0,1] 
+	//Divide by maximum values => -32767, 32768 (thumbstick values of xinput are between -32768 and 32767)
+	float clipValue = 32767;
+
+	if (pos.x < 0)pos.x /= (clipValue + 1);
+	else pos.x /= clipValue;
+
+	if (pos.y < 0)pos.y /= (clipValue + 1);
+	else pos.y /= clipValue;
+
+	return pos;
 }
 
 divengine::InputManager::~InputManager()
@@ -137,14 +249,26 @@ divengine::InputManager::~InputManager()
 	{
 		SAFEDELETE(pCommand.second);
 	}
+
+	for (auto pInputMap : m_pInputMappings)
+	{
+		SAFEDELETE(pInputMap);
+	}
 }
 
 divengine::InputManager::InputManager()
 	:m_ControllerStates{}
 	, m_ConnectedControllers{}
 	,m_PreviousControllerStates{}
+	,m_CurrentEvent{}
+	,m_pCurrentSDLKeyBoardState{}
+	,m_pPrevSDLKeyboardState{}
 {
+	m_pCurrentSDLKeyBoardState = SDL_GetKeyboardState(NULL); //Get current keyboard state
+	memset(m_pPrevSDLKeyboardState, 0, SDL_NUM_SCANCODES); //Set all keys to zero for previous state (there was no yet)
+
 	RefreshControllers();
+	AddImGuiKeyboardMappings();
 }
 
 void divengine::InputManager::RefreshControllers()
@@ -186,12 +310,21 @@ void divengine::InputManager::UpdateControllerState()
 		m_ConnectedControllers[i] = (result == ERROR_SUCCESS);
 	}
 
-	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 2))
+	//Check if a command was triggered with controller
+	for (const auto& inputMap : m_pInputMappings)
+	{
+		if (IsTriggered(inputMap->ControllerButton, inputMap->Trigger, inputMap->PlayerIndex) || IsKeyTriggered(inputMap->KeyboardButton, inputMap->Trigger))
+		{
+			m_pCommands[inputMap->CommandId]->Execute(inputMap->pObject);
+		}
+	}
+
+	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 1))
 	{
 		std::cout << "Player 2 pressed button\n";
 	}
 
-	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 1))
+	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 0))
 	{
 		std::cout << "Player 1 pressed button\n";
 	}

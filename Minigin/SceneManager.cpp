@@ -14,7 +14,7 @@ void divengine::SceneManager::FixedUpdate()
 
 void divengine::SceneManager::Render()
 {
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 	m_pCurrentScene->Render();
 }
 
