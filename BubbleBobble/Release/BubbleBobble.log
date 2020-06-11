@@ -1,7 +1,9 @@
-﻿  Generating code
-  0 of 3423 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+﻿  Main.cpp
+     Creating library D:\Silke\DAE\Semester2\DivineEngine\Release\BubbleBobble.lib and object D:\Silke\DAE\Semester2\DivineEngine\Release\BubbleBobble.exp
+  Generating code
+  111 of 3090 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
+    12 functions were new in current compilation
+    48 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   BubbleBobble.vcxproj -> D:\Silke\DAE\Semester2\DivineEngine\Release\BubbleBobble.exe
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2\lib\x86\SDL2.dll

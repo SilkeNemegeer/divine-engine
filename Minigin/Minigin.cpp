@@ -110,7 +110,6 @@ void divengine::Minigin::Run()
 				timeSinceLastFixedUpdate -= Time::MS_PER_UPDATE;
 			}
 			sceneManager.Update();
-
 			renderer.Render(); //Will always render
 			//Time::GetInstance().EndFrame();
 		}

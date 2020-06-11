@@ -1,4 +1,6 @@
-﻿  SoundManager.cpp
+﻿  InputManager.cpp
+  Minigin.cpp
+  SpriteComponent.cpp
   Minigin.vcxproj -> D:\Silke\DAE\Semester2\DivineEngine\Win32\Release\Minigin.lib
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2\lib\x86\SDL2.dll
   1 File(s) copied

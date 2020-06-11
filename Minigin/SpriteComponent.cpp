@@ -34,7 +34,7 @@ void divengine::SpriteComponent::Update()
 	//update texture
 	if (m_EnableAnim)
 	{
-		srcRect.x = srcRect.w * (int(SDL_GetTicks() / m_AnimationSpeed) % m_NrOfFrames);
+		srcRect.x = srcRect.w * (int(SDL_GetTicks() / m_AnimationSpeed) % m_NrOfFrames); //TODO: fix this
 
 		auto pos = m_pTransform->GetPosition();
 		destRect.x = (int)pos.x;

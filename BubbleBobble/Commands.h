@@ -8,7 +8,10 @@ public:
 	JumpCommand() {}; //Can pass extra values here if needed
 	void Execute(GameObject* pObject) override 
 	{
-		if(pObject->GetTag() == "BubbleDragon")
+		if (pObject)
+		{
+			//if (pObject->GetTag() == "BubbleDragon");
+		}
 		Jump(); 
 	
 	}
