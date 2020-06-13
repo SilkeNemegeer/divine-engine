@@ -107,6 +107,7 @@ void divengine::Minigin::Run()
 			{
 				//fixed update triggered
 				sceneManager.FixedUpdate();
+				//TODO: put collision updates in fixed update
 				timeSinceLastFixedUpdate -= Time::MS_PER_UPDATE;
 			}
 			sceneManager.Update();

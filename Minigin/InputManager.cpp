@@ -206,6 +206,19 @@ bool divengine::InputManager::IsKeyTriggered(SDL_Scancode key, TriggerState trig
 	return false;
 }
 
+//Negative duration will set vibration forever
+void divengine::InputManager::SetVibration(float leftMotorSpeed, float rightMotorSpeed, int controllerId)
+{
+	XINPUT_VIBRATION vibration;
+	ZeroMemory(&vibration, sizeof(vibration));
+
+	//Values between [0-65535]
+	float maxVibrationValue = 65535.f;
+	vibration.wLeftMotorSpeed = WORD(leftMotorSpeed * maxVibrationValue);
+	vibration.wRightMotorSpeed = WORD(rightMotorSpeed * maxVibrationValue);
+	XInputSetState((UINT)controllerId, &vibration);
+}
+
 glm::vec2 divengine::InputManager::GetThumbStickPos(int controllerId, bool leftStick)
 {
 	glm::vec2 pos{};
@@ -321,11 +334,11 @@ void divengine::InputManager::UpdateControllerState()
 
 	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 1))
 	{
-		std::cout << "Player 2 pressed button\n";
+		std::cout << "Player 1 pressed button\n";
 	}
 
 	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 0))
 	{
-		std::cout << "Player 1 pressed button\n";
+		std::cout << "Player 0 pressed button\n";
 	}
 }

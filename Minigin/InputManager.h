@@ -44,8 +44,8 @@ namespace divengine
 		bool IsKeyTriggered(SDL_Scancode key, TriggerState triggerState) const;
 
 		//TODO: mouse button detection
-		//TODO: make controller vibration
-		//void AddVibration();
+		void SetVibration(float leftMotorSpeed, float rightMotorSpeed, int controllerId = 0); //Set speeds to 0 to stop a vibration
+																									  
 		//TODO: call refresh connections only when asked, not always
 
 		glm::vec2 GetMousePos() { return m_MousePos; };

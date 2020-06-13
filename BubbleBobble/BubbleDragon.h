@@ -1,6 +1,5 @@
 #pragma once
 #include "Character.h"
-#include "InputComponent.h"
 #include "BubbleDragonState.h"
 using namespace divengine;
 class BubbleDragon : public Character//protagonist /player
@@ -12,7 +11,6 @@ class BubbleDragon : public Character//protagonist /player
 	//has rigidbody
 	//has health component (made in game not engine)
 public:
-	virtual void HandleInput(InputComponent* input);
 	virtual void Update() override;
 	virtual void Initialize() override;
 	void Jump();

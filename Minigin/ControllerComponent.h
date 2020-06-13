@@ -6,10 +6,11 @@ namespace divengine
 	class ControllerComponent : public BaseComponent
 	{
 	public:
-		void Jump();
 
+
+	protected:
+		int m_PlayerId;
 
 	private:
-		int m_PlayerId;
 	};
 }
