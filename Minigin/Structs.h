@@ -60,4 +60,18 @@ namespace divengine
 	{
 		return a * a;
 	}
+
+	inline void Clamp(float& value, float min, float max)
+	{
+		if (value > max)
+			value = max;
+
+		if (value < min)
+			value = min;
+	}
+
+	inline bool AlmostEquals(float value1, float value2)
+	{
+		return abs(value1 - value2) < 0.001f;
+	}
 }

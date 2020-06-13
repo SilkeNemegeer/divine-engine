@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.h"
+#include "InputManager.h"
 using namespace divengine;
 
 class JumpCommand : public Command
@@ -20,7 +21,7 @@ private:
 	void Jump()
 	{
 		//Check tag to see if it is a character -> make it jump if so
-
+		//InputManager::GetInstance().SetVibration(0, 0);
 		std::cout << "Jump called.\n";
 	}
 };

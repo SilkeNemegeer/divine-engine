@@ -188,7 +188,6 @@ xcopy "$(SolutionDir)3rdParty\Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Player1InputComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Minigin\Minigin.vcxproj">
@@ -201,7 +200,6 @@ xcopy "$(SolutionDir)3rdParty\Fmod\bin\*" "$(OutDir)" /y /D</Command>
     <ClInclude Include="Character.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Health.h" />
-    <ClInclude Include="Player1InputComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,7 +6,6 @@
 #include "BaseComponent.h"
 #include "ControllerComponent.h"
 #include "FPSComponent.h"
-#include "InputComponent.h"
 #include "RenderComponent.h"
 #include "RigidbodyComponent.h"
 #include "SpriteComponent.h"
