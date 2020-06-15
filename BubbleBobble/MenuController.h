@@ -32,7 +32,7 @@ public:
 
 private:
 	divengine::GameObject* CreateButton(const std::string& text, const glm::vec2& pos);
-	divengine::GameObject* m_SelectIcon;
+	divengine::GameObject* m_pSelectIcon;
 	void CreateButtons();
 	std::vector<divengine::GameObject*> m_pButtons;
 	void SelectButton(int id, int oldId);

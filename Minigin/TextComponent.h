@@ -26,6 +26,7 @@ namespace divengine
 
 
 	private:
+		void RootUpdate();
 		std::string m_Text;
 		std::shared_ptr<Font> m_Font;
 		bool m_NeedsUpdate;

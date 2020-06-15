@@ -21,6 +21,7 @@ namespace divengine
 	protected:
 		virtual void Update() = 0;
 		virtual void Initialize() = 0;
+		virtual void PostInitialize() {};
 		virtual void Render() = 0;
 
 		GameObject* m_pGameObject;

@@ -15,7 +15,7 @@ MenuController::MenuController()
 	:m_CurrentButtonId{0}
 	,m_pButtons{}
 	,m_OffsetIcon(20,-2)
-	,m_SelectIcon{nullptr}
+	,m_pSelectIcon{nullptr}
 {
 }
 
@@ -118,7 +118,6 @@ void MenuController::CreateButtons()
 	divengine::GameObject* pExitButton = CreateButton("EXIT", pos);
 	m_pButtons.push_back(pExitButton);
 
-
 	auto pActiveScene = divengine::SceneManager::GetInstance().GetCurrentScene();
 	for (auto pButton : m_pButtons)
 	{
@@ -130,11 +129,12 @@ void MenuController::CreateButtons()
 	m_CurrentButtonId = ButtonType::singleplayer;
 
 	//Create select icon
-	m_SelectIcon = new divengine::GameObject(divengine::Vector3(m_pButtons[m_CurrentButtonId]->GetPos().x - m_OffsetIcon.x
+	m_pSelectIcon = new divengine::GameObject(divengine::Vector3(m_pButtons[m_CurrentButtonId]->GetPos().x - m_OffsetIcon.x
 		, m_pButtons[m_CurrentButtonId]->GetPos().y - m_OffsetIcon.y));
-	m_SelectIcon->AddComponent(new divengine::RenderComponent("icon.png"));
-	divengine::SceneManager::GetInstance().GetCurrentScene()->AddObject(m_SelectIcon);
-	m_SelectIcon->Initialize();
+	m_pSelectIcon->AddComponent(new divengine::RenderComponent("icon.png")); //icon.png
+	pActiveScene->AddObject(m_pSelectIcon);
+
+	m_pSelectIcon->Initialize();
 }
 
 void MenuController::SelectButton(int id, int oldId)
@@ -143,5 +143,5 @@ void MenuController::SelectButton(int id, int oldId)
 	m_pButtons[id]->GetComponent<Button>()->SetSelected(true);
 
 	auto newPos = m_pButtons[id]->GetPos();
-	m_SelectIcon->SetPos(glm::vec2(newPos.x - m_OffsetIcon.x, newPos.y - m_OffsetIcon.y));
+	m_pSelectIcon->SetPos(glm::vec2(newPos.x - m_OffsetIcon.x, newPos.y - m_OffsetIcon.y));
 }
