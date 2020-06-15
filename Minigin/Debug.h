@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 namespace divengine
 {
 	class Debug final

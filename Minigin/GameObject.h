@@ -10,7 +10,7 @@ namespace divengine
 	class TransformComponent;
 
 	//class Texture2D;
-	class GameObject
+	class GameObject final
 	{
 	public:
 		enum class TriggerFlag
@@ -29,13 +29,18 @@ namespace divengine
 		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(const Vector3& newPos);
 		Vector3 GetPosition() const;
+		glm::vec2 GetPos() const;
+		void SetPos(const glm::vec2& pos);
+		void SetPos(float x, float y);
+		float GetScale() const;
+		TransformComponent* GetTransform() const;
 	
 		void SetTag(const std::string& tag) { m_Tag = tag; };
 		const std::string& GetTag() const { return m_Tag; };
 
 		void SetActive(bool isActive) { m_IsActive = isActive; };
 
-		void AddComponent(BaseComponent* pComponent);
+		void AddComponent(BaseComponent* pComponent, bool initOnCreation = false);
 		void RemoveComponent(BaseComponent* pComponent);
 
 		void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag);

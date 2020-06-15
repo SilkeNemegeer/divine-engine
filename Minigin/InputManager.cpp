@@ -25,7 +25,7 @@ bool divengine::InputManager::ProcessInput()
 	m_pCurrentSDLKeyBoardState = SDL_GetKeyboardState(NULL); //Get current keyboard state
 
 	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
+		if ((e.type == SDL_QUIT) || (e.key.keysym.sym == SDLK_ESCAPE)) {
 			return false;
 		}
 
@@ -132,8 +132,8 @@ void divengine::InputManager::ProcessSDLInput(SDL_Event& e)
 		break;
 	}
 
-	int x, y;
-	SDL_GetMouseState(&x, &y);
+	//int x, y;
+	//SDL_GetMouseState(&x, &y);
 }
 
 void divengine::InputManager::AddCommand(Command* pCommand, int commandId)

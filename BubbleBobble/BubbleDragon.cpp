@@ -1,4 +1,5 @@
 #include "BubbleDragon.h"
+#include "GameObject.h"
 
 void BubbleDragon::Update()
 {
@@ -7,7 +8,7 @@ void BubbleDragon::Update()
 
 void BubbleDragon::Initialize()
 {
-	SetTag("BubbleDragon");
+	m_pGameObject->SetTag("BubbleDragon");
 }
 
 void BubbleDragon::Jump()

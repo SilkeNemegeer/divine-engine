@@ -1,6 +1,23 @@
-﻿  InputManager.cpp
+﻿  BaseComponent.cpp
+  BoxColliderComponent.cpp
+  CircleColliderComponent.cpp
+  ColliderComponent.cpp
+  Command.cpp
+  ControllerComponent.cpp
+  DebugRenderer.cpp
+  FPSComponent.cpp
+  GameObject.cpp
+  InputManager.cpp
   Minigin.cpp
+  PlatformColliderComponent.cpp
+  RenderComponent.cpp
+  RigidbodyComponent.cpp
+  Scene.cpp
   SpriteComponent.cpp
+  TextComponent.cpp
+  TextObject.cpp
+  Timer.cpp
+  TransformComponent.cpp
   Minigin.vcxproj -> D:\Silke\DAE\Semester2\DivineEngine\Win32\Release\Minigin.lib
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2\lib\x86\SDL2.dll
   1 File(s) copied

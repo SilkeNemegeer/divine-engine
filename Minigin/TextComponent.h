@@ -1,8 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
-#include "Structs.h"
-#include <SDL.h>
-
+#include <iostream>
 namespace divengine
 {
 	class Font;
@@ -11,7 +9,7 @@ namespace divengine
 	class TextComponent : public BaseComponent
 	{
 	public:
-		TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color = {255,255,255});
+		TextComponent(const std::string& text, const std::shared_ptr<Font>& font, const SDL_Color& color = SDL_Color{255,255,255});
 		virtual ~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;
 		TextComponent(TextComponent&& other) = delete;
@@ -19,6 +17,7 @@ namespace divengine
 		TextComponent& operator=(TextComponent&& other) = delete;
 
 		void SetText(const std::string& text);
+		void SetColor(const SDL_Color& color);
 
 	protected:
 		void Update() override;

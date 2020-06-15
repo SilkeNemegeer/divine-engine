@@ -21,6 +21,7 @@ void divengine::Renderer::Init(SDL_Window * window)
 void divengine::Renderer::Render() const
 {
 	ImGui::NewFrame();
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 	SDL_RenderClear(m_Renderer);
 
 	SceneManager::GetInstance().Render();
@@ -28,6 +29,7 @@ void divengine::Renderer::Render() const
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	
+	SDL_SetRenderTarget(m_Renderer, NULL);
 	SDL_RenderPresent(m_Renderer);
 }
 
@@ -49,6 +51,11 @@ void divengine::Renderer::RenderTexture(const Texture2D& texture, const float x,
 	dst.y = static_cast<int>(y);
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void divengine::Renderer::RenderTexture(const Texture2D& texture, const SDL_Rect& destRect) const
+{
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &destRect);
 }
 
 void divengine::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const

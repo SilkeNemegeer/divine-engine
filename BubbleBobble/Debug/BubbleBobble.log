@@ -1,4 +1,6 @@
-﻿  Main.cpp
+﻿  BubbleDragon.cpp
+  BubbleDragonState.cpp
+  Generating Code...
   BubbleBobble.vcxproj -> D:\Silke\DAE\Semester2\DivineEngine\Debug\BubbleBobble.exe
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2\lib\x86\SDL2.dll
   1 File(s) copied
@@ -12,4 +14,6 @@
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2_ttf\lib\x86\libfreetype-6.dll
   D:\Silke\DAE\Semester2\DivineEngine\3rdParty\SDL2_ttf\lib\x86\SDL2_ttf.dll
   2 File(s) copied
-  0 File(s) copied
+  D:\Silke\DAE\Semester2\DivineEngine\3rdParty\Fmod\lib\x86\fmod.dll
+  D:\Silke\DAE\Semester2\DivineEngine\3rdParty\Fmod\lib\x86\fmodL.dll
+  2 File(s) copied

@@ -1,8 +1,9 @@
 #pragma once
 #include "Character.h"
 #include "BubbleDragonState.h"
+#include "BaseComponent.h"
 using namespace divengine;
-class BubbleDragon : public Character//protagonist /player
+class BubbleDragon : public BaseComponent//: public Character//protagonist /player
 {
 	//Has 4 lives
 	//
@@ -13,6 +14,7 @@ class BubbleDragon : public Character//protagonist /player
 public:
 	virtual void Update() override;
 	virtual void Initialize() override;
+	virtual void Render() override {};
 	void Jump();
 
 
