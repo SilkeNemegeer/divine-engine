@@ -1,18 +1,20 @@
 #pragma once
-#include "SoundManager.h"
-#include "ResourceManager.h"
+
 
 namespace divengine
 {
+	class SoundManager;
+	class ResourceManager;
 	class ServiceLocator
 	{
 	public:
 		static void Init();
-		static SoundManager& GetSoundManager() { return soundManager; };
-		static ResourceManager& GetResourceManager() { return resourceManager; };
+		static SoundManager* GetSoundManager() { return soundManager; };
+		static ResourceManager* GetResourceManager() { return resourceManager; };
+		static void Destroy();
 		
 	private:
-		static SoundManager soundManager;
-		static ResourceManager resourceManager;
+		static SoundManager* soundManager;
+		static ResourceManager* resourceManager;
 	};
 }

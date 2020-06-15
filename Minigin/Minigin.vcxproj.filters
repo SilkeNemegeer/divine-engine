@@ -78,9 +78,6 @@
     <ClInclude Include="Minigin.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="RigidbodyComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -165,6 +162,18 @@
     <ClInclude Include="Timer.h">
       <Filter>Content</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseGame.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralStructs.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderComponent.cpp">
@@ -208,9 +217,6 @@
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="RigidbodyComponent.cpp">
       <Filter>Components</Filter>
@@ -273,6 +279,15 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGame.cpp">
       <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>

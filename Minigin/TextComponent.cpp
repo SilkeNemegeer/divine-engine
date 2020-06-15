@@ -22,6 +22,12 @@ void divengine::TextComponent::SetText(const std::string& text)
 	m_NeedsUpdate = true;
 }
 
+void divengine::TextComponent::SetColor(const SDL_Color& color)
+{
+	m_Color = color;
+	m_NeedsUpdate = true;
+}
+
 void divengine::TextComponent::Update()
 {
 	if (m_NeedsUpdate)

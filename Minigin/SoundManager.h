@@ -21,7 +21,7 @@ namespace divengine
 		bool StartSound(const std::string& soundName, int channelId = -1);
 		FMOD::Sound* GetSound(const std::string& soundName);
 		
-		void AddChannel(FMOD::Channel* pChannel, unsigned int id);
+		void AddChannel(unsigned int id);
 		FMOD::Channel* GetChannel(unsigned int id);
 
 		//Master volume settings

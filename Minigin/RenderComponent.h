@@ -11,8 +11,8 @@ namespace divengine
 	class RenderComponent : public BaseComponent
 	{
 	public:
-		RenderComponent();
-		RenderComponent(const std::string& filename);
+		RenderComponent(bool centerPosition = false);
+		RenderComponent(const std::string& filename, bool centerPosition = false);
 		virtual ~RenderComponent();
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;
@@ -22,6 +22,8 @@ namespace divengine
 		void SetTexture(SDL_Texture* texture);
 		void SetSourceRect(SDL_Rect& srcRect);
 		void SetDestRect(SDL_Rect& destRect);
+
+		void SetPosition(const glm::vec2& pos);
 		Vector2 GetTextureDimensions() const;
 
 	protected:
@@ -30,9 +32,11 @@ namespace divengine
 		void Initialize() override;
 
 	private:
+
 		std::shared_ptr<Texture2D> m_Texture{};
 		SDL_Rect* m_SrcRect;
 		SDL_Rect* m_DestRect;
+		bool m_CenterPosition;
 	};
 
 }

@@ -6,22 +6,23 @@
 #include "TransformComponent.h"
 #include "ServiceLocator.h"
 #include "Texture2D.h"
+#include "SDL.h"
 #include "SDL_ttf.h"
+#include "Debug.h"
 
 using namespace divengine;
 
-divengine::RenderComponent::RenderComponent()
-	:BaseComponent()
+divengine::RenderComponent::RenderComponent(bool centerPosition)
+	:BaseComponent(),m_CenterPosition{centerPosition}
 {
 	m_SrcRect = nullptr;
 	m_DestRect = new SDL_Rect();
 }
 
-divengine::RenderComponent::RenderComponent(const std::string& filename)
-	:RenderComponent()
+divengine::RenderComponent::RenderComponent(const std::string& filename, bool centerPosition)
+	:RenderComponent(centerPosition)
 {
-	m_Texture = ServiceLocator::GetResourceManager().LoadTexture(filename);
-	//m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
+	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
 	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
 
@@ -41,31 +42,28 @@ divengine::RenderComponent::~RenderComponent()
 
 void divengine::RenderComponent::Render()
 {
-	if (m_Texture)
-	{
-		Vector3 pos = m_pGameObject->GetPosition();
+	if (!m_Texture)
+		return;
 
-		m_DestRect->x = (int)pos.x;
-		m_DestRect->y = (int)pos.y;
-	
-		//SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+	if (m_SrcRect)
 		Renderer::GetInstance().RenderTexture(*m_Texture, *m_SrcRect, *m_DestRect);
-		//Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
-	}
+	else
+		Renderer::GetInstance().RenderTexture(*m_Texture, *m_DestRect);
 }
 
 void divengine::RenderComponent::Initialize()
 {
 	Vector3 pos = m_pGameObject->GetPosition();
-	m_DestRect->x = static_cast<int>(pos.x);
-	m_DestRect->y = static_cast<int>(pos.y);
+	SetPosition(glm::vec2(pos.x, pos.y));
 }
 
 void divengine::RenderComponent::SetTexture(const std::string& filename)
 {
-	m_Texture = ServiceLocator::GetResourceManager().LoadTexture(filename);
-	//m_Texture = ResourceManager::GetInstance().LoadTexture(filename);
-	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
+	if (SDL_QueryTexture((*m_Texture).GetSDLTexture(),nullptr, nullptr, &m_DestRect->w, &m_DestRect->h) == -1)
+	{
+		Debug::LogWarning("RenderComponent::SetTexture: texture with name: \'", filename.c_str(), "\' was not valid");
+	}
 }
 
 void divengine::RenderComponent::SetTexture(SDL_Texture* texture)
@@ -94,15 +92,43 @@ void divengine::RenderComponent::SetDestRect(SDL_Rect& destRect)
 	m_DestRect->h = destRect.h;
 }
 
+void divengine::RenderComponent::SetPosition(const glm::vec2& pos)
+{
+	m_DestRect->x = int(pos.x);
+	m_DestRect->y = int(pos.y);
+}
+
 Vector2 divengine::RenderComponent::GetTextureDimensions() const
 {
-	int width, height;
-	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &width, &height);
-	return Vector2(float(width), float(height));
+	return Vector2(float(m_Texture->GetWidth()), float(m_Texture->GetHeight()));
 }
 
 void divengine::RenderComponent::Update()
 {
+	if (!m_Texture)
+		return;
+
+	//Update transform
+	auto transform = m_pGameObject->GetTransform();
+	glm::vec2 offset;
+	if (m_CenterPosition)
+	{
+		offset.x = m_Texture->GetWidth() /2.f;
+		offset.y = m_Texture->GetHeight() / 2.f;
+	}
+	m_DestRect->x = int(transform->GetPosition().x - offset.x);
+	m_DestRect->y = int(transform->GetPosition().y - offset.y);
+
+	if (m_SrcRect)
+	{
+		m_DestRect->w = int(m_SrcRect->w * transform->GetScale());
+		m_DestRect->h = int(m_SrcRect->h * transform->GetScale());
+	}
+	else
+	{
+		m_DestRect->h = int(m_Texture->GetHeight() * transform->GetScale());
+		m_DestRect->w = int(m_Texture->GetWidth() * transform->GetScale());
+	}
 }
 
 

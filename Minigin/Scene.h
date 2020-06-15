@@ -10,7 +10,7 @@ namespace divengine
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
-		void AddObject(const std::shared_ptr<GameObject>& object);
+		void AddObject(GameObject* object);
 		void AddRigidbody(Rigidbody* pRigidboy);
 		void AddCollider(ColliderComponent* pCollider);
 		std::string Name() const;
@@ -30,7 +30,7 @@ namespace divengine
 	private: 
 		explicit Scene(const std::string& name);
 		std::string m_Name;
-		std::vector < std::shared_ptr<GameObject>> m_Objects{};
+		std::vector <GameObject*> m_Objects{};
 		std::vector<Rigidbody*>m_pRigidbodies{};
 		std::vector<ColliderComponent*>m_pColliders{};
 		static unsigned int m_IdCounter; 

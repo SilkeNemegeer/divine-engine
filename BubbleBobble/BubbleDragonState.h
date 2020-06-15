@@ -6,7 +6,7 @@ class BubbleDragonState
 {
 public:
 	virtual ~BubbleDragonState() {};
-	virtual void Update(divengine::GameObject* pObject) {};
+	virtual void Update(divengine::GameObject*) {};
 };
 
 class MovingLeftState
@@ -16,7 +16,7 @@ public:
 
 	//The state can change because of input as well
 
-	virtual void Update(divengine::GameObject* pObject) 
+	virtual void Update(divengine::GameObject*) 
 	{
 		//Check here if you need to go to another state or if you stay in the same state
 

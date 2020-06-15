@@ -1,6 +1,8 @@
 #pragma once
 #include "Command.h"
 #include "InputManager.h"
+#include "PlayerController.h"
+#include "MenuController.h"
 using namespace divengine;
 
 class JumpCommand : public Command
@@ -9,19 +11,104 @@ public:
 	JumpCommand() {}; //Can pass extra values here if needed
 	void Execute(GameObject* pObject) override 
 	{
-		if (pObject)
+		auto playerController = pObject->GetComponent<PlayerController>();
+		if (playerController)
 		{
-			//if (pObject->GetTag() == "BubbleDragon");
+			playerController->Jump();
 		}
-		Jump(); 
 	
 	}
 	void Undo() override {}
 private:
-	void Jump()
+};
+
+class MoveLeft : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
 	{
-		//Check tag to see if it is a character -> make it jump if so
-		//InputManager::GetInstance().SetVibration(0, 0);
-		std::cout << "Jump called.\n";
+		auto playerController = pObject->GetComponent<PlayerController>();
+		if (playerController)
+		{
+			playerController->MoveLeft();
+		}
 	}
+	void Undo() override {}
+
+private:
+
+};
+
+class MoveRight : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
+	{
+		auto playerController = pObject->GetComponent<PlayerController>();
+		if (playerController)
+		{
+			playerController->MoveRight();
+		}
+	}
+	void Undo() override {}
+
+private:
+};
+
+class Attack : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
+	{
+		auto playerController = pObject->GetComponent<PlayerController>();
+		if (playerController)
+		{
+			playerController->Attack();
+		}
+	}
+	void Undo() override {}
+
+private:
+};
+
+class NavigateUp : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
+	{
+		auto menuController = pObject->GetComponent<MenuController>();
+		if (menuController)
+		{
+			menuController->NavigateUp();
+		}
+	}
+	void Undo() override {}
+};
+
+class NavigateDown : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
+	{
+		auto menuController = pObject->GetComponent<MenuController>();
+		if (menuController)
+		{
+			menuController->NavigateDown();
+		}
+	}
+	void Undo() override {}
+};
+
+class Select : public Command
+{
+public:
+	void Execute(GameObject* pObject) override
+	{
+		auto menuController = pObject->GetComponent<MenuController>();
+		if (menuController)
+		{
+			menuController->Select();
+		}
+	}
+	void Undo() override {}
 };

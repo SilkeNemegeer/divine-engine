@@ -38,7 +38,7 @@ FMOD::Sound* divengine::SoundManager::LoadSound(const std::string& path, const s
 
 	//Create new sound
 	FMOD::Sound* pSound = nullptr;
-	FMOD_RESULT result = m_pFmodSystem->createSound(ServiceLocator::GetResourceManager().GetFullDataPath(path).c_str(), mode, 0, &pSound);
+	FMOD_RESULT result = m_pFmodSystem->createSound(ServiceLocator::GetResourceManager()->GetFullDataPath(path).c_str(), mode, 0, &pSound);
 	//FMOD_RESULT result = m_pFmodSystem->createSound(ResourceManager::GetInstance().GetFullDataPath(path).c_str(), mode, 0, &pSound);
 
 	if (!CheckResult(result))
@@ -79,10 +79,17 @@ bool divengine::SoundManager::StartSound(const std::string& soundName, int chann
 		return false;
 	}
 	
-	FMOD::Channel* pChannel = (channelId == -1) ? 0 : GetChannel(unsigned int(channelId));
-
-	auto result = m_pFmodSystem->playSound(m_pSounds[soundName], m_pMainChannelGroup, false, &pChannel);
-	if(!CheckResult(result))
+	//FMOD::Channel* pChannel = (channelId == -1) ? 0 : GetChannel(unsigned int(channelId));
+	FMOD_RESULT result;
+	if (channelId < 0)
+	{
+		 result = m_pFmodSystem->playSound(m_pSounds[soundName], m_pMainChannelGroup, false, &m_pChannels[channelId]);
+	}
+	else
+	{
+		result = m_pFmodSystem->playSound(m_pSounds[soundName], m_pMainChannelGroup, false, &m_pChannels[channelId]);
+	}
+	if (!CheckResult(result))
 		return false;
 
 	return true;
@@ -99,7 +106,7 @@ FMOD::Sound* divengine::SoundManager::GetSound(const std::string& soundName)
 	return m_pSounds[soundName];
 }
 
-void divengine::SoundManager::AddChannel(FMOD::Channel* pChannel, unsigned int id)
+void divengine::SoundManager::AddChannel(unsigned int id)
 {
 	if (m_pChannels.find(id) != m_pChannels.end())
 	{
@@ -107,7 +114,7 @@ void divengine::SoundManager::AddChannel(FMOD::Channel* pChannel, unsigned int i
 		return;
 	}
 
-	m_pChannels[id] = pChannel;
+	m_pChannels[id] = nullptr;
 }
 
 FMOD::Channel* divengine::SoundManager::GetChannel(unsigned int id)

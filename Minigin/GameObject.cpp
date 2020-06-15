@@ -66,7 +66,32 @@ divengine::Vector3 divengine::GameObject::GetPosition() const
 	return m_Transform->GetPosition();
 }
 
-void divengine::GameObject::AddComponent(BaseComponent* pComponent)
+glm::vec2 divengine::GameObject::GetPos() const
+{
+	return glm::vec2(m_Transform->GetPosition().x, m_Transform->GetPosition().y);
+}
+
+void divengine::GameObject::SetPos(const glm::vec2& pos)
+{
+	m_Transform->SetPosition(pos.x, pos.y, 0);
+}
+
+void divengine::GameObject::SetPos(float x, float y)
+{
+	SetPos(glm::vec2(x, y));
+}
+
+float divengine::GameObject::GetScale() const
+{
+	return m_Transform->GetScale();
+}
+
+divengine::TransformComponent* divengine::GameObject::GetTransform() const
+{
+	return m_Transform;
+}
+
+void divengine::GameObject::AddComponent(BaseComponent* pComponent, bool initOnCreation)
 {
 	if (pComponent)
 	{
@@ -81,6 +106,8 @@ void divengine::GameObject::AddComponent(BaseComponent* pComponent)
 		}
 		m_pComponents.push_back(pComponent);
 		pComponent->m_pGameObject = this;
+		if (initOnCreation)
+			pComponent->Initialize();
 	}
 }
 

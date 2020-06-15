@@ -10,6 +10,8 @@ namespace divengine
 	public:
 		SDL_Texture* GetSDLTexture() const;
 		explicit Texture2D(SDL_Texture* texture);
+		int GetWidth() const;
+		int GetHeight() const;
 		~Texture2D();
 
 		Texture2D(const Texture2D &) = delete;
@@ -18,5 +20,7 @@ namespace divengine
 		Texture2D & operator= (const Texture2D &&) = delete;
 	private:
 		SDL_Texture* m_Texture;
+		int m_Width;
+		int m_Height;
 	};
 }

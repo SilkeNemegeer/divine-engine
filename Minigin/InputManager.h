@@ -1,10 +1,9 @@
 #pragma once
-#include <XInput.h>
 #include "Singleton.h"
-#include "ControllerComponent.h"
 #include <map>
 namespace divengine
 {
+	class GameObject;
 	class Command;
 
 	enum class TriggerState
