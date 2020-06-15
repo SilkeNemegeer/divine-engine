@@ -11,8 +11,9 @@ namespace divengine
 	class RenderComponent : public BaseComponent
 	{
 	public:
-		RenderComponent(bool centerPosition = false);
-		RenderComponent(const std::string& filename, bool centerPosition = false);
+		explicit RenderComponent(bool centerPosition = false);
+		explicit RenderComponent(const std::string& filename, bool centerPosition = false);
+		explicit RenderComponent(const char* filename, bool centerPosition = false);
 		virtual ~RenderComponent();
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;
@@ -30,7 +31,7 @@ namespace divengine
 		void Update() override;
 		void Render() override;
 		void Initialize() override;
-
+		void PostInitialize() override;
 	private:
 
 		std::shared_ptr<Texture2D> m_Texture{};

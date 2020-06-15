@@ -21,6 +21,7 @@ BubbleBobbleGame::BubbleBobbleGame()
 
 BubbleBobbleGame::~BubbleBobbleGame()
 {
+
 }
 
 void BubbleBobbleGame::Initialize()

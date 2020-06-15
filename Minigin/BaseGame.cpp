@@ -34,7 +34,6 @@ divengine::BaseGame::BaseGame()
 divengine::BaseGame::~BaseGame()
 {
 	//m_Engine.Cleanup();
-
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 	SDL_Quit();

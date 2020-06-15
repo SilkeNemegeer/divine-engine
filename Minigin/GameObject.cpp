@@ -129,6 +129,7 @@ void divengine::GameObject::OnTrigger(GameObject* trigger, GameObject* other, Tr
 	}
 }
 
+
 void divengine::GameObject::SetTriggerCallback(TriggerCallback callback)
 {
 	m_TriggerCallback = callback;
@@ -139,5 +140,10 @@ void divengine::GameObject::Initialize()
 	for (BaseComponent* component : m_pComponents)
 	{
 		component->Initialize();
+	}
+
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->PostInitialize();
 	}
 }

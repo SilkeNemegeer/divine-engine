@@ -26,6 +26,13 @@ divengine::RenderComponent::RenderComponent(const std::string& filename, bool ce
 	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
 
+divengine::RenderComponent::RenderComponent(const char* filename, bool centerPosition)
+	:RenderComponent(centerPosition)
+{
+	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
+	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+}
+
 divengine::RenderComponent::~RenderComponent()
 {
 	if (m_SrcRect)
@@ -53,8 +60,22 @@ void divengine::RenderComponent::Render()
 
 void divengine::RenderComponent::Initialize()
 {
+
+}
+
+void divengine::RenderComponent::PostInitialize()
+{
+	glm::vec2 offset{};
+	if (m_CenterPosition && m_Texture)
+	{
+		offset.x = -m_Texture->GetWidth() / 2.f;
+		offset.y = -m_Texture->GetHeight() / 2.f;
+	}
+
 	Vector3 pos = m_pGameObject->GetPosition();
-	SetPosition(glm::vec2(pos.x, pos.y));
+	glm::vec2 newPos(pos.x + offset.x, pos.y + offset.y);
+	m_pGameObject->SetPos(newPos);
+	SetPosition(newPos);
 }
 
 void divengine::RenderComponent::SetTexture(const std::string& filename)
@@ -110,14 +131,14 @@ void divengine::RenderComponent::Update()
 
 	//Update transform
 	auto transform = m_pGameObject->GetTransform();
-	glm::vec2 offset;
-	if (m_CenterPosition)
+	//glm::vec2 offset{};
+	/*if (m_CenterPosition)
 	{
 		offset.x = m_Texture->GetWidth() /2.f;
-		offset.y = m_Texture->GetHeight() / 2.f;
-	}
-	m_DestRect->x = int(transform->GetPosition().x - offset.x);
-	m_DestRect->y = int(transform->GetPosition().y - offset.y);
+		offset.y = m_Texture->GetHeight() / 2.f;*/
+	//}
+	m_DestRect->x = int(transform->GetPosition().x);
+	m_DestRect->y = int(transform->GetPosition().y);
 
 	if (m_SrcRect)
 	{
