@@ -9,29 +9,38 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "Debug.h"
+#include <fstream>
 
 using namespace divengine;
+//
+//divengine::RenderComponent::RenderComponent(bool centerPosition, const std::string& filename)
+//	:BaseComponent(), m_CenterPosition{ centerPosition }, m_FileName{filename}
+//{
+//	m_SrcRect = nullptr;
+//	m_DestRect = new SDL_Rect();
+//}
 
 divengine::RenderComponent::RenderComponent(bool centerPosition)
-	:BaseComponent(),m_CenterPosition{centerPosition}
+	:RenderComponent("", centerPosition)
 {
-	m_SrcRect = nullptr;
-	m_DestRect = new SDL_Rect();
 }
 
 divengine::RenderComponent::RenderComponent(const std::string& filename, bool centerPosition)
-	:RenderComponent(centerPosition)
+	:m_CenterPosition{ centerPosition }, m_FileName{ filename }
 {
-	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
-	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+	m_TypeId = unsigned int(ComponentType::rendercomponent);
+	m_SrcRect = nullptr;
+	m_DestRect = new SDL_Rect();
+	//m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
+	//SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
 
-divengine::RenderComponent::RenderComponent(const char* filename, bool centerPosition)
-	:RenderComponent(centerPosition)
-{
-	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
-	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
-}
+//divengine::RenderComponent::RenderComponent(const char* filename, bool centerPosition)
+//	:RenderComponent(filename, centerPosition)
+//{
+//	//m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
+//	//SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+//}
 
 divengine::RenderComponent::~RenderComponent()
 {
@@ -60,7 +69,11 @@ void divengine::RenderComponent::Render()
 
 void divengine::RenderComponent::Initialize()
 {
-
+	if (m_FileName != "" && !m_Texture)
+	{
+		m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(m_FileName);
+		SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+	}
 }
 
 void divengine::RenderComponent::PostInitialize()
@@ -80,6 +93,7 @@ void divengine::RenderComponent::PostInitialize()
 
 void divengine::RenderComponent::SetTexture(const std::string& filename)
 {
+	m_FileName = filename;
 	m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
 	if (SDL_QueryTexture((*m_Texture).GetSDLTexture(),nullptr, nullptr, &m_DestRect->w, &m_DestRect->h) == -1)
 	{
@@ -89,6 +103,7 @@ void divengine::RenderComponent::SetTexture(const std::string& filename)
 
 void divengine::RenderComponent::SetTexture(SDL_Texture* texture)
 {
+
 	m_Texture = std::make_shared<Texture2D>(texture);
 	SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
@@ -121,7 +136,40 @@ void divengine::RenderComponent::SetPosition(const glm::vec2& pos)
 
 Vector2 divengine::RenderComponent::GetTextureDimensions() const
 {
+	if (!m_Texture)
+	{
+		Debug::LogWarning("RenderComponent::GetTextureDimensions: Texture was not found!");
+		return Vector2();
+	}
 	return Vector2(float(m_Texture->GetWidth()), float(m_Texture->GetHeight()));
+}
+
+void divengine::RenderComponent::Load(BinaryReader& reader)
+{
+	//center position
+	reader.Read(m_CenterPosition);
+	//istream.read((char*)&m_CenterPosition, sizeof(m_CenterPosition));
+
+	////read file name
+	reader.Read(m_FileName);
+	//size_t size = 0;
+	//istream.read((char*)&size, sizeof(size_t));
+	//m_FileName.resize(size, ' ');
+	//istream.read((char*)&m_FileName[0], sizeof(char) * size);
+}
+
+void divengine::RenderComponent::Save(BinaryWriter& writer)
+{
+	//center position
+	//ostream.write((const char*)&m_CenterPosition, sizeof(m_CenterPosition));
+	writer.Write(m_CenterPosition);
+
+	////write filename
+	writer.Write(m_FileName);
+	//size_t size = m_FileName.size();
+	//ostream.write((const char*)&size, sizeof(size));
+	//ostream.write((const char*)&m_FileName[0], size);
+
 }
 
 void divengine::RenderComponent::Update()

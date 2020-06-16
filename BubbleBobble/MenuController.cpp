@@ -1,4 +1,5 @@
 #include "MenuController.h"
+#include "MiniginPCH.h"
 #include "Debug.h"
 #include "Button.h"
 #include "GameObject.h"
@@ -10,6 +11,8 @@
 #include "Scene.h"
 #include "Minigin.h"
 #include "BaseGame.h"
+#include "GameComponentType.h"
+#include "InputManager.h"
 
 MenuController::MenuController()
 	:m_CurrentButtonId{0}
@@ -17,6 +20,7 @@ MenuController::MenuController()
 	,m_OffsetIcon(20,-2)
 	,m_pSelectIcon{nullptr}
 {
+	m_TypeId = unsigned int(GameComponentType::menucontroller);
 }
 
 MenuController::~MenuController()
@@ -68,6 +72,7 @@ void MenuController::Select()
 
 	case ButtonType::pvp:
 		divengine::Debug::Log("Start pvp game");
+		divengine::SceneManager::GetInstance().SetAsCurrentScene("Demo");
 		break;
 	}
 }
@@ -80,6 +85,20 @@ void MenuController::Update()
 void MenuController::Initialize()
 {
 	CreateButtons();
+
+	divengine::InputManager::GetInstance().AddInputMapping(1, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, m_pGameObject);
+	divengine::InputManager::GetInstance().AddInputMapping(2, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, divengine::TriggerState::pressed, m_pGameObject);
+	divengine::InputManager::GetInstance().AddInputMapping(3, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, divengine::TriggerState::pressed, m_pGameObject);
+}
+
+void MenuController::Load(divengine::BinaryReader& )
+{
+	//No need 
+}
+
+void MenuController::Save(divengine::BinaryWriter& )
+{
+	//No need
 }
 
 divengine::GameObject* MenuController::CreateButton(const std::string& text, const glm::vec2& pos)

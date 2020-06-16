@@ -162,12 +162,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationClip.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Animator.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="BaseGame.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -175,6 +169,18 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="InputMap.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryReader.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryWriter.h">
       <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -287,13 +293,19 @@
     <ClCompile Include="AnimationClip.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Animator.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="BaseGame.cpp">
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="InputMap.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryReader.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryWriter.cpp">
       <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>

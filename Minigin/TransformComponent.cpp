@@ -5,6 +5,13 @@ divengine::TransformComponent::TransformComponent(const Vector3& position, float
 	:m_Position{position}
 	,m_Scale{scale}
 {
+	m_TypeId = unsigned int(ComponentType::transformcomponent);
+}
+
+divengine::TransformComponent::TransformComponent(const glm::vec2& pos, float scale)
+	:m_Position{pos.x, pos.y, 0}, m_Scale{scale}
+{
+	m_TypeId = unsigned int(ComponentType::transformcomponent);
 }
 
 void divengine::TransformComponent::SetPosition(const Vector3& pos)
@@ -45,4 +52,26 @@ void divengine::TransformComponent::Render()
 
 void divengine::TransformComponent::Initialize()
 {
+}
+
+void divengine::TransformComponent::Load(BinaryReader& reader)
+{
+	//position
+	//istream.read((char*)&m_Position, sizeof(m_Position));
+	reader.Read(m_Position);
+
+	////Scale
+	//istream.read((char*)&m_Scale, sizeof(m_Scale));
+	reader.Read(m_Scale);
+}
+
+void divengine::TransformComponent::Save(BinaryWriter& writer)
+{
+	//position
+	//ostream.write((const char*)&m_Position, sizeof(m_Position));
+	writer.Write(m_Position);
+
+	////scale
+	//ostream.write((const char*)&m_Scale, sizeof(m_Scale));
+	writer.Write(m_Scale);
 }

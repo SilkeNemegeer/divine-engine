@@ -14,6 +14,7 @@
 #include "Commands.h"
 #include "Timer.h"
 #include "MenuController.h"
+#include "FileManager.h"
 
 BubbleBobbleGame::BubbleBobbleGame()
 {
@@ -24,15 +25,8 @@ BubbleBobbleGame::~BubbleBobbleGame()
 
 }
 
-void BubbleBobbleGame::Initialize()
+void LoadDemoLevel()
 {
-	using namespace divengine;
-
-	//Init managers
-	ServiceLocator::Init();
-	ServiceLocator::GetResourceManager()->Init("../Data/");	// tell the resource manager where he can find the game data
-
-	//Load scenes
 	auto& demoScene = SceneManager::GetInstance().CreateScene("Demo");
 
 	//Add background
@@ -150,11 +144,59 @@ void BubbleBobbleGame::Initialize()
 	demoScene.AddObject(menu);
 
 	//Add commands
+	//InputManager::GetInstance().AddCommand(new Select(), 1);
+	//InputManager::GetInstance().AddCommand(new NavigateDown(), 2);
+	//InputManager::GetInstance().AddCommand(new NavigateUp(), 3);
+
+	/*InputManager::GetInstance().AddInputMapping(1, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, TriggerState::pressed, menu);
+	InputManager::GetInstance().AddInputMapping(2, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, TriggerState::pressed, menu);
+	InputManager::GetInstance().AddInputMapping(3, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, TriggerState::pressed, menu);*/
+}
+
+void LoadMainMenu()
+{
+	//auto& level1Scene = SceneManager::GetInstance().CreateScene("MainMenu");
+
+	//auto menu = new GameObject(Vector3(0, 0, 0));
+	//menu->AddComponent(new MenuController());
+	//level1Scene.AddObject(menu);
+
+	////ADD bubble bobble main screen
+	//RenderComponent* pBubbleBobbleImage = new RenderComponent();
+	//pBubbleBobbleImage->SetTexture("BubbleBobbleText.png");
+	//float halfWidth = pBubbleBobbleImage->GetTextureDimensions().x / 2.f;
+	//auto go = new GameObject(Vector3(320.f - halfWidth, 50.f, 0.f), 1.f);
+	//go->AddComponent(pBubbleBobbleImage);
+	//level1Scene.AddObject(go);
+	//
+	//FileManager::GetInstance().SaveLevel("../Data/MainMenu.div", "MainMenu");
+
+	SceneManager::GetInstance().CreateScene("MainMenu");
+	FileManager::GetInstance().LoadLevel("../Data/MainMenu.div", "MainMenu");
+}
+
+void LoadLevel1()
+{
+
+}
+
+void BubbleBobbleGame::Initialize()
+{
+	using namespace divengine;
+	//Init managers
+	ServiceLocator::Init();
+	ServiceLocator::GetResourceManager()->Init("../Data/");	// tell the resource manager where he can find the game data
+
+	//Add commands
 	InputManager::GetInstance().AddCommand(new Select(), 1);
 	InputManager::GetInstance().AddCommand(new NavigateDown(), 2);
 	InputManager::GetInstance().AddCommand(new NavigateUp(), 3);
 
-	InputManager::GetInstance().AddInputMapping(1, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, TriggerState::pressed, menu);
-	InputManager::GetInstance().AddInputMapping(2, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, TriggerState::pressed, menu);
-	InputManager::GetInstance().AddInputMapping(3, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, TriggerState::pressed, menu);
+	//Load scenes
+	LoadMainMenu();
+	LoadLevel1();
+	LoadDemoLevel();
+
+	SceneManager::GetInstance().SetAsCurrentScene("MainMenu");
+
 }

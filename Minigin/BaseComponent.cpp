@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 divengine::BaseComponent::BaseComponent()
-	:m_pGameObject{nullptr}
+	:m_pGameObject{nullptr}, m_TypeId{unsigned int(ComponentType::unknown)}
 {
 }
 

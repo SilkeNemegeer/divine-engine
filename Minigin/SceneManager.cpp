@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Debug.h"
 
 void divengine::SceneManager::Update()
 {
@@ -20,7 +21,11 @@ void divengine::SceneManager::Render()
 
 void  divengine::SceneManager::Initialize()
 {
-	m_pCurrentScene->InitializeAll();
+	for (const auto& scene : m_Scenes)
+	{
+		scene->InitializeAll();
+	}
+	//m_pCurrentScene->InitializeAll();
 }
 
 void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
@@ -34,6 +39,17 @@ void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
 			return;
 		}
 	}
+}
+
+std::shared_ptr<divengine::Scene> divengine::SceneManager::GetSceneByName(const std::string& name) const
+{
+	auto it = std::find_if(m_Scenes.begin(), m_Scenes.end(), [name](std::shared_ptr<Scene> pScene) {return pScene->Name() == name; });
+	if (it == m_Scenes.end())
+	{
+		Debug::LogWarning("Could not find scene with name ", name.c_str());
+		return nullptr;
+	}
+	return *it;
 }
 
 divengine::Scene& divengine::SceneManager::CreateScene(const std::string& name)

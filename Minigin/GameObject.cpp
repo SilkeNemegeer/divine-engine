@@ -10,6 +10,7 @@ divengine::GameObject::GameObject(const Vector3& position, float scale)
 	:m_Transform(new TransformComponent(position, scale))
 	,m_Tag{""}
 	, m_IsActive(true)
+	,m_IsInitialized(false)
 {
 	AddComponent(m_Transform);
 }
@@ -100,7 +101,7 @@ void divengine::GameObject::AddComponent(BaseComponent* pComponent, bool initOnC
 		{
 			if (component == pComponent)
 			{
-				throw std::exception("GameObject.h: Tried to add component that GameObject already had");
+				//throw std::exception("GameObject.h: Tried to add component that GameObject already had");
 				return;
 			}
 		}
@@ -137,13 +138,18 @@ void divengine::GameObject::SetTriggerCallback(TriggerCallback callback)
 
 void divengine::GameObject::Initialize()
 {
-	for (BaseComponent* component : m_pComponents)
+	if (m_IsInitialized)
+		return;
+
+	for (size_t i = 0; i < m_pComponents.size(); i++)
 	{
-		component->Initialize();
+		m_pComponents[i]->Initialize();
 	}
 
 	for (BaseComponent* component : m_pComponents)
 	{
 		component->PostInitialize();
 	}
+
+	m_IsInitialized = true;
 }

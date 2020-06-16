@@ -215,6 +215,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClInclude Include="Character.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="GameComponentType.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="PlayerController.h" />
