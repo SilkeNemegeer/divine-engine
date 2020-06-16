@@ -104,7 +104,10 @@ void divengine::Animator::Initialize()
 		m_pGameObject->AddComponent(m_pTransform);
 		Debug::LogWarning("Animator::Initialize: no transform component found");
 	}
-	
+}
+
+void divengine::Animator::PostInitialize()
+{
 	m_pRenderComp->SetSourceRect(m_SrcRect);
 
 	auto dimensions = m_pRenderComp->GetTextureDimensions();

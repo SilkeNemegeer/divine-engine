@@ -43,6 +43,8 @@ namespace divengine
 		void AddComponent(BaseComponent* pComponent, bool initOnCreation = false);
 		void RemoveComponent(BaseComponent* pComponent);
 
+		const std::vector<BaseComponent*> &Components() const { return m_pComponents; };
+
 		void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag);
 		void SetTriggerCallback(TriggerCallback callback);
 
@@ -96,5 +98,6 @@ namespace divengine
 		TransformComponent* m_Transform; //a lot of GameObjects have a position, having it here will be more efficient
 		std::string m_Tag;
 		bool m_IsActive;
+		bool m_IsInitialized;
 	};
 }

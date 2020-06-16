@@ -64,9 +64,17 @@ void Scene::Render() const
 
 void divengine::Scene::InitializeAll() const
 {
-	for (const auto& object : m_Objects)
+	//for (const auto& object : m_Objects)
+	//{
+	//	object->Initialize();
+
+	//}
+
+	for (size_t i = 0; i < m_Objects.size(); i++)
 	{
-		object->Initialize();
+		m_Objects[i]->Initialize();
+
+
 	}
 }
 

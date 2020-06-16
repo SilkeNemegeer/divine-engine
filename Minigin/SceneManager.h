@@ -19,6 +19,7 @@ namespace divengine
 		void Initialize();
 
 		void SetAsCurrentScene(const std::string& name);
+		std::shared_ptr<Scene> GetSceneByName(const std::string& name) const;
 		std::shared_ptr<Scene> GetCurrentScene() const { return m_pCurrentScene; };
 	private:
 		friend class Singleton<SceneManager>;

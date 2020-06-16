@@ -13,7 +13,7 @@ namespace divengine
 	public:
 		explicit RenderComponent(bool centerPosition = false);
 		explicit RenderComponent(const std::string& filename, bool centerPosition = false);
-		explicit RenderComponent(const char* filename, bool centerPosition = false);
+		//explicit RenderComponent(const char* filename, bool centerPosition = false);
 		virtual ~RenderComponent();
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;
@@ -27,6 +27,12 @@ namespace divengine
 		void SetPosition(const glm::vec2& pos);
 		Vector2 GetTextureDimensions() const;
 
+		//virtual void Load(std::istream& istream) override;
+		//virtual void Save(std::ostream& ostream) override;
+
+		virtual void Load(BinaryReader& reader) override;
+		virtual void Save(BinaryWriter& writer) override;
+
 	protected:
 		void Update() override;
 		void Render() override;
@@ -38,6 +44,7 @@ namespace divengine
 		SDL_Rect* m_SrcRect;
 		SDL_Rect* m_DestRect;
 		bool m_CenterPosition;
+		std::string m_FileName;
 	};
 
 }

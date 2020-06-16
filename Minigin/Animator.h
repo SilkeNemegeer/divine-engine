@@ -27,6 +27,7 @@ namespace divengine
 	protected:
 		virtual void Update() override;
 		virtual void Initialize() override;
+		virtual void PostInitialize() override;
 		virtual void Render() override;
 
 		private:
