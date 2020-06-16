@@ -15,20 +15,13 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 	if (!scene)
 		return;
 
+	//Open binary stream	
 	m_Reader.Open(file);
 	if (!m_Reader.isOpen())
 		return;
 
-	//Open binary stream
-	//m_ReadStream.open(file, std::ios::in | std::ios::binary);
-	//if (!m_ReadStream.is_open())
-	//	return;
-
-	//TODO: add check if it is the correct file (regex?)
-	
 	//Read amount of gameobjects
 	size_t objectCount = 0;
-	//Read(objectCount);
 	m_Reader.Read(objectCount);
 
 	//start reading all objects:
@@ -38,13 +31,11 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 
 		//read component count for the object
 		size_t componentCount = 0;
-		//Read(componentCount);
 		m_Reader.Read(componentCount);
 
 		for (size_t j = 0; j < componentCount; j++)
 		{
 			unsigned int componentType = 0;
-			//Read(componentType);
 			m_Reader.Read(componentType);
 
 			//Create component according to type
@@ -72,8 +63,6 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 				{
 				case ComponentType::transformcomponent:
 					pComponent = pObject->GetComponent<TransformComponent>();
-					//pComponent = new TransformComponent();
-					//game object  auto has transformComp
 					break;
 
 				case ComponentType::rendercomponent:
@@ -87,7 +76,6 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 			if (pComponent)
 			{
 				//Load the component
-				//pComponent->Load(m_ReadStream);
 				pComponent->Load(m_Reader);
 				//add it to the gameObject
 				pObject->AddComponent(pComponent);
@@ -100,7 +88,6 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 
 	//close stream
 	m_Reader.Close();
-	//m_ReadStream.close();
 }
 
 void FileManager::SaveLevel(const std::string& file, const std::string& levelname)//Write to file
@@ -108,9 +95,6 @@ void FileManager::SaveLevel(const std::string& file, const std::string& levelnam
 	using namespace divengine;
 
 	//open stream
-	/*m_WriteStream.open(file, std::ios::out | std::ios::binary);
-	if (!m_WriteStream.is_open())
-		return;*/
 	m_Writer.Open(file);
 
 	//save gameObject count (from the current scene)
@@ -118,12 +102,10 @@ void FileManager::SaveLevel(const std::string& file, const std::string& levelnam
 	if (!scene)
 	{
 		m_Writer.Close();
-		//m_WriteStream.close();
 		return;
 	}
 	auto objects = scene->GameObjects();
 	size_t objectCount = objects.size();
-	//Write(objectCount);
 	m_Writer.Write(objectCount);
 
 	//Start saving the objects:
@@ -131,19 +113,17 @@ void FileManager::SaveLevel(const std::string& file, const std::string& levelnam
 	{
 		auto components = objects[i]->Components();
 		//save component count per gameobject (from gameobject itself)
-		//Write(components.size());
 		m_Writer.Write(components.size());
 
 		for (size_t j = 0; j < components.size(); j++)
 		{
-		//	Write(components[j]->Type()); //save component type
+			//save component type
 			m_Writer.Write(components[j]->Type());
 			components[j]->Save(m_Writer); //call save components per component
 		}
 	}
 
 	//close stream
-	//m_WriteStream.close();
 	m_Writer.Close();
 }
 
