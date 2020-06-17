@@ -14,9 +14,13 @@
 #include "Commands.h"
 #include "Timer.h"
 #include "MenuController.h"
+#include "ServiceLocator.h"
 #include "FileManager.h"
 #include "MaterialManager.h"
+#include "Health.h"
 #include "PhysicsMaterial2D.h"
+#include "ItemBehaviour.h"
+#include "HUD.h"
 
 BubbleBobbleGame::GameMode BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::solo;
 
@@ -259,9 +263,23 @@ void LoadLevel1()
 
 	pPlayer->AddComponent(new BoxColliderComponent(glm::vec2(32, 32), glm::vec2(), false, 0));
 	pPlayer->AddComponent(new PlayerController());
+	pPlayer->AddComponent(new Health(4));
 	level1Scene.AddObject(pPlayer);
 
 
+	GameObject* pPickUp = new GameObject(Vector3(250, 250, 0), 0.5f);
+	pPickUp->AddComponent(new RenderComponent("Items/Bubble_Bobble_item_french_fries.png"));
+	pPickUp->AddComponent(new RigidbodyComponent(true));
+	pPickUp->AddComponent(new BoxColliderComponent(glm::vec2(36,36), glm::vec2(), true));
+	pPickUp->AddComponent(new ItemBehaviour(200));
+	level1Scene.AddObject(pPickUp);
+
+	GameObject* pHud = new GameObject(Vector3(60, 20, 0));
+	auto font = ServiceLocator::GetResourceManager()->LoadFont("Fonts/Airstream.ttf", 30);
+	auto hudComp = new HUD(font, {0,0,0});
+	hudComp->LinkPlayer(pPlayer->GetComponent<PlayerController>());
+	pHud->AddComponent(hudComp);
+	level1Scene.AddObject(pHud);
 
 	//animator->Play();
 	//If works -> add all colliders
@@ -281,6 +299,16 @@ void LoadLevel1()
 	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::jump, SDL_SCANCODE_UP, XINPUT_GAMEPAD_X, divengine::TriggerState::pressed, pPlayer);
 	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::attack, SDL_SCANCODE_P, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, pPlayer);
 
+	//ADD SOUND
+	SoundManager *sound = ServiceLocator::GetSoundManager();
+	sound->LoadSound("Sounds/03_Room Theme.mp3", "BackGroundMusic", FMOD_2D | FMOD_LOOP_NORMAL);
+	sound->AddChannel(0);
+	//sound.AddChannel(1);
+	//sound.LoadSound("Sounds/Aggressive_Zombie_Snarls.mp3", "testSound2", FMOD_2D | FMOD_LOOP_NORMAL);
+	sound->StartSound("BackGroundMusic", 0);
+	sound->GetChannel(0)->setVolume(0.05f);
+	//sound.StartSound("testSound2", 1);
+	//sound.SetMasterVolume(0.08f);
 
 
 	//FileManager::GetInstance().SaveLevel("../Data/Level1.div", "Level1");

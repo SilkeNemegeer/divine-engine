@@ -28,6 +28,11 @@ public:
 		m_IsDead = true;
 	}
 
+	int Lives() const
+	{
+		return m_CurrentHealth;
+	}
+
 	bool IsDead() const
 	{
 		return m_IsDead;

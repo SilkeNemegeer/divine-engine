@@ -46,16 +46,23 @@ void Button::SetPosition(const glm::vec2& pos)
 
 void Button::Initialize()
 {
+
+}
+
+void Button::Update()
+{
+}
+
+void Button::Start()
+{
 	using namespace divengine;
 
 	m_pTextComponent = m_pGameObject->GetComponent<TextComponent>();
 	if (!m_pTextComponent)
 		Debug::LogWarning("Button::Initialize: no textcomponent was found");
 	m_pRenderComponent = m_pGameObject->GetComponent<RenderComponent>();
-	if(!m_pRenderComponent)
+	if (!m_pRenderComponent)
 		Debug::LogWarning("Button::Initialize: no rendercomponent was found");
-}
 
-void Button::Update()
-{
+
 }

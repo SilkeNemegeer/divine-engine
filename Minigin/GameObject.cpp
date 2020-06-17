@@ -232,3 +232,11 @@ void divengine::GameObject::Initialize()
 
 	m_IsInitialized = true;
 }
+
+void divengine::GameObject::Start()
+{
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->Start();
+	}
+}

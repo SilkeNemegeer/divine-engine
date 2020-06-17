@@ -8,7 +8,6 @@ namespace divengine
 	{
 		public:
 			Rectf m_Rect; 
-		//	BoxColliderComponent(const glm::vec2& dimensions = glm::vec2(), const glm::vec2& offset = glm::vec2(), bool isTrigger = false, PhysicsMaterial2D* pMaterial = nullptr); //Pass an offset, width, height, isTrigger, physcics material (= nullptr) that's all
 			BoxColliderComponent(const glm::vec2& dimensions = glm::vec2(), const glm::vec2& offset = glm::vec2(), bool isTrigger = false, int materialId = -1); //Pass an offset, width, height, isTrigger, physcics material (= nullptr) that's all
 			virtual bool IsColliding(const Rectf& rect, bool isPlatform = false) const override;
 			virtual bool IsColliding(const Circlef& circle) const override;
@@ -23,6 +22,7 @@ namespace divengine
 			virtual void Update() override;
 			virtual void Initialize() override;
 			virtual void Render() override;
+			virtual void Start() override;
 
 		private:
 			glm::vec2 m_Offset;

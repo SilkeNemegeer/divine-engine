@@ -8,15 +8,7 @@
 #include "TransformComponent.h"
 #include "Renderer.h"
 #include "RigidbodyComponent.h"
-//
-//divengine::BoxColliderComponent::BoxColliderComponent(const glm::vec2& dimensions, const glm::vec2& offset, bool isTrigger, PhysicsMaterial2D* pMaterial)
-//	:m_Rect{glm::vec2(), dimensions.x, dimensions.y }
-//	, ColliderComponent::ColliderComponent(isTrigger, pMaterial)
-//	,m_Offset{offset}
-//{
-//	m_Type = ColliderComponent::ColliderType::rect;
-//	m_TypeId = unsigned int(ComponentType::boxcollider);
-//}
+
 
 divengine::BoxColliderComponent::BoxColliderComponent(const glm::vec2& dimensions, const glm::vec2& offset, bool isTrigger, int materialId)
 	:m_Rect{ glm::vec2(), dimensions.x, dimensions.y }
@@ -209,12 +201,17 @@ void divengine::BoxColliderComponent::Update()
 void divengine::BoxColliderComponent::Initialize()
 {
 	ColliderComponent::Initialize();
-	auto pos = m_pGameObject->GetPosition();
-	m_Rect.bottomLeft.x = pos.x + m_Offset.x;
-	m_Rect.bottomLeft.y = pos.y + m_Offset.y;
 }
 
 void divengine::BoxColliderComponent::Render()
 {
 	DebugRenderer::DrawRect(m_Rect, 255, 0, 0, 255);
+}
+
+void divengine::BoxColliderComponent::Start()
+{
+	ColliderComponent::Start();
+	auto pos = m_pGameObject->GetPosition();
+	m_Rect.bottomLeft.x = pos.x + m_Offset.x;
+	m_Rect.bottomLeft.y = pos.y + m_Offset.y;
 }

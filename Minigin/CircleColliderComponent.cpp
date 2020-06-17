@@ -77,12 +77,18 @@ void divengine::CircleColliderComponent::Update()
 void divengine::CircleColliderComponent::Initialize()
 {
 	ColliderComponent::Initialize();
-	auto pos = m_pGameObject->GetPosition();
-	m_Circle.center.x = pos.x + m_Offset.x;
-	m_Circle.center.y = pos.y + m_Offset.y;
+
 }
 
 void divengine::CircleColliderComponent::Render()
 {
 	DebugRenderer::DrawCircle(m_Circle, 255, 0, 0, 255);
+}
+
+void divengine::CircleColliderComponent::Start()
+{
+	ColliderComponent::Start();
+	auto pos = m_pGameObject->GetPosition();
+	m_Circle.center.x = pos.x + m_Offset.x;
+	m_Circle.center.y = pos.y + m_Offset.y;
 }

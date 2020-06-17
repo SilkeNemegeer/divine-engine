@@ -1,96 +1,138 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="GameComponents">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="General">
+      <UniqueIdentifier>{387c7b50-7f9c-4333-9dc9-68fc322aba6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="GameComponents\Player">
+      <UniqueIdentifier>{dae39f6e-73d2-40ef-aa37-2bab74c3fe0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameComponents\Enemies">
+      <UniqueIdentifier>{370085d7-e551-4a11-969d-4c79bd518227}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameComponents\UI">
+      <UniqueIdentifier>{b9514765-aa5e-4fa4-b30e-1ef9925ef7bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BubbleDragon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Health.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BubbleDragonState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MenuController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BubbleBobbleGame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>General</Filter>
     </ClCompile>
     <ClCompile Include="FileManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleBobbleGame.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GameComponents\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>GameComponents\Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameComponents\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleDragon.cpp">
+      <Filter>GameComponents\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleDragonState.cpp">
+      <Filter>GameComponents\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>GameComponents\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuController.cpp">
+      <Filter>GameComponents\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Health.cpp">
+      <Filter>GameComponents\Player</Filter>
     </ClCompile>
     <ClCompile Include="BubbleBehaviour.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GameComponents\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MaitaBehaviour.cpp">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="ZenChanBehaviour.cpp">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBehaviour.cpp">
+      <Filter>GameComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="AIController.cpp">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>GameComponents\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BubbleDragon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FileManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Commands.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BubbleDragonState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>Header Files</Filter>
+      <Filter>General</Filter>
     </ClInclude>
     <ClInclude Include="BubbleBobbleGame.h">
-      <Filter>Header Files</Filter>
+      <Filter>General</Filter>
     </ClInclude>
-    <ClInclude Include="FileManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Character.h">
+      <Filter>GameComponents\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameComponentType.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="PlayerController.h">
+      <Filter>GameComponents\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>Header Files</Filter>
+      <Filter>GameComponents\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleDragon.h">
+      <Filter>GameComponents\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleDragonState.h">
+      <Filter>GameComponents\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameComponentType.h">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>GameComponents\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuController.h">
+      <Filter>GameComponents\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>GameComponents\Player</Filter>
     </ClInclude>
     <ClInclude Include="BubbleBehaviour.h">
-      <Filter>Header Files</Filter>
+      <Filter>GameComponents\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MaitaBehaviour.h">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="ZenChanBehaviour.h">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBehaviour.h">
+      <Filter>GameComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>GameComponents\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>GameComponents\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

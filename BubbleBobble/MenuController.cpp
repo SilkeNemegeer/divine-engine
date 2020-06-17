@@ -118,7 +118,7 @@ divengine::GameObject* MenuController::CreateButton(const std::string& text, con
 	GameObject* pButton = new GameObject(divengine::Vector3(pos.x, pos.y ,0));
 	auto s = ServiceLocator::GetResourceManager()->LoadFont("Lingua.otf", 20);
 
-	pButton->AddComponent(new RenderComponent(true));
+	//pButton->AddComponent(new RenderComponent(true));
 	pButton->AddComponent(new TextComponent(text, s, SDL_Color{ 50, 50, 50 }));
 	pButton->AddComponent(new Button(SDL_Color{ 255, 0, 0 }, SDL_Color{ 50, 50, 50 }));
 	return pButton;
@@ -153,6 +153,7 @@ void MenuController::CreateButtons()
 	{
 		pActiveScene->AddObject(pButton);
 		pButton->Initialize();
+		pButton->Start();
 	}
 
 	m_pButtons[ButtonType::singleplayer]->GetComponent<Button>()->SetSelected(true);
@@ -165,6 +166,7 @@ void MenuController::CreateButtons()
 	pActiveScene->AddObject(m_pSelectIcon);
 
 	m_pSelectIcon->Initialize();
+	m_pSelectIcon->Start();
 }
 
 void MenuController::SelectButton(int id, int oldId)

@@ -38,6 +38,7 @@ namespace divengine
 		void Render() override;
 		void Initialize() override;
 		void PostInitialize() override;
+		//void Start() override;
 	private:
 
 		std::shared_ptr<Texture2D> m_Texture{};

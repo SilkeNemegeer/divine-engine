@@ -34,15 +34,15 @@
     <Filter Include="Helpers">
       <UniqueIdentifier>{815527e2-2745-4635-a956-7c6ca3119143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Graphics">
+      <UniqueIdentifier>{bb9b71ec-80fd-4c9a-b699-776e72d589c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Physics">
+      <UniqueIdentifier>{06ac478c-6b22-4f27-aab7-fe6dbfea2865}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RenderComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="FPSComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
@@ -69,20 +69,11 @@
     <ClInclude Include="Singleton.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TransformComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="MiniginPCH.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="RigidbodyComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="BoxColliderComponent.h">
       <Filter>Components\ColliderComponents</Filter>
@@ -156,28 +147,10 @@
     <ClInclude Include="ServiceLocator.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="BaseGame.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="GeneralStructs.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="InputMap.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Animator.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationClip.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryWriter.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="MaterialManager.h">
@@ -186,15 +159,42 @@
     <ClInclude Include="BinaryReader.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextComponent.h">
+      <Filter>Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodyComponent.h">
+      <Filter>Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryWriter.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMap.h">
+      <Filter>Content\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RenderComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="FPSComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="BaseComponent.cpp">
@@ -226,15 +226,6 @@
     </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="RigidbodyComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="BoxColliderComponent.cpp">
       <Filter>Components\ColliderComponents</Filter>
@@ -290,20 +281,8 @@
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationClip.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="BaseGame.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="InputMap.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Animator.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="BinaryReader.cpp">
       <Filter>Main</Filter>
@@ -313,6 +292,33 @@
     </ClCompile>
     <ClCompile Include="MaterialManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMap.cpp">
+      <Filter>Content\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>Content</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

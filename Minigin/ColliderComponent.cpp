@@ -48,6 +48,11 @@ divengine::ColliderComponent::~ColliderComponent()
 
 void divengine::ColliderComponent::Initialize()
 {
+
+}
+
+void divengine::ColliderComponent::Start()
+{
 	//add collider to the rigidbody
 	auto rigidBody = GetGameObject()->GetComponent<RigidbodyComponent>();
 	if (rigidBody == nullptr)

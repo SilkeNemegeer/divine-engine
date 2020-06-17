@@ -32,6 +32,7 @@ namespace divengine
 		virtual void Initialize() override;
 		virtual void PostInitialize() override;
 		virtual void Render() override;
+		virtual void Start() override;
 
 		private:
 			std::vector<AnimationClip*> m_pAnimations;

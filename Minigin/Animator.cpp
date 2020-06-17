@@ -7,7 +7,7 @@
 #include "GameObject.h"
 
 divengine::Animator::Animator(const std::string& path, float clipHeight, float clipWidth)
-	:m_pAnimations{},
+	:m_pAnimations(std::vector<AnimationClip*>()),
 	m_AnimationSpeed{1.0f}
 	,m_IsPlaying{false}
 	,m_pCurrentAnimation(nullptr)
@@ -104,6 +104,21 @@ void divengine::Animator::Update()
 
 void divengine::Animator::Initialize()
 {
+
+}
+
+void divengine::Animator::PostInitialize()
+{
+
+}
+
+void divengine::Animator::Render()
+{
+
+}
+
+void divengine::Animator::Start()
+{
 	//m_pRenderComp = new RenderComponent(m_Path);
 	m_pRenderComp = m_pGameObject->GetComponent<RenderComponent>();
 	if (!m_pRenderComp)
@@ -121,10 +136,7 @@ void divengine::Animator::Initialize()
 		m_pGameObject->AddComponent(m_pTransform);
 		Debug::LogWarning("Animator::Initialize: no transform component found");
 	}
-}
 
-void divengine::Animator::PostInitialize()
-{
 	m_pRenderComp->SetSourceRect(m_SrcRect);
 
 	auto dimensions = m_pRenderComp->GetTextureDimensions();
@@ -137,11 +149,6 @@ void divengine::Animator::PostInitialize()
 	m_DestRect.w = int(m_SrcRect.w * m_pTransform->GetScale());
 	m_DestRect.h = int(m_SrcRect.h * m_pTransform->GetScale());
 	m_pRenderComp->SetDestRect(m_DestRect);
-}
-
-void divengine::Animator::Render()
-{
-
 }
 
 void divengine::Animator::Restart()

@@ -62,12 +62,6 @@ void divengine::Scene::RemoveCollider(ColliderComponent* pCollider)
 		Debug::LogWarning("Cannot remove collider that is not in the scene");
 		return;
 	}
-	//
-	//for (auto collider : pCollider->GetRigidBody()->Colliders())
-	//{
-
-	//	collider->GetRigidBody()->RemoveCollider(pCollider);
-	//}
 
 	m_pColliders.erase(it);
 }
@@ -83,12 +77,6 @@ void Scene::Update()
 	{
 		object->Update();
 	}
-
-	//for (size_t i = 0; i < m_Objects.size(); i++)
-	//{
-	//	m_Objects[i]->Update();
-
-	//}
 
 	for (size_t i = 0; i < m_ObjectsToDelete.size(); i++)
 	{
@@ -136,6 +124,14 @@ void divengine::Scene::InitializeAll() const
 	for (size_t i = 0; i < m_Objects.size(); i++)
 	{
 		m_Objects[i]->Initialize();
+	}
+}
+
+void divengine::Scene::Start() const
+{
+	for (size_t i = 0; i < m_Objects.size(); i++)
+	{
+		m_Objects[i]->Start();
 	}
 }
 
