@@ -33,3 +33,23 @@ void divengine::BinaryWriter::Write(const std::string& string)
 		m_WriteStream.write((const char*)&string[0], sizeName);
 	}
 }
+
+void divengine::BinaryWriter::Write(const Rectf& rect)
+{
+	if (!m_WriteStream.is_open())
+		return;
+
+	m_WriteStream.write((const char*)&rect.bottomLeft.x, sizeof(rect.bottomLeft.x));
+	m_WriteStream.write((const char*)&rect.bottomLeft.y, sizeof(rect.bottomLeft.y));
+	m_WriteStream.write((const char*)&rect.width, sizeof(rect.width));
+	m_WriteStream.write((const char*)&rect.height, sizeof(rect.height));
+}
+
+void divengine::BinaryWriter::Write(const glm::vec2& vec)
+{
+	if (!m_WriteStream.is_open())
+		return;
+
+	m_WriteStream.write((const char*)&vec.x, sizeof(vec.x));
+	m_WriteStream.write((const char*)&vec.y, sizeof(vec.y));
+}

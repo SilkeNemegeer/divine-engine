@@ -11,6 +11,7 @@ namespace divengine
 		collidercomponent
 		,boxcollider
 		,circlecollider
+		,platformcollider
 		,fpscomponent
 		,rendercomponent
 		,rigidbodycomponent
@@ -35,6 +36,13 @@ namespace divengine
 
 		//virtual void Load(std::istream& ) {}; //TODO: make this abstract so every component has this
 		//virtual void Save(std::ostream& ) {};
+		virtual void OnCollisionEnter(GameObject* ) {};
+		virtual void OnCollisionStay(GameObject* ) {};
+		virtual void OnCollisionExit(GameObject* ) {};
+
+		virtual void OnTriggerEnter(GameObject* ) {};
+		virtual void OnTriggerStay(GameObject* ) {};
+		virtual void OnTriggerExit(GameObject* ) {};
 		
 		virtual void Load(BinaryReader& ) {}; //TODO: make this abstract so every component has this
 		virtual void Save(BinaryWriter& ) {};

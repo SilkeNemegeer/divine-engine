@@ -2,12 +2,21 @@
 #include "CircleColliderComponent.h"
 #include "DebugRenderer.h"
 #include "GameObject.h"
-divengine::CircleColliderComponent::CircleColliderComponent(float radius, const glm::vec2& offset, bool isTrigger, PhysicsMaterial2D* pMaterial)
-	:m_Offset{offset}
-	,m_Circle{glm::vec2(), radius}
-	,ColliderComponent::ColliderComponent(isTrigger, pMaterial)
+//divengine::CircleColliderComponent::CircleColliderComponent(float radius, const glm::vec2& offset, bool isTrigger, PhysicsMaterial2D* pMaterial)
+//	:m_Offset{offset}
+//	,m_Circle{glm::vec2(), radius}
+//	,ColliderComponent::ColliderComponent(isTrigger, pMaterial)
+//{
+//	m_Type = ColliderComponent::ColliderType::circle;
+//}
+
+divengine::CircleColliderComponent::CircleColliderComponent(float radius, const glm::vec2& offset, bool isTrigger, int materialId)
+	:m_Offset{ offset }
+	, m_Circle{ glm::vec2(), radius }
+	, ColliderComponent::ColliderComponent(isTrigger, materialId)
 {
 	m_Type = ColliderComponent::ColliderType::circle;
+	m_TypeId = unsigned int(ComponentType::circlecollider);
 }
 
 divengine::CircleColliderComponent::~CircleColliderComponent()
@@ -15,8 +24,10 @@ divengine::CircleColliderComponent::~CircleColliderComponent()
 
 }
 
-bool divengine::CircleColliderComponent::IsColliding(const Rectf& rect) const
+bool divengine::CircleColliderComponent::IsColliding(const Rectf& rect, bool ) const
 {
+
+
 	//Calc distance between two center of the shapes
 	float halfWidthRect = rect.width / 2.f;
 	float halfHeightRect = rect.height / 2.f;
@@ -44,6 +55,16 @@ bool divengine::CircleColliderComponent::IsColliding(const Rectf& rect) const
 bool divengine::CircleColliderComponent::IsColliding(const Circlef& circle) const
 {
 	return Square(circle.radius + m_Circle.radius) <= Square(circle.center.x - m_Circle.center.x) + Square(circle.center.y - m_Circle.center.y);
+}
+
+glm::vec2 divengine::CircleColliderComponent::ResolveCollision(const Rectf& , float )
+{
+	return glm::vec2();
+}
+
+glm::vec2 divengine::CircleColliderComponent::ResolveCollision(const Circlef& , float)
+{
+	return glm::vec2();
 }
 
 void divengine::CircleColliderComponent::Update()

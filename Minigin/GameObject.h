@@ -3,11 +3,14 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include "BinaryReader.h"
+#include "BinaryWriter.h"
+#include "TransformComponent.h"
 
 namespace divengine
 {
 	class BaseComponent;
-	class TransformComponent;
+	//class TransformComponent;
 
 	//class Texture2D;
 	class GameObject final
@@ -39,14 +42,29 @@ namespace divengine
 		const std::string& GetTag() const { return m_Tag; };
 
 		void SetActive(bool isActive) { m_IsActive = isActive; };
+		bool IsActive() const { return m_IsActive; };
+
 
 		void AddComponent(BaseComponent* pComponent, bool initOnCreation = false);
 		void RemoveComponent(BaseComponent* pComponent);
 
 		const std::vector<BaseComponent*> &Components() const { return m_pComponents; };
 
-		void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag);
-		void SetTriggerCallback(TriggerCallback callback);
+		//void OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag) {};
+		//void OnCollision(GameObject* collider, GameObject* other, TriggerFlag flag) {};
+
+		void SetTriggerCallback(TriggerCallback callback); //Make ontrigger enter, oncollision enter , ... (also for the components, call these functions for the components)
+
+		virtual void OnCollisionEnter(GameObject* collider);
+		virtual void OnCollisionStay(GameObject* collider);
+		virtual void OnCollisionExit(GameObject* collider);
+
+		virtual void OnTriggerEnter(GameObject* trigger);
+		virtual void OnTriggerStay(GameObject* trigger);
+		virtual void OnTriggerExit(GameObject* trigger);
+
+		void Load(BinaryReader& reader);
+		void Save(BinaryWriter& writer);
 
 		//TODO: make oncollision callback
 

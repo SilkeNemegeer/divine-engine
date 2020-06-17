@@ -5,11 +5,22 @@ namespace divengine
 {
 	class ColliderComponent;
 	class RigidbodyComponent;
+	class Animator;
 }
 
 class PlayerController : public divengine::BaseComponent
 {
 public:
+	//enum class State : int
+	//{
+	//	walkLeft, walkRight, idle, attackLeft, attackRight
+	//};
+
+	enum class State
+	{
+		walkLeft, walkRight, idle, attack, dead
+	};
+
 	PlayerController(int id = 0);
 	~PlayerController();
 
@@ -27,11 +38,24 @@ public:
 	void Jump();
 	void Attack();
 
+	void SetAnimation(State anim);
+
 	int GetPlayerId() const { return m_PlayerId; };
 
 private:
+	void ChangeState(State newState);
 	int m_PlayerId;
-	divengine::RigidbodyComponent* m_pRigidbody;
+	bool m_IsFacingLeft;
+	State m_CurrentState;
 
+	//Attack params
+	float m_MaxAttackTime;
+	float m_CurrentAttackTime;
+
+	void FireBubble();
+	float m_FireBubbleForce;
+
+	divengine::RigidbodyComponent* m_pRigidbody;
+	divengine::Animator* m_pAnimator;
 };
 

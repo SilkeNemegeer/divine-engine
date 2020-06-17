@@ -8,7 +8,7 @@
 #include "BoxColliderComponent.h"
 #include "Time.h"
 #include "PhysicsMaterial2D.h"
-
+#include "Debug.h"
 float divengine::RigidbodyComponent::m_Gravity = -9.81f;
 
 divengine::RigidbodyComponent::RigidbodyComponent(bool isStatic)
@@ -19,7 +19,36 @@ divengine::RigidbodyComponent::RigidbodyComponent(bool isStatic)
 	, m_Velocity{ 0, 0}
 	
 {
+	m_TypeId = int(ComponentType::rigidbodycomponent);
+}
+
+divengine::RigidbodyComponent::~RigidbodyComponent()
+{
+
+}
+
+void divengine::RigidbodyComponent::Load(divengine::BinaryReader& reader)
+{
+	reader.Read(m_Velocity);
+	reader.Read(m_Acceleration);
+	reader.Read(m_Force);
+	reader.Read(m_Mass);
+
+	reader.Read(m_IsKinematic);
+	reader.Read(m_IsStatic);
 	
+	//Collider component takes care of linking rigidbody already
+}
+
+void divengine::RigidbodyComponent::Save(divengine::BinaryWriter& writer)
+{
+	writer.Write(m_Velocity);
+	writer.Write(m_Acceleration);
+	writer.Write(m_Force);
+	writer.Write(m_Mass);
+
+	writer.Write(m_IsKinematic);
+	writer.Write(m_IsStatic);
 }
 
 void divengine::RigidbodyComponent::SetKinematic(bool isKinematic)
@@ -42,9 +71,20 @@ void divengine::RigidbodyComponent::ClearForce()
 	m_Force = glm::vec2{};
 }
 
-void divengine::RigidbodyComponent::AddCollider(ColliderComponent* collider)
+void divengine::RigidbodyComponent::SetCollider(ColliderComponent* collider)
 {
 	m_pColliderComp = collider;
+}
+
+void divengine::RigidbodyComponent::RemoveCollider(ColliderComponent* collider)
+{
+	auto it = std::find(m_pCollidingObjects.begin(), m_pCollidingObjects.end(), collider);
+	if (it == m_pCollidingObjects.end())
+	{
+		return;
+	}
+
+	m_pCollidingObjects.erase(it);
 }
 
 void divengine::RigidbodyComponent::Update()
@@ -59,21 +99,21 @@ void divengine::RigidbodyComponent::Update()
 		glm::vec2 force = m_Force / m_Mass; //Apply forces
 		m_Acceleration.y = -m_Gravity; 	//Apply gravity
 		m_Acceleration += force;
+		m_Force = glm::vec2();
+
+		float dragForce = 1.f;
 		auto pMaterial = m_pColliderComp->Material();
 		if (pMaterial)
-		{
-			//Apply friction
-			glm::vec2 friction = pMaterial->Friction * force;
-			m_Force -= friction;
+			dragForce = pMaterial->Friction;
 
-			if (m_Force.x < 0.001f)
-				m_Force.x = 0.f;
-			if (m_Force.y < 0.001f)
-				m_Force.y = 0.1f;
-		}
-		m_Velocity += m_Acceleration * Time::GetInstance().GetDeltaTime();
+		//m_Acceleration
+		m_Acceleration.x -= dragForce * m_Velocity.x;
+		m_Acceleration.y -= dragForce * m_Velocity.y;
 
 		HandleCollisions();
+
+		m_Velocity += m_Acceleration * Time::GetInstance().GetDeltaTime();
+
 		auto position = m_pGameObject->GetPosition();
 		glm::vec2 newPos{ position.x, position.y };
 		newPos += m_Velocity;// *Time::GetInstance().GetDeltaTime();
@@ -86,6 +126,10 @@ void divengine::RigidbodyComponent::Update()
 
 void divengine::RigidbodyComponent::Initialize()
 {
+}
+
+void divengine::RigidbodyComponent::PostInitialize()
+{
 
 }
 
@@ -94,73 +138,151 @@ void divengine::RigidbodyComponent::HandleCollisions()
 	if (!m_pColliderComp)
 		return;
 
-	for (auto& collider : SceneManager::GetInstance().GetCurrentScene()->GetColliders())
+	glm::vec2 maxPenetration{0.f, 0.f}; //absX & absY
+	glm::vec2 penetration{};
+
+	//Use smallest restitution
+	float XRestitution = 1.f;
+	float YRestitution = 1.f;
+	bool isColliding = false;
+	for (auto& collider : SceneManager::GetInstance().GetCurrentScene()->GetColliders()) //check for new colliders
 	{
 		if (collider == m_pColliderComp)
 			continue;
+
 		if (m_pColliderComp->IsColliding(collider))
 		{
-			ResolveCollision(collider);
+			if (!collider->IsTrigger() && !m_pColliderComp->IsTrigger())
+			{
+				isColliding = true;
+				penetration = m_pColliderComp->ResolveCollision(collider);
+				auto material = collider->Material();
+				float bounciness = 0.f;
+				if (material)
+				{
+					bounciness = collider->Material()->Bounciness;
+				}
+				if (penetration.x > maxPenetration.x)
+				{
+					XRestitution = bounciness;
+					maxPenetration.x = penetration.x;
+				}
+				if (penetration.y > maxPenetration.y)
+				{
+					YRestitution = bounciness;
+					maxPenetration.y = penetration.y;
+				}
+			}
+			NotifyCollisions(collider);
+
 		}
 	}
+
+	if (isColliding)
+	{
+		if (abs(maxPenetration.x - maxPenetration.y) < 0.4f) //Corner
+		{
+			//Set the velocity according to the resolve collision
+			if (rand() % 2)
+			{
+				m_Velocity.x = -m_Velocity.x * XRestitution;
+
+				if (abs(m_Velocity.x) < 0.004f)
+					m_Velocity.x = 0.f;
+			}
+			else
+			{
+				m_Velocity.y = -m_Velocity.y * YRestitution;
+				if (abs(m_Velocity.y) < 0.004f)
+					m_Velocity.y = 0;
+			}
+		}
+		else if (maxPenetration.x > maxPenetration.y) //horizontal penetration
+		{
+		m_Velocity.x = -m_Velocity.x * XRestitution;
+
+		if (abs(m_Velocity.x) < 0.004f)
+			m_Velocity.x = 0.f;
+		}
+		else //vertical penetration
+		{
+		m_Velocity.y = -m_Velocity.y * YRestitution; 
+		if (abs(m_Velocity.y) < 0.004f)
+			m_Velocity.y = 0;
+		}
+	}
+
 }
 
-void divengine::RigidbodyComponent::ResolveCollision(ColliderComponent* pCollider)
+void divengine::RigidbodyComponent::NotifyCollisions(ColliderComponent* pCollider)
 {
-	auto pMaterial = m_pColliderComp->Material();
-
-	if (!pCollider->IsTrigger())
-	{
-		//Calculate bounce direction & Apply bounciness/restitution
-		if (pMaterial)
-		{
-			m_Velocity *= -pMaterial->Bounciness;
-			if (abs(m_Velocity.x) < 0.1f)
-			{
-				m_Velocity.x = 0.f;
-			}
-
-			if (abs(m_Velocity.y) < 0.1f)
-			{
-				m_Velocity.y = 0.f;
-			}
-		}
-		else //no bounciness
-		{
-			m_Velocity = glm::vec2(); //set velocity to zero when detecting collision
-		}
-		return;
-	}
-
 	//If it is a trigger -> call trigger
 	auto other = pCollider->GetGameObject();
-	if(std::find(m_pCollidingObjects.begin(), m_pCollidingObjects.end(), pCollider) == m_pCollidingObjects.end())
+	if (std::find(m_pCollidingObjects.begin(), m_pCollidingObjects.end(), pCollider) == m_pCollidingObjects.end())
 	{
 		//Is not in there yet
-		//-> add new
-		m_pGameObject->OnTrigger(m_pGameObject, other, GameObject::TriggerFlag::enter);
-		other->OnTrigger(other, m_pGameObject, GameObject::TriggerFlag::enter);
-		m_pCollidingObjects.push_back(pCollider);
+		if (pCollider->IsTrigger() || m_pColliderComp->IsTrigger())
+		{
+			m_pGameObject->OnTriggerEnter(other);
+			other->OnTriggerEnter(m_pGameObject);
+		}
+		else
+		{
+			m_pGameObject->OnCollisionEnter(other);
+			other->OnCollisionEnter(m_pGameObject);
+		}
+
+		m_pCollidingObjects.insert(pCollider);
 
 	}
 	else
 	{
-		m_pGameObject->OnTrigger(m_pGameObject, other, GameObject::TriggerFlag::stay);
-		other->OnTrigger(other, m_pGameObject, GameObject::TriggerFlag::stay);
+		if (pCollider->IsTrigger() || m_pColliderComp->IsTrigger())
+		{
+			m_pGameObject->OnTriggerStay(other);
+			other->OnTriggerStay(m_pGameObject);
+		}
+		else
+		{
+			m_pGameObject->OnCollisionStay(other);
+			other->OnCollisionStay(m_pGameObject);
+		}
+
 	}
 }
 
 void divengine::RigidbodyComponent::UpdateCollidingObjects()
 {
+	if (!m_pColliderComp)
+		return;
+
 	auto it = m_pCollidingObjects.begin();
-	while(it != m_pCollidingObjects.end())
+
+
+	while (it != m_pCollidingObjects.end())
 	{
-		if (!(*it)->IsColliding(m_pColliderComp)) //Instead of checking if you are colliding, keep track with bool array if they are still found when in colliders update
+
+		if (!(*it)->GetGameObject()) //Check if queued for removal (to be removed from colliding objects) -> if so -> exit & erase
+		{
+			it = m_pCollidingObjects.erase(it);
+		}
+		else if (!(*it)->GetGameObject()->IsActive())
+		{
+			it = m_pCollidingObjects.erase(it);
+		}
+		else if (!(*it)->IsColliding(m_pColliderComp)) //Instead of checking if you are colliding, keep track with bool array if they are still found when in colliders update
 		{
 			auto other = (*it)->GetGameObject();
-
-			m_pGameObject->OnTrigger(m_pGameObject, other, GameObject::TriggerFlag::leave);
-			other->OnTrigger(other, m_pGameObject, GameObject::TriggerFlag::leave);
+			if (m_pColliderComp->IsTrigger() || (*it)->IsTrigger())
+			{
+				m_pGameObject->OnTriggerExit(other);
+				other->OnTriggerExit(m_pGameObject);
+			}
+			else
+			{
+				other->OnCollisionExit(m_pGameObject);
+				m_pGameObject->OnCollisionExit(other);
+			}
 			it = m_pCollidingObjects.erase(it);
 		}
 		else
@@ -168,4 +290,5 @@ void divengine::RigidbodyComponent::UpdateCollidingObjects()
 			++it;
 		}
 	}
+
 }

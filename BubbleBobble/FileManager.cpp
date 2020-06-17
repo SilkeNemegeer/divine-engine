@@ -28,7 +28,7 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 	for (size_t i = 0; i < objectCount; i++)
 	{
 		GameObject* pObject = new GameObject();
-
+		pObject->Load(m_Reader);
 		//read component count for the object
 		size_t componentCount = 0;
 		m_Reader.Read(componentCount);
@@ -69,6 +69,27 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 					pComponent = new RenderComponent();
 					break;
 
+				case ComponentType::rigidbodycomponent:
+					pComponent = new RigidbodyComponent();
+					break;
+
+				case ComponentType::collidercomponent:
+					//Means collider was not set
+					Debug::Log("FileManager::Load: Collider type was not set, cannot add");
+					break;
+
+				case ComponentType::boxcollider:
+					pComponent = new BoxColliderComponent();
+					break;
+
+				case ComponentType::animator:
+					
+					break;
+
+				case ComponentType::platformcollider:
+					pComponent = new PlatformColliderComponent(glm::vec2());
+					break;
+
 				case ComponentType::unknown:
 					break;
 				}
@@ -76,9 +97,9 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 			if (pComponent)
 			{
 				//Load the component
+				pObject->AddComponent(pComponent);
 				pComponent->Load(m_Reader);
 				//add it to the gameObject
-				pObject->AddComponent(pComponent);
 			}
 		}
 
@@ -111,6 +132,7 @@ void FileManager::SaveLevel(const std::string& file, const std::string& levelnam
 	//Start saving the objects:
 	for (size_t i = 0; i < objectCount; i++)
 	{
+		objects[i]->Save(m_Writer);
 		auto components = objects[i]->Components();
 		//save component count per gameobject (from gameobject itself)
 		m_Writer.Write(components.size());
@@ -125,6 +147,46 @@ void FileManager::SaveLevel(const std::string& file, const std::string& levelnam
 
 	//close stream
 	m_Writer.Close();
+}
+
+void FileManager::ReloadLevel(const std::string& file, const std::string& name)
+{
+	using namespace divengine;
+
+	//open stream
+	m_Reader.Open(file);
+
+	//read gameObject count (from the current scene)
+	auto scene = SceneManager::GetInstance().GetSceneByName(name);
+	if (!scene)
+	{
+		m_Writer.Close();
+		return;
+	}
+	auto objects = scene->GameObjects();
+	size_t objectCount = objects.size();
+	m_Reader.Read(objectCount);
+
+	//Start reloading the objects:
+	for (size_t i = 0; i < objectCount; i++)
+	{
+		objects[i]->Load(m_Reader);
+		auto components = objects[i]->Components();
+		//read component count per gameobject (from gameobject itself)
+		size_t componentCount = 0;
+		m_Reader.Read(componentCount);
+		for (size_t j = 0; j < componentCount; j++)
+		{
+			//read component type
+			unsigned int componentType = 0;
+			m_Reader.Read(componentType);
+
+			components[j]->Load(m_Reader); //call load components per component
+		}
+	}
+
+	//close stream
+	m_Reader.Close();
 }
 
 FileManager::FileManager()

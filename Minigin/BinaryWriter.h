@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include "Structs.h"
 namespace divengine
 {
 	struct Vector3;
@@ -18,6 +19,8 @@ namespace divengine
 		void Write(const Vector3& vector);
 
 		void Write(const std::string& string);
+		void Write(const Rectf& rect);
+		void Write(const glm::vec2& vec);
 
 	private:
 		std::ofstream m_WriteStream;

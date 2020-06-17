@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "PlayerController.h"
 #include "MenuController.h"
+
 using namespace divengine;
 
 class JumpCommand : public Command
@@ -77,7 +78,7 @@ public:
 	void Execute(GameObject* pObject) override
 	{
 		auto menuController = pObject->GetComponent<MenuController>();
-		if (menuController)
+		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
 			menuController->NavigateUp();
 		}
@@ -91,7 +92,7 @@ public:
 	void Execute(GameObject* pObject) override
 	{
 		auto menuController = pObject->GetComponent<MenuController>();
-		if (menuController)
+		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
 			menuController->NavigateDown();
 		}
@@ -105,7 +106,7 @@ public:
 	void Execute(GameObject* pObject) override
 	{
 		auto menuController = pObject->GetComponent<MenuController>();
-		if (menuController)
+		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
 			menuController->Select();
 		}

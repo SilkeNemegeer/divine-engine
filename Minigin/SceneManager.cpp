@@ -21,11 +21,11 @@ void divengine::SceneManager::Render()
 
 void  divengine::SceneManager::Initialize()
 {
-	for (const auto& scene : m_Scenes)
-	{
-		scene->InitializeAll();
-	}
-	//m_pCurrentScene->InitializeAll();
+	//for (const auto& scene : m_Scenes)
+	//{
+	//	scene->InitializeAll();
+	//}
+	m_pCurrentScene->InitializeAll();
 }
 
 void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
@@ -36,6 +36,7 @@ void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
 		if (scene->Name() == name)
 		{
 			m_pCurrentScene = scene;
+			scene->InitializeAll();
 			return;
 		}
 	}

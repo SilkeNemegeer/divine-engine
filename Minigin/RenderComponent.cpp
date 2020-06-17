@@ -26,21 +26,27 @@ divengine::RenderComponent::RenderComponent(bool centerPosition)
 }
 
 divengine::RenderComponent::RenderComponent(const std::string& filename, bool centerPosition)
+	: RenderComponent(filename.c_str(), centerPosition)
+{
+
+}
+
+divengine::RenderComponent::RenderComponent(const char* filename, bool centerPosition)
 	:m_CenterPosition{ centerPosition }, m_FileName{ filename }
 {
 	m_TypeId = unsigned int(ComponentType::rendercomponent);
 	m_SrcRect = nullptr;
 	m_DestRect = new SDL_Rect();
+
+	if (!m_FileName.empty())
+	{
+		m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
+		SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
+	}
+
 	//m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
 	//SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
 }
-
-//divengine::RenderComponent::RenderComponent(const char* filename, bool centerPosition)
-//	:RenderComponent(filename, centerPosition)
-//{
-//	//m_Texture = ServiceLocator::GetResourceManager()->LoadTexture(filename);
-//	//SDL_QueryTexture((*m_Texture).GetSDLTexture(), nullptr, nullptr, &m_DestRect->w, &m_DestRect->h);
-//}
 
 divengine::RenderComponent::~RenderComponent()
 {

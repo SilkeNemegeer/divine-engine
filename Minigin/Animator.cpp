@@ -61,6 +61,16 @@ void divengine::Animator::AddAnimation(AnimationClip *animation)
 		m_pCurrentAnimation = animation;
 }
 
+void divengine::Animator::Load(divengine::BinaryReader& )
+{
+
+}
+
+void divengine::Animator::Save(divengine::BinaryWriter& )
+{
+
+}
+
 void divengine::Animator::Update()
 {
 	//Update current clip
@@ -78,7 +88,7 @@ void divengine::Animator::Update()
 
 	//index = (row * cols) + col
 	int col = ( m_CurrentFrame + m_pCurrentAnimation->m_StartCol) % (m_Cols);
-	int row = ((m_pCurrentAnimation->m_StartRow + m_CurrentFrame + m_pCurrentAnimation->m_StartCol - col) / (m_Cols)) % m_Rows;
+	int row = (m_pCurrentAnimation->m_StartRow + (( m_CurrentFrame + m_pCurrentAnimation->m_StartCol - col) / (m_Cols))) % m_Rows;
 
 	m_SrcRect.x =  int((m_ClipWidth) * col);
 	m_SrcRect.y = (int(m_ClipHeight) * row); 
@@ -94,7 +104,14 @@ void divengine::Animator::Update()
 
 void divengine::Animator::Initialize()
 {
-	m_pRenderComp = new RenderComponent(m_Path);
+	//m_pRenderComp = new RenderComponent(m_Path);
+	m_pRenderComp = m_pGameObject->GetComponent<RenderComponent>();
+	if (!m_pRenderComp)
+	{
+		m_pRenderComp = new RenderComponent(m_Path);
+		m_pGameObject->AddComponent(m_pRenderComp);
+	}
+
 	m_pGameObject->AddComponent(m_pRenderComp);
 
 	m_pTransform = m_pGameObject->GetComponent<TransformComponent>();
@@ -117,8 +134,8 @@ void divengine::Animator::PostInitialize()
 	m_DestRect.x = (int)m_pTransform->GetPosition().x;
 	m_DestRect.y = (int)m_pTransform->GetPosition().y;
 
-	m_DestRect.w = int(m_SrcRect.w);
-	m_DestRect.h = int(m_SrcRect.h);
+	m_DestRect.w = int(m_SrcRect.w * m_pTransform->GetScale());
+	m_DestRect.h = int(m_SrcRect.h * m_pTransform->GetScale());
 	m_pRenderComp->SetDestRect(m_DestRect);
 }
 

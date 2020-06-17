@@ -10,8 +10,10 @@ divengine::BaseGame::BaseGame()
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
-	m_GameSettings.Height = 480;
-	m_GameSettings.Width = 640;
+	//m_GameSettings.Height = 480;
+	//m_GameSettings.Width = 640;	
+	m_GameSettings.Height = 512;
+	m_GameSettings.Width = 512;
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",

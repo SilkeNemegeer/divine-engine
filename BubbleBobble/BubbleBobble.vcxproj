@@ -191,6 +191,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BubbleBehaviour.cpp" />
     <ClCompile Include="BubbleBobbleGame.cpp" />
     <ClCompile Include="BubbleDragon.cpp" />
     <ClCompile Include="BubbleDragonState.cpp" />
@@ -201,6 +202,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Minigin\Minigin.vcxproj">
@@ -208,6 +210,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BubbleBehaviour.h" />
     <ClInclude Include="BubbleBobbleGame.h" />
     <ClInclude Include="BubbleDragon.h" />
     <ClInclude Include="BubbleDragonState.h" />
@@ -219,6 +222,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClInclude Include="Health.h" />
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="PlayerState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
