@@ -15,6 +15,10 @@
 #include "Timer.h"
 #include "MenuController.h"
 #include "FileManager.h"
+#include "MaterialManager.h"
+#include "PhysicsMaterial2D.h"
+
+BubbleBobbleGame::GameMode BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::solo;
 
 BubbleBobbleGame::BubbleBobbleGame()
 {
@@ -162,10 +166,9 @@ void LoadMainMenu()
 	//level1Scene.AddObject(menu);
 
 	////ADD bubble bobble main screen
-	//RenderComponent* pBubbleBobbleImage = new RenderComponent();
+	//RenderComponent* pBubbleBobbleImage = new RenderComponent(true);
 	//pBubbleBobbleImage->SetTexture("BubbleBobbleText.png");
-	//float halfWidth = pBubbleBobbleImage->GetTextureDimensions().x / 2.f;
-	//auto go = new GameObject(Vector3(320.f - halfWidth, 50.f, 0.f), 1.f);
+	//auto go = new GameObject(Vector3((BaseGame::GetGameSettings().Width /2.f), 100.f, 0.f), 1.f);
 	//go->AddComponent(pBubbleBobbleImage);
 	//level1Scene.AddObject(go);
 	//
@@ -177,26 +180,142 @@ void LoadMainMenu()
 
 void LoadLevel1()
 {
+	auto& level1Scene = SceneManager::GetInstance().CreateScene("Level1");
+
+	//Add background
+	RenderComponent* pBubbleBobbleImage = new RenderComponent();
+	pBubbleBobbleImage->SetTexture("level1.png");
+	auto go = new GameObject(Vector3(0.f, 0.f, 0.f), 2.f);
+	go->AddComponent(pBubbleBobbleImage);
+	level1Scene.AddObject(go);
+
+	//Create level colliders
+	//Add collider & test saving and loading
+	GameObject* pBottomWall = new GameObject();
+	auto rigidBody = new RigidbodyComponent(true);
+    pBottomWall->AddComponent(rigidBody);
+	pBottomWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width,80)));
+	level1Scene.AddObject(pBottomWall);
+
+	GameObject* pTopWall = new GameObject(Vector3(0, BaseGame::GetGameSettings().Height - 50.f, 0));
+	rigidBody = new RigidbodyComponent(true);
+	pTopWall->AddComponent(rigidBody);
+	pTopWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width, 50)));
+	level1Scene.AddObject(pTopWall);
+
+	GameObject* pLeftWall = new GameObject(Vector3(0,0,0));
+	rigidBody = new RigidbodyComponent(true);
+	pLeftWall->AddComponent(rigidBody);
+	pLeftWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
+	level1Scene.AddObject(pLeftWall);
+
+	GameObject* pRightWall = new GameObject(Vector3(BaseGame::GetGameSettings().Width - 35.f, 0,0));
+	rigidBody = new RigidbodyComponent(true);
+	pRightWall->AddComponent(rigidBody);
+	pRightWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
+	level1Scene.AddObject(pRightWall);
+
+
+	////Add 3 platforms but with change in height
+	float height = 382.f;
+	for (int i = 0; i < 3; i++)
+	{
+		//Add the 3 platforms horizontal
+
+		GameObject* pPlatform = new GameObject(Vector3(35, height, 0));
+		rigidBody = new RigidbodyComponent(true);
+		pPlatform->AddComponent(rigidBody);
+		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(30.f, 20.f)));
+		level1Scene.AddObject(pPlatform);
+
+		pPlatform = new GameObject(Vector3(110, height, 0));
+		rigidBody = new RigidbodyComponent(true);
+		pPlatform->AddComponent(rigidBody);
+		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(290.f, 20.f)));
+		level1Scene.AddObject(pPlatform);
+
+		pPlatform = new GameObject(Vector3(445, height, 0));
+		rigidBody = new RigidbodyComponent(true);
+		pPlatform->AddComponent(rigidBody);
+		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(35.f, 20.f)));
+		level1Scene.AddObject(pPlatform);
+
+		height -= 80.f;
+	}
+
+	//Create player
+	GameObject* pPlayer = new GameObject(Vector3(200, 200, 0), 2);
+	auto renderComp = new RenderComponent("sprites.png");
+	pPlayer->AddComponent(renderComp);
+	auto animator = new Animator("sprites.png", 16, 16);
+
+	pPlayer->AddComponent(animator);
+	pPlayer->AddComponent(new RigidbodyComponent());
+
+	//ADD materials
+	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(4.f, 0.f), 0);
+	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(0.f, 0.f), 1);
+
+
+	pPlayer->AddComponent(new BoxColliderComponent(glm::vec2(32, 32), glm::vec2(), false, 0));
+	pPlayer->AddComponent(new PlayerController());
+	level1Scene.AddObject(pPlayer);
+
+
+
+	//animator->Play();
+	//If works -> add all colliders
+
+	//Add rigidbody & test saving and loading
+
+	//CREATE PLAYERS OUTSIDE OF LEVEL LOADING (create them according to the game mode)
+
+	//ENEMIES OUTSIDE FILE or inside (check what is best)
+	//SAVE ENEMY COUNT IN FILE (so you can check when there are no enemies left in the level)
+
+	//If works -> start on player controller & movement (create player)
+		//Create player input
+
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveleft, SDL_SCANCODE_LEFT, XINPUT_GAMEPAD_DPAD_LEFT, divengine::TriggerState::down, pPlayer);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveright, SDL_SCANCODE_RIGHT, XINPUT_GAMEPAD_DPAD_RIGHT, divengine::TriggerState::down, pPlayer);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::jump, SDL_SCANCODE_UP, XINPUT_GAMEPAD_X, divengine::TriggerState::pressed, pPlayer);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::attack, SDL_SCANCODE_P, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, pPlayer);
+
+
+
+	//FileManager::GetInstance().SaveLevel("../Data/Level1.div", "Level1");
+
+	/*SceneManager::GetInstance().CreateScene("Level1");
+	FileManager::GetInstance().LoadLevel("../Data/Level1.div", "Level1");*/
 
 }
 
 void BubbleBobbleGame::Initialize()
 {
 	using namespace divengine;
+
 	//Init managers
 	ServiceLocator::Init();
 	ServiceLocator::GetResourceManager()->Init("../Data/");	// tell the resource manager where he can find the game data
 
-	//Add commands
-	InputManager::GetInstance().AddCommand(new Select(), 1);
-	InputManager::GetInstance().AddCommand(new NavigateDown(), 2);
-	InputManager::GetInstance().AddCommand(new NavigateUp(), 3);
+	//--- Add commands ---
+	//Menu
+	InputManager::GetInstance().AddCommand(new Select(), CommandId::select);
+	InputManager::GetInstance().AddCommand(new NavigateDown(), CommandId::navigatedown);
+	InputManager::GetInstance().AddCommand(new NavigateUp(), CommandId::navigateup);
+
+	//Players
+	InputManager::GetInstance().AddCommand(new MoveLeft(), CommandId::moveleft);
+	InputManager::GetInstance().AddCommand(new MoveRight(), CommandId::moveright);
+	InputManager::GetInstance().AddCommand(new JumpCommand(), CommandId::jump);
+	InputManager::GetInstance().AddCommand(new Attack(), CommandId::attack);
 
 	//Load scenes
 	LoadMainMenu();
 	LoadLevel1();
-	LoadDemoLevel();
+	//LoadDemoLevel();
 
 	SceneManager::GetInstance().SetAsCurrentScene("MainMenu");
+	//SceneManager::GetInstance().SetAsCurrentScene("Level1");
 
 }

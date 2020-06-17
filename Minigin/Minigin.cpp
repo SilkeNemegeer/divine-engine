@@ -10,6 +10,7 @@
 #include "DebugRenderer.h"
 #include "ServiceLocator.h"
 #include "BaseGame.h"
+#include "MaterialManager.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -30,6 +31,7 @@ void divengine::Minigin::Cleanup()
 {
 	Renderer::GetInstance().Destroy();
 	ServiceLocator::Destroy();
+
 }
 
 void divengine::Minigin::Run()

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include "Structs.h"
 namespace divengine
 {
 	class BinaryReader
@@ -16,6 +17,8 @@ namespace divengine
 		void Read(T& value);
 
 		void Read(std::string& string);
+		void Read(glm::vec2& vec);
+		void Read(Rectf& rect);
 
 	private:
 		std::ifstream m_ReadStream;

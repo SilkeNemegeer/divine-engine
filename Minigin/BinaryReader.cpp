@@ -31,3 +31,23 @@ void divengine::BinaryReader::Read(std::string& string)
 		m_ReadStream.read((char*)&string[0], sizeof(char) * size);
 	}
 }
+
+void divengine::BinaryReader::Read(glm::vec2& vec)
+{
+	if (!m_ReadStream.is_open())
+		return;
+
+	m_ReadStream.read((char*)&vec.x, sizeof(vec.x));
+	m_ReadStream.read((char*)&vec.y, sizeof(vec.y));
+}
+
+void divengine::BinaryReader::Read(Rectf& rect)
+{
+	if (!m_ReadStream.is_open())
+		return;
+
+	m_ReadStream.read((char*)&rect.bottomLeft.x, sizeof(rect.bottomLeft.x));
+	m_ReadStream.read((char*)&rect.bottomLeft.y, sizeof(rect.bottomLeft.y));
+	m_ReadStream.read((char*)&rect.width, sizeof(rect.width));
+	m_ReadStream.read((char*)&rect.height, sizeof(rect.height));
+}

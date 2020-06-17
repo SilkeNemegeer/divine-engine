@@ -9,10 +9,13 @@ namespace divengine
 	{
 	public:
 		Circlef m_Circle;
-		CircleColliderComponent(float radius, const glm::vec2& offset, bool isTrigger = false, PhysicsMaterial2D* pMaterial = nullptr);
+		CircleColliderComponent(float radius, const glm::vec2& offset, bool isTrigger = false, int materialId = -1);
 		virtual ~CircleColliderComponent();
-		virtual bool IsColliding(const Rectf& rect) const override;
+		virtual bool IsColliding(const Rectf& rect, bool isPlatform = false) const override;
 		virtual bool IsColliding(const Circlef& circle) const override;
+
+		virtual glm::vec2 ResolveCollision(const Rectf& rect, float restitution) override;
+		virtual glm::vec2 ResolveCollision(const Circlef& circle, float restitution) override;
 
 	protected:
 		virtual void Update() override;

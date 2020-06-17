@@ -13,7 +13,7 @@ namespace divengine
 	public:
 		explicit RenderComponent(bool centerPosition = false);
 		explicit RenderComponent(const std::string& filename, bool centerPosition = false);
-		//explicit RenderComponent(const char* filename, bool centerPosition = false);
+		explicit RenderComponent(const char* filename, bool centerPosition = false);
 		virtual ~RenderComponent();
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;

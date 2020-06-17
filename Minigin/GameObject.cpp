@@ -5,6 +5,8 @@
 #include "BaseComponent.h"
 #include <algorithm>
 #include "TransformComponent.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 divengine::GameObject::GameObject(const Vector3& position, float scale)
 	:m_Transform(new TransformComponent(position, scale))
@@ -20,11 +22,7 @@ divengine::GameObject::~GameObject()
 	//delete all the components
 	for (BaseComponent* pComponent: m_pComponents)
 	{
-		if (pComponent)
-		{
-			delete pComponent;
-			pComponent = nullptr;
-		}
+		SAFEDELETE(pComponent);
 	}
 }
 
@@ -122,18 +120,99 @@ void divengine::GameObject::RemoveComponent(BaseComponent* pComponent)
 	}
 }
 
-void divengine::GameObject::OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag)
-{
-	if (m_TriggerCallback)
-	{
-		m_TriggerCallback(trigger, other, flag);
-	}
-}
+//void divengine::GameObject::OnTrigger(GameObject* trigger, GameObject* other, TriggerFlag flag)
+//{
+//	if (m_TriggerCallback)
+//	{
+//		m_TriggerCallback(trigger, other, flag);
+//	}
+//}
 
 
 void divengine::GameObject::SetTriggerCallback(TriggerCallback callback)
 {
 	m_TriggerCallback = callback;
+}
+
+void divengine::GameObject::OnCollisionEnter(GameObject* collider)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnCollisionEnter(collider);
+	}
+}
+
+void divengine::GameObject::OnCollisionStay(GameObject* collider)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnCollisionStay(collider);
+	}
+}
+
+void divengine::GameObject::OnCollisionExit(GameObject* collider)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnCollisionExit(collider);
+	}
+}
+
+void divengine::GameObject::OnTriggerEnter(GameObject* trigger)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnTriggerEnter(trigger);
+	}
+}
+
+void divengine::GameObject::OnTriggerStay(GameObject* trigger)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnTriggerStay(trigger);
+	}
+}
+
+void divengine::GameObject::OnTriggerExit(GameObject* trigger)
+{
+	if (!m_IsActive)
+		return;
+	//Update all the components
+	for (BaseComponent* component : m_pComponents)
+	{
+		component->OnTriggerExit(trigger);
+	}
+}
+
+void divengine::GameObject::Load(divengine::BinaryReader& reader)
+{
+	//TODO: Find way to store the callback
+	reader.Read(m_Tag);
+	reader.Read(m_IsActive);
+	reader.Read(m_IsInitialized);
+}
+
+void divengine::GameObject::Save(divengine::BinaryWriter& writer)
+{
+	writer.Write(m_Tag);
+	writer.Write(m_IsActive);
+	writer.Write(m_IsInitialized);
 }
 
 void divengine::GameObject::Initialize()

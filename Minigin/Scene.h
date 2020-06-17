@@ -11,8 +11,9 @@ namespace divengine
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		void AddObject(GameObject* object);
-		void AddRigidbody(Rigidbody* pRigidboy);
+		void DestroyObject(GameObject* pObject);
 		void AddCollider(ColliderComponent* pCollider);
+		void RemoveCollider(ColliderComponent* pCollider);
 		std::string Name() const;
 
 		std::vector<ColliderComponent*>GetColliders() const{ return m_pColliders; };
@@ -33,7 +34,7 @@ namespace divengine
 		explicit Scene(const std::string& name);
 		std::string m_Name;
 		std::vector <GameObject*> m_Objects{};
-		std::vector<Rigidbody*>m_pRigidbodies{};
+		std::vector<GameObject*> m_ObjectsToDelete{};
 		std::vector<ColliderComponent*>m_pColliders{};
 		static unsigned int m_IdCounter; 
 	};

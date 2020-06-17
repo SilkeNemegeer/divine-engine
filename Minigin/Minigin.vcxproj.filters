@@ -177,11 +177,14 @@
     <ClInclude Include="AnimationClip.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="BinaryReader.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="BinaryWriter.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryReader.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="BinaryWriter.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

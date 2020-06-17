@@ -24,6 +24,9 @@ namespace divengine
 			float GetAnimSpeed() const { return m_AnimationSpeed; };
 			bool IsPlaying() const { return m_IsPlaying; };
 
+			virtual void Load(divengine::BinaryReader& reader) override;
+			virtual void Save(divengine::BinaryWriter& writer) override;
+
 	protected:
 		virtual void Update() override;
 		virtual void Initialize() override;

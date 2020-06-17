@@ -13,6 +13,7 @@
 #include "BaseGame.h"
 #include "GameComponentType.h"
 #include "InputManager.h"
+#include "BubbleBobbleGame.h"
 
 MenuController::MenuController()
 	:m_CurrentButtonId{0}
@@ -57,11 +58,19 @@ void MenuController::Select()
 	case ButtonType::singleplayer:
 		//Start game
 		divengine::Debug::Log("Start 1P game");
+		//Set the gamemode
+		BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::solo;
+		//Load the scene with the right gamemode
+		
+
+		divengine::SceneManager::GetInstance().SetAsCurrentScene("Level1");
+
 		//Load first scene
 		break;
 
 	case ButtonType::coop:
 		divengine::Debug::Log("Start coop game");
+		BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::coop;
 		break;
 
 	case ButtonType::exit:
@@ -72,6 +81,7 @@ void MenuController::Select()
 
 	case ButtonType::pvp:
 		divengine::Debug::Log("Start pvp game");
+		BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::versus;
 		divengine::SceneManager::GetInstance().SetAsCurrentScene("Demo");
 		break;
 	}
@@ -86,13 +96,14 @@ void MenuController::Initialize()
 {
 	CreateButtons();
 
-	divengine::InputManager::GetInstance().AddInputMapping(1, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, m_pGameObject);
-	divengine::InputManager::GetInstance().AddInputMapping(2, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, divengine::TriggerState::pressed, m_pGameObject);
-	divengine::InputManager::GetInstance().AddInputMapping(3, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, divengine::TriggerState::pressed, m_pGameObject);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::select, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, m_pGameObject);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::navigatedown, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, divengine::TriggerState::pressed, m_pGameObject);
+	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::navigateup, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, divengine::TriggerState::pressed, m_pGameObject);
 }
 
 void MenuController::Load(divengine::BinaryReader& )
 {
+
 	//No need 
 }
 
@@ -137,7 +148,7 @@ void MenuController::CreateButtons()
 	divengine::GameObject* pExitButton = CreateButton("EXIT", pos);
 	m_pButtons.push_back(pExitButton);
 
-	auto pActiveScene = divengine::SceneManager::GetInstance().GetCurrentScene();
+	auto pActiveScene = divengine::SceneManager::GetInstance().GetSceneByName("MainMenu");
 	for (auto pButton : m_pButtons)
 	{
 		pActiveScene->AddObject(pButton);
