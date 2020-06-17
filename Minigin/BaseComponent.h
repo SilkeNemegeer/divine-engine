@@ -54,6 +54,7 @@ namespace divengine
 		virtual void Initialize() = 0;
 		virtual void PostInitialize() {};
 		virtual void Render() = 0;
+		virtual void Start() {}; //when scene is activated, this will be called
 
 		GameObject* m_pGameObject;
 		unsigned int m_TypeId;

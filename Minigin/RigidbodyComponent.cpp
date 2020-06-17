@@ -126,6 +126,7 @@ void divengine::RigidbodyComponent::Update()
 
 void divengine::RigidbodyComponent::Initialize()
 {
+
 }
 
 void divengine::RigidbodyComponent::PostInitialize()

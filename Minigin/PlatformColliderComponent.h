@@ -24,6 +24,7 @@ namespace divengine
 		virtual void Update() override;
 		virtual void Initialize() override;
 		virtual void Render() override;
+		virtual void Start() override;
 
 	private:
 		//Collider that will check 

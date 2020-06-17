@@ -54,6 +54,7 @@ namespace divengine
 		virtual void Update() override = 0;
 		virtual void Initialize() override;
 		virtual void Render() override = 0;
+		virtual void Start() override;
 
 		bool m_IsTrigger;
 		PhysicsMaterial2D* m_pMaterial;

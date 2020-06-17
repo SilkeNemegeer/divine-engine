@@ -21,6 +21,7 @@ namespace divengine
 		void FixedUpdate();
 		void Render() const;
 		void InitializeAll() const;
+		void Start() const;
 		size_t GetGameObjectCount() const { return m_Objects.size(); };
 		const std::vector<GameObject*>& GameObjects() const { return m_Objects; };
 

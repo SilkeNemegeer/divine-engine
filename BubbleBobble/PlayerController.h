@@ -8,14 +8,10 @@ namespace divengine
 	class Animator;
 }
 
+class Health;
 class PlayerController : public divengine::BaseComponent
 {
 public:
-	//enum class State : int
-	//{
-	//	walkLeft, walkRight, idle, attackLeft, attackRight
-	//};
-
 	enum class State
 	{
 		walkLeft, walkRight, idle, attack, dead
@@ -32,11 +28,16 @@ public:
 	virtual void Update() override;
 	virtual void Render() override {};
 	virtual void Initialize() override;
+	virtual void Start() override;
 
 	void MoveLeft();
 	void MoveRight();
 	void Jump();
 	void Attack();
+
+	void AddToScore(float points) { m_Score += points; };
+	float GetScore() const { return m_Score; };
+	void ResetScore() { m_Score = 0.f; };
 
 	void SetAnimation(State anim);
 
@@ -44,9 +45,16 @@ public:
 
 private:
 	void ChangeState(State newState);
+	void Die();
 	int m_PlayerId;
 	bool m_IsFacingLeft;
 	State m_CurrentState;
+
+	//Health params
+	Health* m_pHealth;
+	int m_MaxLives;
+	float m_TotalRespawnTime;
+	float m_CurrentDeadTime;
 
 	//Attack params
 	float m_MaxAttackTime;
@@ -55,6 +63,10 @@ private:
 	void FireBubble();
 	float m_FireBubbleForce;
 
+	//Score
+	float m_Score;
+
+	//Components
 	divengine::RigidbodyComponent* m_pRigidbody;
 	divengine::Animator* m_pAnimator;
 };

@@ -25,6 +25,7 @@ public:
 	virtual void Initialize() override;
 	virtual void Render() override {};
 	virtual void Update() override;
+	virtual void Start() override;
 
 private:
 	//divengine::GameObject* m_pButton;

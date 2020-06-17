@@ -5,7 +5,7 @@ namespace divengine
 {
 	class Font;
 	class Texture2D;
-
+	class RenderComponent;
 	class TextComponent : public BaseComponent
 	{
 	public:
@@ -26,6 +26,7 @@ namespace divengine
 
 
 	private:
+		RenderComponent* m_RenderComponent;
 		void RootUpdate();
 		std::string m_Text;
 		std::shared_ptr<Font> m_Font;

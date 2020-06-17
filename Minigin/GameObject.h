@@ -28,6 +28,7 @@ namespace divengine
 		virtual void Update();
 		virtual void Render() const;
 		virtual void Initialize();
+		virtual void Start(); //When scene is activated this is called
 
 		void SetPosition(float x, float y, float z = 0.f);
 		void SetPosition(const Vector3& newPos);

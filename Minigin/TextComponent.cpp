@@ -12,6 +12,7 @@ divengine::TextComponent::TextComponent(const std::string& text, const std::shar
 	,m_Font{font}
 	,m_NeedsUpdate{true}
 	,m_Color{color}
+	,m_RenderComponent{nullptr}
 {
 
 }
@@ -44,6 +45,8 @@ void divengine::TextComponent::Render()
 
 void divengine::TextComponent::Initialize()
 {
+	m_RenderComponent = new RenderComponent(true);
+	m_pGameObject->AddComponent(m_RenderComponent);
 	RootUpdate();
 }
 
@@ -61,13 +64,11 @@ void divengine::TextComponent::RootUpdate()
 	}
 	SDL_FreeSurface(surf);
 
-	const auto renderComp = m_pGameObject->GetComponent<RenderComponent>();
-	if (renderComp)
+	if (m_RenderComponent)
 	{
-		renderComp->SetTexture(texture);
+		m_RenderComponent->SetTexture(texture);
 	}
 	else
-
 	{
 		throw std::exception("TextComponent::Update(): Could not find RenderComponent");
 	}

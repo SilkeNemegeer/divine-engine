@@ -14,8 +14,6 @@ divengine::PlatformColliderComponent::PlatformColliderComponent(const glm::vec2&
 bool divengine::PlatformColliderComponent::IsColliding(const Rectf& rect, bool ) const
 {
 	//Check velocity 
-	//if (!(velocity.y < 0)) //only calc collision if actor is falling down
-	//	return;
 	if (m_pRigidbody->GetVelocity().y >= 0)
 		return false;
 
@@ -63,20 +61,24 @@ void divengine::PlatformColliderComponent::Save(divengine::BinaryWriter& writer)
 
 void divengine::PlatformColliderComponent::Update()
 {
-	//auto pos = m_pGameObject->GetPosition();
-	//m_Rect.bottomLeft.x = pos.x + m_Offset.x;
-	//m_Rect.bottomLeft.y = pos.y + m_Offset.y;
 }
 
 void divengine::PlatformColliderComponent::Initialize()
 {
 	ColliderComponent::Initialize();
-	auto pos = m_pGameObject->GetPosition();
-	m_Rect.bottomLeft.x = pos.x + m_Offset.x;
-	m_Rect.bottomLeft.y = pos.y + m_Offset.y;
 }
+
+
 
 void divengine::PlatformColliderComponent::Render()
 {
 	DebugRenderer::DrawRect(m_Rect, 0, 0, 255, 255);
+}
+
+void divengine::PlatformColliderComponent::Start()
+{
+	ColliderComponent::Start();
+	auto pos = m_pGameObject->GetPosition();
+	m_Rect.bottomLeft.x = pos.x + m_Offset.x;
+	m_Rect.bottomLeft.y = pos.y + m_Offset.y;
 }
