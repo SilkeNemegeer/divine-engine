@@ -17,7 +17,7 @@ namespace divengine
 class AIController : public divengine::BaseComponent
 {
 public:
-	AIController(EnemyBehaviour* pEnemy);
+	AIController();
 	~AIController();
 
 	AIController(const AIController& other) = delete;
@@ -25,10 +25,16 @@ public:
 	AIController& operator=(const AIController& other) = delete;
 	AIController& operator=(AIController&& other) = delete;
 
+	void LinkEnemy(EnemyBehaviour* pEnemy);
+
+	virtual void Load(divengine::BinaryReader& reader) override;
+	virtual void Save(divengine::BinaryWriter& writer) override;
+
 protected:
 	virtual void Update() override;
 	virtual void Render() override {};
 	virtual void Initialize() override;
+	virtual void PostInitialize() override;
 	virtual void Start() override;
 private:
 

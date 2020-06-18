@@ -73,8 +73,11 @@ public:
 	virtual void Update() override {};
 	virtual void Render() override {};
 
+	virtual void Load(divengine::BinaryReader& reader) override;
+	virtual void Save(divengine::BinaryWriter& writer) override;
+
 private:
-	const int m_MaxHealth;
+	int m_MaxHealth;
 	int m_CurrentHealth;
 	bool m_IsDead;
 	DeathCallback m_DeathCall;

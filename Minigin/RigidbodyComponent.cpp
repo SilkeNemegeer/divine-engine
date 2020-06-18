@@ -37,6 +37,7 @@ void divengine::RigidbodyComponent::Load(divengine::BinaryReader& reader)
 	reader.Read(m_IsKinematic);
 	reader.Read(m_IsStatic);
 	
+	reader.Read(m_Position);
 	//Collider component takes care of linking rigidbody already
 }
 
@@ -49,6 +50,8 @@ void divengine::RigidbodyComponent::Save(divengine::BinaryWriter& writer)
 
 	writer.Write(m_IsKinematic);
 	writer.Write(m_IsStatic);
+
+	writer.Write(m_Position);
 }
 
 void divengine::RigidbodyComponent::SetKinematic(bool isKinematic)

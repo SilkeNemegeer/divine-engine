@@ -19,8 +19,12 @@ namespace divengine
 		void Write(const Vector3& vector);
 
 		void Write(const std::string& string);
+		void Write(const char* string);
 		void Write(const Rectf& rect);
+		void Write(const SDL_Rect& rect);
+		void Write(const SDL_Color& color);
 		void Write(const glm::vec2& vec);
+		void Write(const Circlef& circle);
 
 	private:
 		std::ofstream m_WriteStream;

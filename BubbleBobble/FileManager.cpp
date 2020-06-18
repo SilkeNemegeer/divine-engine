@@ -6,11 +6,29 @@
 #include "PlayerController.h"
 #include "Components.h"
 #include "MenuController.h"
+#include "Animator.h"
+#include "ItemBehaviour.h"
+#include "Health.h"
+#include "AIController.h"
+#include "InputManager.h"
+#include "BubbleBobbleGame.h"
+#include "ZenChanBehaviour.h"
+#include "MaitaBehaviour.h"
+#include "HUD.h"
 
 void FileManager::LoadLevel(const std::string& file, const std::string& sceneName) //Read from file
 {
 	using namespace divengine;
 
+	//Destroy objects old scene
+	//auto currentScene = SceneManager::GetInstance().GetCurrentScene();
+	//if (currentScene)
+	//{
+	///*	currentScene->Destroy();
+	//	InputManager::GetInstance().DestroyInputMappings();*/
+	//}
+
+	//Start loading new scene
 	auto scene = SceneManager::GetInstance().GetSceneByName(sceneName);
 	if (!scene)
 		return;
@@ -32,6 +50,10 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 		//read component count for the object
 		size_t componentCount = 0;
 		m_Reader.Read(componentCount);
+		if (componentCount > 6)
+		{
+			std::cout << "P";
+		}
 
 		for (size_t j = 0; j < componentCount; j++)
 		{
@@ -52,6 +74,29 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 
 				case GameComponentType::menucontroller:
 					pComponent = new MenuController();
+					break;
+
+				case GameComponentType::health:
+					pComponent = new Health(0);
+					break;
+
+				case GameComponentType::itembehaviour:
+					pComponent = new ItemBehaviour(0);
+					break;
+
+				case GameComponentType::hud:
+					pComponent = new HUD();
+					break;
+
+				case GameComponentType::aicontroller: //Enemy behaviours will take care of this
+					break;
+
+				case GameComponentType::zenchanbehaviour:
+					pComponent = new ZenChanBehaviour();
+					break;
+
+				case GameComponentType::maitabehaviour:
+					pComponent = new MaitaBehaviour();
 					break;
 				}
 			}
@@ -82,8 +127,13 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 					pComponent = new BoxColliderComponent();
 					break;
 
+
+				case ComponentType::circlecollider:
+					pComponent = new CircleColliderComponent(0, glm::vec2());
+					break;
+
 				case ComponentType::animator:
-					
+					pComponent = new Animator("", 0, 0);
 					break;
 
 				case ComponentType::platformcollider:
@@ -109,6 +159,19 @@ void FileManager::LoadLevel(const std::string& file, const std::string& sceneNam
 
 	//close stream
 	m_Reader.Close();
+
+	SceneManager::GetInstance().SetAsCurrentScene(sceneName);
+
+	//Set players
+	std::vector<GameObject*> players = SceneManager::GetInstance().GetCurrentScene()->FindObjectsWithTag("Player");
+
+	if (players.size() == 1)
+	{
+		divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveleft, SDL_SCANCODE_LEFT, XINPUT_GAMEPAD_DPAD_LEFT, divengine::TriggerState::down, players[0]);
+		divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveright, SDL_SCANCODE_RIGHT, XINPUT_GAMEPAD_DPAD_RIGHT, divengine::TriggerState::down, players[0]);
+		divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::jump, SDL_SCANCODE_UP, XINPUT_GAMEPAD_X, divengine::TriggerState::pressed, players[0]);
+		divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::attack, SDL_SCANCODE_P, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, players[0]);
+	}
 }
 
 void FileManager::SaveLevel(const std::string& file, const std::string& levelname)//Write to file

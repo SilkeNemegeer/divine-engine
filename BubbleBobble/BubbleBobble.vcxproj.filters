@@ -84,6 +84,9 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>GameComponents\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="LevelBehaviour.cpp">
+      <Filter>GameComponents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileManager.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>GameComponents\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelBehaviour.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -39,6 +39,8 @@ namespace divengine
 		void AddCommand(Command* pCommand, int commandId); //Add a command
 		void AddInputMapping(int commandId, SDL_Scancode key = SDL_Scancode::SDL_NUM_SCANCODES, WORD controllerButton = 0, TriggerState triggerState = TriggerState::pressed, GameObject* pObject = nullptr, int controllerId = 0);
 		
+		void DestroyInputMappings();
+
 		bool IsTriggered(WORD button, TriggerState triggerState, int controllerId = 0) const;
 		bool IsKeyTriggered(SDL_Scancode key, TriggerState triggerState) const;
 

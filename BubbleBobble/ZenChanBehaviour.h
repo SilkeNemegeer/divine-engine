@@ -12,7 +12,7 @@ class Health;
 class ZenChanBehaviour : public EnemyBehaviour
 {
 public:
-	ZenChanBehaviour(int damage = 1);
+	ZenChanBehaviour(int damage = 1, bool ai = true);
 	~ZenChanBehaviour();
 
 	ZenChanBehaviour(const ZenChanBehaviour& other) = delete;
@@ -23,11 +23,15 @@ public:
 	virtual void Attack() {};
 	virtual void Die(); 
 
+	virtual void Load(divengine::BinaryReader& reader) override;
+	virtual void Save(divengine::BinaryWriter& writer) override;
+
 protected:
 	virtual void Update() override;
 	virtual void Render() override {};
 	virtual void Initialize() override;
 	virtual void Start() override;
+	virtual void PostInitialize() override;
 
 private:
 	void SpawnWaterMelon();

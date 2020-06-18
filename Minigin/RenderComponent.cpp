@@ -154,27 +154,18 @@ void divengine::RenderComponent::Load(BinaryReader& reader)
 {
 	//center position
 	reader.Read(m_CenterPosition);
-	//istream.read((char*)&m_CenterPosition, sizeof(m_CenterPosition));
 
 	////read file name
 	reader.Read(m_FileName);
-	//size_t size = 0;
-	//istream.read((char*)&size, sizeof(size_t));
-	//m_FileName.resize(size, ' ');
-	//istream.read((char*)&m_FileName[0], sizeof(char) * size);
 }
 
 void divengine::RenderComponent::Save(BinaryWriter& writer)
 {
 	//center position
-	//ostream.write((const char*)&m_CenterPosition, sizeof(m_CenterPosition));
 	writer.Write(m_CenterPosition);
 
 	////write filename
 	writer.Write(m_FileName);
-	//size_t size = m_FileName.size();
-	//ostream.write((const char*)&size, sizeof(size));
-	//ostream.write((const char*)&m_FileName[0], size);
 
 }
 

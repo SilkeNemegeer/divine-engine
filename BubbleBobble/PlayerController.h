@@ -23,7 +23,7 @@ public:
 		walkLeft, walkRight, idle, attack, dead
 	};
 
-	PlayerController(int id = 0);
+	PlayerController(int id = 0, PlayerType type = PlayerType::bub);
 	~PlayerController();
 
 	PlayerController(const PlayerController& other) = delete;
@@ -35,6 +35,9 @@ public:
 	virtual void Render() override {};
 	virtual void Initialize() override;
 	virtual void Start() override;
+
+	virtual void Load(divengine::BinaryReader& reader) override;
+	virtual void Save(divengine::BinaryWriter& writer) override;
 
 	void MoveLeft();
 	void MoveRight();
@@ -71,6 +74,8 @@ private:
 
 	//Score
 	float m_Score;
+
+	PlayerType m_PlayerType;
 
 	//Components
 	divengine::RigidbodyComponent* m_pRigidbody;

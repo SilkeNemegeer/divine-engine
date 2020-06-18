@@ -22,6 +22,8 @@ divengine::Animator::Animator(const std::string& path, float clipHeight, float c
 	, m_ClipHeight{ clipHeight }
 	, m_ClipWidth{ clipWidth }
 {
+	m_TypeId = unsigned int(ComponentType::animator);
+
 	m_SrcRect.w = int(clipWidth);
 	m_SrcRect.h = int(clipHeight);
 }
@@ -66,14 +68,34 @@ void divengine::Animator::AddAnimation(AnimationClip *animation, unsigned int id
 		m_pCurrentAnimation = animation;
 }
 
-void divengine::Animator::Load(divengine::BinaryReader& )
+void divengine::Animator::Load(divengine::BinaryReader& reader)
 {
-
+	reader.Read(m_IsPlaying);
+	reader.Read(m_AnimationSpeed);
+	reader.Read(m_CurrentFrame);
+	reader.Read(m_CurrentFrameTime);
+	reader.Read(m_SrcRect);
+	reader.Read(m_DestRect);
+	reader.Read(m_Cols);
+	reader.Read(m_Rows);
+	reader.Read(m_Path);
+	reader.Read(m_ClipHeight);
+	reader.Read(m_ClipWidth);
 }
 
-void divengine::Animator::Save(divengine::BinaryWriter& )
+void divengine::Animator::Save(divengine::BinaryWriter& writer)
 {
-
+	writer.Write(m_IsPlaying);
+	writer.Write(m_AnimationSpeed);
+	writer.Write(m_CurrentFrame);
+	writer.Write(m_CurrentFrameTime);
+	writer.Write(m_SrcRect);
+	writer.Write(m_DestRect);
+	writer.Write(m_Cols);
+	writer.Write(m_Rows);
+	writer.Write(m_Path);
+	writer.Write(m_ClipHeight);
+	writer.Write(m_ClipWidth);
 }
 
 void divengine::Animator::Update()

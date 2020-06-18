@@ -17,6 +17,9 @@ public:
 
 	virtual void OnTriggerEnter(divengine::GameObject* pCollider);
 
+	virtual void Load(divengine::BinaryReader& reader) override;
+	virtual void Save(divengine::BinaryWriter& writer) override;
+
 protected:
 	virtual void Update() override;
 	virtual void Render() override {};

@@ -25,7 +25,6 @@ void  divengine::SceneManager::Initialize()
 	{
 		scene->InitializeAll();
 	}
-	//m_pCurrentScene->InitializeAll();
 }
 
 void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
@@ -36,6 +35,8 @@ void divengine::SceneManager::SetAsCurrentScene(const std::string& name)
 		if (scene->Name() == name)
 		{
 			m_pCurrentScene = scene;
+			//Load all objects from new scene
+			scene->InitializeAll();
 			scene->Start();
 			//scene->InitializeAll();
 			return;

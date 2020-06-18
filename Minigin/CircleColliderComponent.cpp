@@ -67,6 +67,21 @@ glm::vec2 divengine::CircleColliderComponent::ResolveCollision(const Circlef& , 
 	return glm::vec2();
 }
 
+void divengine::CircleColliderComponent::Load(divengine::BinaryReader& reader)
+{
+	//Circle & offset 
+	ColliderComponent::Load(reader);
+	reader.Read(m_Circle);
+	reader.Read(m_Offset);
+}
+
+void divengine::CircleColliderComponent::Save(divengine::BinaryWriter& writer)
+{
+	ColliderComponent::Save(writer);
+	writer.Write(m_Circle);
+	writer.Write(m_Offset);
+}
+
 void divengine::CircleColliderComponent::Update()
 {
 	auto pos = m_pGameObject->GetPosition();

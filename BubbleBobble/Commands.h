@@ -12,6 +12,8 @@ public:
 	JumpCommand() {}; //Can pass extra values here if needed
 	void Execute(GameObject* pObject) override 
 	{
+		if (!pObject)
+			return;
 		auto playerController = pObject->GetComponent<PlayerController>();
 		if (playerController)
 		{
@@ -28,6 +30,8 @@ class MoveLeft : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto playerController = pObject->GetComponent<PlayerController>();
 		if (playerController)
 		{
@@ -45,6 +49,8 @@ class MoveRight : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto playerController = pObject->GetComponent<PlayerController>();
 		if (playerController)
 		{
@@ -61,6 +67,8 @@ class Attack : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto playerController = pObject->GetComponent<PlayerController>();
 		if (playerController)
 		{
@@ -77,6 +85,8 @@ class NavigateUp : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto menuController = pObject->GetComponent<MenuController>();
 		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
@@ -91,6 +101,8 @@ class NavigateDown : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto menuController = pObject->GetComponent<MenuController>();
 		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
@@ -105,6 +117,8 @@ class Select : public Command
 public:
 	void Execute(GameObject* pObject) override
 	{
+		if (!pObject)
+			return;
 		auto menuController = pObject->GetComponent<MenuController>();
 		if (menuController && SceneManager::GetInstance().GetCurrentScene()->Name() == "MainMenu")
 		{
