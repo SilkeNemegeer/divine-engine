@@ -154,15 +154,6 @@ void LoadDemoLevel()
 	auto menu = new GameObject(Vector3(0, 0, 0));
 	menu->AddComponent(new MenuController());
 	demoScene.AddObject(menu);
-
-	//Add commands
-	//InputManager::GetInstance().AddCommand(new Select(), 1);
-	//InputManager::GetInstance().AddCommand(new NavigateDown(), 2);
-	//InputManager::GetInstance().AddCommand(new NavigateUp(), 3);
-
-	/*InputManager::GetInstance().AddInputMapping(1, SDL_SCANCODE_RETURN, XINPUT_GAMEPAD_A, TriggerState::pressed, menu);
-	InputManager::GetInstance().AddInputMapping(2, SDL_SCANCODE_DOWN, XINPUT_GAMEPAD_DPAD_DOWN, TriggerState::pressed, menu);
-	InputManager::GetInstance().AddInputMapping(3, SDL_SCANCODE_UP, XINPUT_GAMEPAD_DPAD_UP, TriggerState::pressed, menu);*/
 }
 
 void LoadMainMenu()
@@ -182,147 +173,140 @@ void LoadMainMenu()
 	//
 	//FileManager::GetInstance().SaveLevel("../Data/MainMenu.div", "MainMenu");
 
-	SceneManager::GetInstance().CreateScene("MainMenu");
+	//SceneManager::GetInstance().CreateScene("MainMenu");
 	FileManager::GetInstance().LoadLevel("../Data/MainMenu.div", "MainMenu");
 }
 
-void LoadLevel1()
+void CreateAndSaveLevel1()
 {
-	auto& level1Scene = SceneManager::GetInstance().CreateScene("Level1");
+	//auto& level1Scene = SceneManager::GetInstance().CreateScene("Level1");
+		//Add background
+	//RenderComponent* pBubbleBobbleImage = new RenderComponent();
+	//pBubbleBobbleImage->SetTexture("level1.png");
+	//auto go = new GameObject(Vector3(0.f, 0.f, 0.f), 2.f);
+	//go->AddComponent(pBubbleBobbleImage);
+	//level1Scene.AddObject(go);
 
-	//Add background
-	RenderComponent* pBubbleBobbleImage = new RenderComponent();
-	pBubbleBobbleImage->SetTexture("level1.png");
-	auto go = new GameObject(Vector3(0.f, 0.f, 0.f), 2.f);
-	go->AddComponent(pBubbleBobbleImage);
-	level1Scene.AddObject(go);
+	////Create level colliders
+	////Add collider & test saving and loading
+	//GameObject* pBottomWall = new GameObject();
+	//auto rigidBody = new RigidbodyComponent(true);
+ //   pBottomWall->AddComponent(rigidBody);
+	//pBottomWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width,80)));
+	//level1Scene.AddObject(pBottomWall);
 
-	//Create level colliders
-	//Add collider & test saving and loading
-	GameObject* pBottomWall = new GameObject();
-	auto rigidBody = new RigidbodyComponent(true);
-    pBottomWall->AddComponent(rigidBody);
-	pBottomWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width,80)));
-	level1Scene.AddObject(pBottomWall);
+	//GameObject* pTopWall = new GameObject(Vector3(0, BaseGame::GetGameSettings().Height - 50.f, 0));
+	//rigidBody = new RigidbodyComponent(true);
+	//pTopWall->AddComponent(rigidBody);
+	//pTopWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width, 50)));
+	//level1Scene.AddObject(pTopWall);
 
-	GameObject* pTopWall = new GameObject(Vector3(0, BaseGame::GetGameSettings().Height - 50.f, 0));
-	rigidBody = new RigidbodyComponent(true);
-	pTopWall->AddComponent(rigidBody);
-	pTopWall->AddComponent(new BoxColliderComponent(glm::vec2(BaseGame::GetGameSettings().Width, 50)));
-	level1Scene.AddObject(pTopWall);
+	//GameObject* pLeftWall = new GameObject(Vector3(0,0,0));
+	//rigidBody = new RigidbodyComponent(true);
+	//pLeftWall->AddComponent(rigidBody);
+	//pLeftWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
+	//level1Scene.AddObject(pLeftWall);
 
-	GameObject* pLeftWall = new GameObject(Vector3(0,0,0));
-	rigidBody = new RigidbodyComponent(true);
-	pLeftWall->AddComponent(rigidBody);
-	pLeftWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
-	level1Scene.AddObject(pLeftWall);
-
-	GameObject* pRightWall = new GameObject(Vector3(BaseGame::GetGameSettings().Width - 35.f, 0,0));
-	rigidBody = new RigidbodyComponent(true);
-	pRightWall->AddComponent(rigidBody);
-	pRightWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
-	level1Scene.AddObject(pRightWall);
-
-
-	////Add 3 platforms but with change in height
-	float height = 382.f;
-	for (int i = 0; i < 3; i++)
-	{
-		//Add the 3 platforms horizontal
-
-		GameObject* pPlatform = new GameObject(Vector3(35, height, 0));
-		rigidBody = new RigidbodyComponent(true);
-		pPlatform->AddComponent(rigidBody);
-		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(30.f, 20.f)));
-		level1Scene.AddObject(pPlatform);
-
-		pPlatform = new GameObject(Vector3(110, height, 0));
-		rigidBody = new RigidbodyComponent(true);
-		pPlatform->AddComponent(rigidBody);
-		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(290.f, 20.f)));
-		level1Scene.AddObject(pPlatform);
-
-		pPlatform = new GameObject(Vector3(445, height, 0));
-		rigidBody = new RigidbodyComponent(true);
-		pPlatform->AddComponent(rigidBody);
-		pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(35.f, 20.f)));
-		level1Scene.AddObject(pPlatform);
-
-		height -= 80.f;
-	}
-
-	//Create player
-	GameObject* pPlayer = new GameObject(Vector3(200, 200, 0), 2);
-	auto renderComp = new RenderComponent("sprites.png");
-	pPlayer->AddComponent(renderComp);
-	auto animator = new Animator("sprites.png", 16, 16);
-
-	pPlayer->AddComponent(animator);
-	pPlayer->AddComponent(new RigidbodyComponent());
-
-	//ADD materials
-	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(4.f, 0.f), 0);
-	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(0.f, 0.f), 1);
+	//GameObject* pRightWall = new GameObject(Vector3(BaseGame::GetGameSettings().Width - 35.f, 0,0));
+	//rigidBody = new RigidbodyComponent(true);
+	//pRightWall->AddComponent(rigidBody);
+	//pRightWall->AddComponent(new BoxColliderComponent(glm::vec2(35, BaseGame::GetGameSettings().Height)));
+	//level1Scene.AddObject(pRightWall);
 
 
-	pPlayer->AddComponent(new BoxColliderComponent(glm::vec2(32, 32), glm::vec2(), false, 0));
-	pPlayer->AddComponent(new PlayerController());
-	pPlayer->AddComponent(new Health(1));
-	level1Scene.AddObject(pPlayer);
+	//////Add 3 platforms but with change in height
+	//float height = 382.f;
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	//Add the 3 platforms horizontal
 
-	//Add pickup
-	GameObject* pPickUp = new GameObject(Vector3(250, 250, 0), 0.5f);
-	pPickUp->AddComponent(new RenderComponent("Items/Bubble_Bobble_item_french_fries.png"));
-	pPickUp->AddComponent(new RigidbodyComponent(true));
-	pPickUp->AddComponent(new BoxColliderComponent(glm::vec2(36,36), glm::vec2(), true));
-	pPickUp->AddComponent(new ItemBehaviour(200));
-	level1Scene.AddObject(pPickUp);
+	//	GameObject* pPlatform = new GameObject(Vector3(35, height, 0));
+	//	rigidBody = new RigidbodyComponent(true);
+	//	pPlatform->AddComponent(rigidBody);
+	//	pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(30.f, 20.f)));
+	//	level1Scene.AddObject(pPlatform);
 
-	//ADD hud
-	GameObject* pHud = new GameObject(Vector3(60, 20, 0));
-	auto font = ServiceLocator::GetResourceManager()->LoadFont("Fonts/Airstream.ttf", 30);
-	auto hudComp = new HUD(font, {0,0,0});
-	hudComp->LinkPlayer(pPlayer->GetComponent<PlayerController>());
-	pHud->AddComponent(hudComp);
-	level1Scene.AddObject(pHud);
+	//	pPlatform = new GameObject(Vector3(110, height, 0));
+	//	rigidBody = new RigidbodyComponent(true);
+	//	pPlatform->AddComponent(rigidBody);
+	//	pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(290.f, 20.f)));
+	//	level1Scene.AddObject(pPlatform);
 
-	//Add enemies
-	GameObject* pZenChan = new GameObject(Vector3(60, 200, 0),2);
-	pZenChan->AddComponent(new RigidbodyComponent());
-	pZenChan->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
-	renderComp = new RenderComponent("sprites.png");
-	pZenChan->AddComponent(renderComp);
-	animator = new Animator("sprites.png", 16, 16);
-	animator->AddAnimation(new AnimationClip(2, 4, 2, "WalkingLeft"), CharacterAnimations::moveLeft);
-	animator->AddAnimation(new AnimationClip(0, 4, 2, "WalkingRight"), CharacterAnimations::moveRight);
-	animator->AddAnimation(new AnimationClip(4, 4, 2, "WalkingRight"), CharacterAnimations::inBubble);
-	animator->Play();
-	pZenChan->AddComponent(animator);
-	auto zenChanBehaviour = new ZenChanBehaviour();
-	pZenChan->AddComponent(zenChanBehaviour);
-	pZenChan->AddComponent(new AIController(zenChanBehaviour));
+	//	pPlatform = new GameObject(Vector3(445, height, 0));
+	//	rigidBody = new RigidbodyComponent(true);
+	//	pPlatform->AddComponent(rigidBody);
+	//	pPlatform->AddComponent(new PlatformColliderComponent(glm::vec2(35.f, 20.f)));
+	//	level1Scene.AddObject(pPlatform);
 
-	//has ai controller -> so it moves to the enemy
-	level1Scene.AddObject(pZenChan);
+	//	height -= 80.f;
+	//}
 
-	//Add Maita
-	GameObject* pMaita = new GameObject(Vector3(150, 50, 0),2);
-	pMaita->AddComponent(new RigidbodyComponent());
-	pMaita->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
-	renderComp = new RenderComponent("sprites.png");
-	pMaita->AddComponent(renderComp);
-	animator = new Animator("sprites.png", 16, 16);
-	animator->AddAnimation(new AnimationClip(4, 15, 2, "WalkingLeft"), CharacterAnimations::moveLeft);
-	animator->AddAnimation(new AnimationClip(2, 15, 2, "WalkingRight"), CharacterAnimations::moveRight);
-	animator->AddAnimation(new AnimationClip(6, 15, 4, "WalkingRight"), CharacterAnimations::inBubble);
-	animator->Play();
-	pMaita->AddComponent(animator);
-	auto maitaBehviour = new MaitaBehaviour();
-	pMaita->AddComponent(maitaBehviour);
-	pMaita->AddComponent(new AIController(maitaBehviour));
+	/////LOADING TILL HERE == OK
 
-	//has ai controller -> so it moves to the enemy
-	level1Scene.AddObject(pMaita);
+	////Create player
+	//GameObject* pPlayer = new GameObject(Vector3(200, 200, 0), 2);
+	//auto renderComp = new RenderComponent("sprites.png");
+	//pPlayer->AddComponent(renderComp);
+	//auto animator = new Animator("sprites.png", 16, 16);
+
+	//pPlayer->AddComponent(animator);
+	//pPlayer->AddComponent(new RigidbodyComponent());
+
+
+	//pPlayer->AddComponent(new BoxColliderComponent(glm::vec2(32, 32), glm::vec2(), false, 0));
+	//pPlayer->AddComponent(new PlayerController(0, PlayerController::PlayerType::bob));
+	//pPlayer->AddComponent(new Health(1));
+	//level1Scene.AddObject(pPlayer);
+
+	////Add pickup
+	//GameObject* pPickUp = new GameObject(Vector3(250, 250, 0), 0.5f);
+	//pPickUp->AddComponent(new RenderComponent("Items/Bubble_Bobble_item_french_fries.png"));
+	//pPickUp->AddComponent(new RigidbodyComponent(true));
+	//pPickUp->AddComponent(new BoxColliderComponent(glm::vec2(36,36), glm::vec2(), true));
+	//pPickUp->AddComponent(new ItemBehaviour(200));
+	//level1Scene.AddObject(pPickUp);
+
+	////ADD hud
+	//GameObject* pHud = new GameObject(Vector3(60, 20, 0));
+	////auto font = ServiceLocator::GetResourceManager()->LoadFont("Fonts/Airstream.ttf", 30);
+	//auto hudComp = new HUD(0, {0,0,0});
+	////hudComp->LinkPlayer(pPlayer->GetComponent<PlayerController>());
+	//pHud->AddComponent(hudComp);
+	//level1Scene.AddObject(pHud);
+
+	////Add enemies
+	//GameObject* pZenChan = new GameObject(Vector3(60, 200, 0),2);
+	//pZenChan->AddComponent(new RigidbodyComponent());
+	//pZenChan->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
+	//renderComp = new RenderComponent("sprites.png");
+	//pZenChan->AddComponent(renderComp);
+	//animator = new Animator("sprites.png", 16, 16);
+
+	//pZenChan->AddComponent(animator);
+	//auto zenChanBehaviour = new ZenChanBehaviour();
+	//pZenChan->AddComponent(zenChanBehaviour);
+	////pZenChan->AddComponent(new AIController(zenChanBehaviour));
+
+	////has ai controller -> so it moves to the enemy
+	//level1Scene.AddObject(pZenChan);
+
+	////Add Maita
+	//GameObject* pMaita = new GameObject(Vector3(150, 50, 0),2);
+	//pMaita->AddComponent(new RigidbodyComponent());
+	//pMaita->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
+	//renderComp = new RenderComponent("sprites.png");
+	//pMaita->AddComponent(renderComp);
+	//animator = new Animator("sprites.png", 16, 16);
+
+	//pMaita->AddComponent(animator);
+	//auto maitaBehviour = new MaitaBehaviour();
+	//pMaita->AddComponent(maitaBehviour);
+	////pMaita->AddComponent(new AIController(maitaBehviour));
+
+	////has ai controller -> so it moves to the enemy
+	//level1Scene.AddObject(pMaita);
+
+
 
 	//animator->Play();
 	//If works -> add all colliders
@@ -337,28 +321,16 @@ void LoadLevel1()
 	//If works -> start on player controller & movement (create player)
 		//Create player input
 
-	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveleft, SDL_SCANCODE_LEFT, XINPUT_GAMEPAD_DPAD_LEFT, divengine::TriggerState::down, pPlayer);
-	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::moveright, SDL_SCANCODE_RIGHT, XINPUT_GAMEPAD_DPAD_RIGHT, divengine::TriggerState::down, pPlayer);
-	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::jump, SDL_SCANCODE_UP, XINPUT_GAMEPAD_X, divengine::TriggerState::pressed, pPlayer);
-	divengine::InputManager::GetInstance().AddInputMapping(BubbleBobbleGame::CommandId::attack, SDL_SCANCODE_P, XINPUT_GAMEPAD_A, divengine::TriggerState::pressed, pPlayer);
-
-	//ADD SOUND
-	SoundManager *sound = ServiceLocator::GetSoundManager();
-	sound->LoadSound("Sounds/03_Room Theme.mp3", "BackGroundMusic", FMOD_2D | FMOD_LOOP_NORMAL);
-	sound->AddChannel(0);
-	//sound.AddChannel(1);
-	//sound.LoadSound("Sounds/Aggressive_Zombie_Snarls.mp3", "testSound2", FMOD_2D | FMOD_LOOP_NORMAL);
-	sound->StartSound("BackGroundMusic", 0);
-	sound->GetChannel(0)->setVolume(0.05f);
-	//sound.StartSound("testSound2", 1);
-	//sound.SetMasterVolume(0.08f);
 
 
 	//FileManager::GetInstance().SaveLevel("../Data/Level1.div", "Level1");
+	//SceneManager::GetInstance().SetAsCurrentScene("Level1");
+}
 
-	/*SceneManager::GetInstance().CreateScene("Level1");
-	FileManager::GetInstance().LoadLevel("../Data/Level1.div", "Level1");*/
-
+void LoadLevel1()
+{
+	//SceneManager::GetInstance().CreateScene("Level1");
+	FileManager::GetInstance().LoadLevel("../Data/Level1.div", "Level1");
 }
 
 void BubbleBobbleGame::Initialize()
@@ -381,12 +353,22 @@ void BubbleBobbleGame::Initialize()
 	InputManager::GetInstance().AddCommand(new JumpCommand(), CommandId::jump);
 	InputManager::GetInstance().AddCommand(new Attack(), CommandId::attack);
 
-	//Load scenes
-	LoadMainMenu();
-	LoadLevel1();
-	//LoadDemoLevel();
+	//Add materials
+	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(4.f, 0.f), 0);
+	MaterialManager::GetInstance().AddMaterial(new PhysicsMaterial2D(0.f, 0.f), 1);
 
-	SceneManager::GetInstance().SetAsCurrentScene("MainMenu");
-	//SceneManager::GetInstance().SetAsCurrentScene("Level1");
+	//ADD SOUND
+	SoundManager* sound = ServiceLocator::GetSoundManager();
+	sound->LoadSound("Sounds/03_Room Theme.mp3", "BackGroundMusic", FMOD_2D | FMOD_LOOP_NORMAL);
+	sound->AddChannel(0);
+	sound->StartSound("BackGroundMusic", 0);
+	sound->GetChannel(0)->setVolume(0.05f);
+
+	//Create scenes
+	SceneManager::GetInstance().CreateScene("MainMenu");
+	SceneManager::GetInstance().CreateScene("Level1");
+
+	//Load start scene
+	LoadMainMenu();
 
 }

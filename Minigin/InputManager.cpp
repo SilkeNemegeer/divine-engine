@@ -152,6 +152,14 @@ void divengine::InputManager::AddInputMapping(int commandId, SDL_Scancode key, W
 	m_pInputMappings.push_back(new InputMapping(commandId, key, controllerButton, triggerState, pObject, controllerId));
 }
 
+void divengine::InputManager::DestroyInputMappings()
+{
+	for (auto pInputMap : m_pInputMappings)
+	{
+		SAFEDELETE(pInputMap);
+	}
+}
+
 bool divengine::InputManager::IsTriggered(WORD button, TriggerState triggerState, int controllerId) const
 {
 	if (!m_ConnectedControllers[controllerId] || (button <= 0x0000 && button > 0x8000))
@@ -324,13 +332,22 @@ void divengine::InputManager::UpdateControllerState()
 	}
 
 	//Check if a command was triggered with controller
-	for (const auto& inputMap : m_pInputMappings)
+	for (size_t i = 0; i < m_pInputMappings.size(); i++)
 	{
+		auto inputMap = m_pInputMappings[i];
 		if (IsTriggered(inputMap->ControllerButton, inputMap->Trigger, inputMap->PlayerIndex) || IsKeyTriggered(inputMap->KeyboardButton, inputMap->Trigger))
 		{
 			m_pCommands[inputMap->CommandId]->Execute(inputMap->pObject);
 		}
 	}
+	//
+	//for (const auto& inputMap : m_pInputMappings)
+	//{
+	//	if (IsTriggered(inputMap->ControllerButton, inputMap->Trigger, inputMap->PlayerIndex) || IsKeyTriggered(inputMap->KeyboardButton, inputMap->Trigger))
+	//	{
+	//		m_pCommands[inputMap->CommandId]->Execute(inputMap->pObject);
+	//	}
+	//}
 
 	if (IsTriggered(XINPUT_GAMEPAD_A, TriggerState::pressed, 1))
 	{

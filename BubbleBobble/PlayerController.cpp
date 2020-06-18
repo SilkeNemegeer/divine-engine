@@ -14,8 +14,9 @@
 #include "Health.h"
 #include "TextComponent.h"
 #include "BaseGame.h"
+#include "GameComponentType.h"
 
-PlayerController::PlayerController(int id)
+PlayerController::PlayerController(int id, PlayerType type)
 	:m_PlayerId{id}
 	,m_pRigidbody{nullptr}
 	,m_pAnimator{nullptr}
@@ -29,8 +30,9 @@ PlayerController::PlayerController(int id)
 	,m_TotalRespawnTime{1.5f}
 	,m_CurrentDeadTime{0.f}
 	,m_Score{0.f}
+	,m_PlayerType{type}
 {
-
+	m_TypeId = int(GameComponentType::playercontroller);
 }
 
 PlayerController::~PlayerController()
@@ -105,19 +107,33 @@ void PlayerController::Initialize()
 		divengine::Debug::LogError("No rigidbody found in player");
 		return;
 	}
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 2, "MoveLeft", 3), CharacterAnimations::moveLeft); //TODO: change strings to ints
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 2, "MoveRight", 3), CharacterAnimations::moveRight);
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 1, "IdleLeft", 1), CharacterAnimations::idleLeft); //TODO: change strings to ints
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 1, "IdleRight", 1), CharacterAnimations::idleRight);
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(4, 0, 2, "AttackRight", 5), CharacterAnimations::attackRight);
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(6, 0, 2, "AttackLeft", 3), CharacterAnimations::attackLeft);
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(8, 0, 4, "Dead", 5), CharacterAnimations::inBubble);
+
+	int row = 0;
+	switch (m_PlayerType)
+	{
+	case PlayerController::PlayerType::bub:
+		row = 0;
+		break;
+	case PlayerController::PlayerType::bob:
+		row = 2;
+		break;
+	}
+
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, row, 2, "MoveLeft", 3), CharacterAnimations::moveLeft); //TODO: change strings to ints
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, row, 2, "MoveRight", 3), CharacterAnimations::moveRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, row, 1, "IdleLeft", 1), CharacterAnimations::idleLeft); //TODO: change strings to ints
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, row, 1, "IdleRight", 1), CharacterAnimations::idleRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(4, row, 2, "AttackRight", 5), CharacterAnimations::attackRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(6, row, 2, "AttackLeft", 3), CharacterAnimations::attackLeft);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(8, row, 4, "Dead", 5), CharacterAnimations::inBubble);
 	m_pAnimator->SetAnimation(CharacterAnimations::idleLeft);
 	m_IsFacingLeft = true;
 	m_pAnimator->Play();
 //	m_pAnimator->SetAnimation("IdleLeft");
 	m_IsFacingLeft = true;
 	//m_pAnimator->Play();
+
+
 }
 
 void PlayerController::Start()
@@ -149,6 +165,34 @@ void PlayerController::Start()
 	m_pRigidbody->ClearForce();
 	m_pRigidbody->SetVelocity(glm::vec2(0.f, 0.f));
 	ChangeState(State::idle);
+}
+
+void PlayerController::Load(divengine::BinaryReader& reader)
+{
+	reader.Read(m_PlayerId);
+	reader.Read(m_CurrentState);
+	reader.Read(m_MaxLives);
+	reader.Read(m_TotalRespawnTime);
+	reader.Read(m_CurrentDeadTime);
+	reader.Read(m_MaxAttackTime);
+	reader.Read(m_CurrentAttackTime);
+	reader.Read(m_FireBubbleForce);
+	reader.Read(m_Score);
+	reader.Read(m_PlayerType);
+}
+
+void PlayerController::Save(divengine::BinaryWriter& writer)
+{
+	writer.Write(m_PlayerId);
+	writer.Write(m_CurrentState);
+	writer.Write(m_MaxLives);
+	writer.Write(m_TotalRespawnTime);
+	writer.Write(m_CurrentDeadTime);
+	writer.Write(m_MaxAttackTime);
+	writer.Write(m_CurrentAttackTime);
+	writer.Write(m_FireBubbleForce);
+	writer.Write(m_Score);
+	writer.Write(m_PlayerType);
 }
 
 void PlayerController::MoveLeft()
@@ -298,9 +342,11 @@ void PlayerController::FireBubble()
 	pBubble->AddComponent(behaviour);
 
 	auto animator = new Animator("sprites.png", 16,16);
-	//animator->AddAnimation(new AnimationClip(0, 12, 2, "GreenBubbles"));
-	animator->AddAnimation(new AnimationClip(0, 12, 2, "GreenBubbles"), 0);
-	//animator->AddAnimation(new AnimationClip(2, 12, 2, "BlueBubbles"));
+
+	if(m_PlayerType == PlayerType::bub)
+		animator->AddAnimation(new AnimationClip(0, 12, 2, "BlueBubbles"), 0);
+	else
+		animator->AddAnimation(new AnimationClip(2, 12, 2, "GreenBubbles"), 0);
 	animator->Play();
 	pBubble->AddComponent(animator);
 

@@ -5,14 +5,15 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "EnemyState.h"
+#include "GameComponentType.h"
 
-AIController::AIController(EnemyBehaviour* pEnemy)
+AIController::AIController()
 	:m_pRigidbody{nullptr}
 	,m_pEnemyBehaviour{nullptr}
 	,m_pCurrentState{nullptr}
 	,m_IsLookingLeft{bool(rand()%2)}
 {
-	m_pEnemyBehaviour = pEnemy;
+	m_TypeId = int(GameComponentType::aicontroller);
 }
 
 AIController::~AIController()
@@ -22,6 +23,19 @@ AIController::~AIController()
 		delete m_pCurrentState;
 		m_pCurrentState = nullptr;
 	}
+}
+
+void AIController::LinkEnemy(EnemyBehaviour* pEnemy)
+{
+	m_pEnemyBehaviour = pEnemy;
+}
+
+void AIController::Load(divengine::BinaryReader& )
+{
+}
+
+void AIController::Save(divengine::BinaryWriter& )
+{
 }
 
 void AIController::Update()
@@ -52,6 +66,11 @@ void AIController::Update()
 }
 
 void AIController::Initialize()
+{
+
+}
+
+void AIController::PostInitialize()
 {
 	if (!m_pEnemyBehaviour)
 		divengine::Debug::LogError("No enemy behaviour found for the ai controller!");

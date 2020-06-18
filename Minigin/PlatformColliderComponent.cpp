@@ -49,12 +49,14 @@ glm::vec2 divengine::PlatformColliderComponent::ResolveCollision(const Circlef& 
 
 void divengine::PlatformColliderComponent::Load(divengine::BinaryReader& reader)
 {
+	ColliderComponent::Load(reader);
 	reader.Read(m_Rect);
 	reader.Read(m_Offset);
 }
 
 void divengine::PlatformColliderComponent::Save(divengine::BinaryWriter& writer)
 {
+	ColliderComponent::Save(writer);
 	writer.Write(m_Rect);
 	writer.Write(m_Offset);
 }

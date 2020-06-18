@@ -17,6 +17,9 @@ namespace divengine
 		virtual glm::vec2 ResolveCollision(const Rectf& rect, float restitution) override;
 		virtual glm::vec2 ResolveCollision(const Circlef& circle, float restitution) override;
 
+		virtual void Load(divengine::BinaryReader& reader) override;
+		virtual void Save(divengine::BinaryWriter& writer) override;
+
 	protected:
 		virtual void Update() override;
 		virtual void Initialize() override;

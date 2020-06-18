@@ -13,13 +13,16 @@ class Health;
 class EnemyBehaviour : public divengine::BaseComponent
 {
 	public:
-		EnemyBehaviour(int damage = 1);
+		EnemyBehaviour(int damage = 1, bool ai = true);
 		virtual ~EnemyBehaviour() = default;
 		virtual void Attack() = 0;
 		virtual void Die() = 0;
 
 		bool IsInbubble() const { return m_IsInBubble; };	
 		void PopBubble();
+
+		virtual void Load(divengine::BinaryReader& reader) override;
+		virtual void Save(divengine::BinaryWriter& writer) override;
 
 protected:
 	virtual void Update() override;
@@ -36,5 +39,6 @@ private:
 	float m_DeathCooldown;
 	float m_CurrentDeathTime;
 	bool m_IsDead;
+	bool m_IsAI;
 };
 

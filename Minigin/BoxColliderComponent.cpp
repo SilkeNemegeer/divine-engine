@@ -181,6 +181,7 @@ glm::vec2 divengine::BoxColliderComponent::ResolveCollision(const Circlef& , flo
 
 void divengine::BoxColliderComponent::Load(divengine::BinaryReader& reader)
 {
+	ColliderComponent::Load(reader);
 	//Rect & offset
 	reader.Read(m_Rect);
 	reader.Read(m_Offset);
@@ -188,6 +189,7 @@ void divengine::BoxColliderComponent::Load(divengine::BinaryReader& reader)
 
 void divengine::BoxColliderComponent::Save(divengine::BinaryWriter& writer)
 {
+	ColliderComponent::Save(writer);
 	writer.Write(m_Rect);
 	writer.Write(m_Offset);
 }

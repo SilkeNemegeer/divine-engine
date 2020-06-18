@@ -14,15 +14,7 @@ Scene::Scene(const std::string& name) : m_Name(name){}
 
 Scene::~Scene()
 {
-	for (auto pObject : m_ObjectsToDelete)
-	{
-		SAFEDELETE(pObject);
-	}
-
-	for (auto pObject : m_Objects)
-	{
-		SAFEDELETE(pObject);
-	}
+	Destroy();
 }
 
 void Scene::AddObject(GameObject* object)
@@ -45,6 +37,19 @@ void divengine::Scene::DestroyObject(GameObject* pObject)
 //	m_Objects.erase(it);
 	pObject->SetActive(false);
 	m_ObjectsToDelete.push_back(pObject);
+}
+
+void divengine::Scene::Destroy()
+{
+	for (auto pObject : m_ObjectsToDelete)
+	{
+		SAFEDELETE(pObject);
+	}
+
+	for (auto pObject : m_Objects)
+	{
+		SAFEDELETE(pObject);
+	}
 }
 
 std::vector<GameObject*> divengine::Scene::FindObjectsWithTag(const std::string& tag)

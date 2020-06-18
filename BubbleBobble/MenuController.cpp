@@ -14,6 +14,7 @@
 #include "GameComponentType.h"
 #include "InputManager.h"
 #include "BubbleBobbleGame.h"
+#include "FileManager.h"
 
 MenuController::MenuController()
 	:m_CurrentButtonId{0}
@@ -62,8 +63,8 @@ void MenuController::Select()
 		BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::solo;
 		//Load the scene with the right gamemode
 		
-
-		divengine::SceneManager::GetInstance().SetAsCurrentScene("Level1");
+		FileManager::GetInstance().LoadLevel("../Data/Level1.div", "Level1");
+		//divengine::SceneManager::GetInstance().SetAsCurrentScene("Level1");
 
 		//Load first scene
 		break;

@@ -204,6 +204,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="ItemBehaviour.cpp" />
+    <ClCompile Include="LevelBehaviour.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaitaBehaviour.cpp" />
     <ClCompile Include="MenuController.cpp" />
@@ -232,6 +233,7 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClInclude Include="Health.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="ItemBehaviour.h" />
+    <ClInclude Include="LevelBehaviour.h" />
     <ClInclude Include="MaitaBehaviour.h" />
     <ClInclude Include="MenuController.h" />
     <ClInclude Include="PlayerController.h" />

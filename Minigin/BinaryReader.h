@@ -18,7 +18,11 @@ namespace divengine
 
 		void Read(std::string& string);
 		void Read(glm::vec2& vec);
+		void Read(const char* string);
 		void Read(Rectf& rect);
+		void Read(SDL_Rect& rect);
+		void Read(SDL_Color& color);
+		void Read(Circlef& circle);
 
 	private:
 		std::ifstream m_ReadStream;

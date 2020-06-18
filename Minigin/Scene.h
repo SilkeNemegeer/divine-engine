@@ -12,6 +12,7 @@ namespace divengine
 	public:
 		void AddObject(GameObject* object);
 		void DestroyObject(GameObject* pObject);
+		void Destroy();
 		std::vector<GameObject*> FindObjectsWithTag(const std::string& tag);
 		void AddCollider(ColliderComponent* pCollider);
 		void RemoveCollider(ColliderComponent* pCollider);

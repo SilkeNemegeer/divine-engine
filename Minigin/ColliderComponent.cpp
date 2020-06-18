@@ -129,8 +129,6 @@ void divengine::ColliderComponent::Load(divengine::BinaryReader& reader)
 {
 	reader.Read(m_IsTrigger);
 
-	m_pRigidbody = m_pGameObject->GetComponent<RigidbodyComponent>(); //Get the rigidbody
-
 	//read material id
 	reader.Read(m_MaterialId);
 	if (m_MaterialId != -1)

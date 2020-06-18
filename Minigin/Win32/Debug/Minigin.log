@@ -1,5 +1,10 @@
 ﻿  MiniginPCH.cpp
+  AnimationClip.cpp
+  Animator.cpp
   BaseComponent.cpp
+  BaseGame.cpp
+  BinaryReader.cpp
+  BinaryWriter.cpp
   BoxColliderComponent.cpp
   CircleColliderComponent.cpp
   ColliderComponent.cpp
@@ -9,33 +14,29 @@
   DebugRenderer.cpp
   Font.cpp
   FPSComponent.cpp
-  Game.cpp
   GameObject.cpp
   InputManager.cpp
+  InputMap.cpp
+  MaterialManager.cpp
   Minigin.cpp
+  Generating Code...
+  Compiling...
   PlatformColliderComponent.cpp
   RenderComponent.cpp
   Renderer.cpp
   ResourceManager.cpp
   RigidbodyComponent.cpp
   Scene.cpp
-  Generating Code...
-  Compiling...
   SceneManager.cpp
   ServiceLocator.cpp
   SoundManager.cpp
   SpriteComponent.cpp
+  Structs.cpp
   TextComponent.cpp
   TextObject.cpp
   Texture2D.cpp
   Time.cpp
   Timer.cpp
   TransformComponent.cpp
-  Generating Code...
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_sdl.cpp
-  imgui_widgets.cpp
   Generating Code...
   Minigin.vcxproj -> D:\Silke\DAE\Semester2\DivineEngine\Win32\Debug\Minigin.lib
