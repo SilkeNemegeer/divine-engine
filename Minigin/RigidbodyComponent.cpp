@@ -95,6 +95,9 @@ void divengine::RigidbodyComponent::Update()
 	m_Acceleration = glm::vec2();
 	if (!m_IsStatic && !m_IsKinematic)
 	{
+		m_Position = m_pGameObject->GetPos();
+		HandleCollisions();
+
 		//Only move & check collision for dynamic bodies 
 		glm::vec2 force = m_Force / m_Mass; //Apply forces
 		m_Acceleration.y = -m_Gravity; 	//Apply gravity
@@ -110,15 +113,22 @@ void divengine::RigidbodyComponent::Update()
 		m_Acceleration.x -= dragForce * m_Velocity.x;
 		m_Acceleration.y -= dragForce * m_Velocity.y;
 
-		HandleCollisions();
+
+
 
 		m_Velocity += m_Acceleration * Time::GetInstance().GetDeltaTime();
 
-		auto position = m_pGameObject->GetPosition();
-		glm::vec2 newPos{ position.x, position.y };
-		newPos += m_Velocity;// *Time::GetInstance().GetDeltaTime();
+		//auto position = m_pGameObject->GetPosition();
+		//glm::vec2 newPos{ position.x, position.y };
+		//newPos += m_Velocity;// *Time::GetInstance().GetDeltaTime();
 
-		m_pGameObject->SetPosition(newPos.x, newPos.y, position.z);
+		m_Position += m_Velocity;
+
+		//m_pGameObject->SetPosition(newPos.x, newPos.y, position.z);
+
+
+		m_pGameObject->SetPos(m_Position);
+
 	}
 
 	UpdateCollidingObjects();
@@ -143,8 +153,9 @@ void divengine::RigidbodyComponent::HandleCollisions()
 	glm::vec2 penetration{};
 
 	//Use smallest restitution
-	float XRestitution = 1.f;
-	float YRestitution = 1.f;
+	/*float XRestitution = 1.f;
+	float YRestitution = 1.f;*/
+	float finalRestitution{2.f};
 	bool isColliding = false;
 	for (auto& collider : SceneManager::GetInstance().GetCurrentScene()->GetColliders()) //check for new colliders
 	{
@@ -163,51 +174,75 @@ void divengine::RigidbodyComponent::HandleCollisions()
 				{
 					bounciness = collider->Material()->Bounciness;
 				}
-				if (penetration.x > maxPenetration.x)
+
+				maxPenetration += penetration;
+				if (bounciness < finalRestitution)
+					finalRestitution = bounciness;
+
+
+				if (!collider->GetRigidBody()->IsKinematic() && !collider->GetRigidBody()->IsStatic())
 				{
-					XRestitution = bounciness;
-					maxPenetration.x = penetration.x;
+					//2 dynamics colliding -> also adapt velocity of other
+					auto otherVel = collider->GetRigidBody()->GetVelocity();
+					collider->GetRigidBody()->SetVelocity(-1.f * otherVel);
+					//collider->GetRigidBody()->ClearForce();
+					m_Force.x = 0.f;
+					m_Force.y = 0.f;
 				}
-				if (penetration.y > maxPenetration.y)
-				{
-					YRestitution = bounciness;
-					maxPenetration.y = penetration.y;
-				}
+
+				//if (penetration.x > maxPenetration.x)
+				//{
+				//	XRestitution = bounciness;
+				//	maxPenetration.x = penetration.x;
+				//}
+				//if (penetration.y > maxPenetration.y)
+				//{
+				//	YRestitution = bounciness;
+				//	maxPenetration.y = penetration.y;
+				//}
 			}
+
+			
 			NotifyCollisions(collider);
 
 		}
 	}
 
+	if (finalRestitution >= 2.f)
+		finalRestitution = 0.f;
+
+	maxPenetration.x = abs(maxPenetration.x);
+	maxPenetration.y = abs(maxPenetration.y);
+
 	if (isColliding)
 	{
-		if (abs(maxPenetration.x - maxPenetration.y) < 0.4f) //Corner
+		if (abs(maxPenetration.x - maxPenetration.y) < 0.1f) //Corner
 		{
 			//Set the velocity according to the resolve collision
 			if (rand() % 2)
 			{
-				m_Velocity.x = -m_Velocity.x * XRestitution;
+				m_Velocity.x = -m_Velocity.x * finalRestitution;
 
 				if (abs(m_Velocity.x) < 0.004f)
 					m_Velocity.x = 0.f;
 			}
 			else
 			{
-				m_Velocity.y = -m_Velocity.y * YRestitution;
+				m_Velocity.y = -m_Velocity.y * finalRestitution;
 				if (abs(m_Velocity.y) < 0.004f)
 					m_Velocity.y = 0;
 			}
 		}
 		else if (maxPenetration.x > maxPenetration.y) //horizontal penetration
 		{
-		m_Velocity.x = -m_Velocity.x * XRestitution;
+		m_Velocity.x = -m_Velocity.x * finalRestitution;
 
 		if (abs(m_Velocity.x) < 0.004f)
 			m_Velocity.x = 0.f;
 		}
 		else //vertical penetration
 		{
-		m_Velocity.y = -m_Velocity.y * YRestitution; 
+		m_Velocity.y = -m_Velocity.y * finalRestitution;
 		if (abs(m_Velocity.y) < 0.004f)
 			m_Velocity.y = 0;
 		}

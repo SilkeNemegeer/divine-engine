@@ -198,6 +198,8 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClCompile Include="BubbleDragonState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="EnemyBehaviour.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="Health.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -223,6 +225,8 @@ xcopy "$(SolutionDir)3rdParty\Fmod\lib\x64\*.dll" "$(OutputPath)" /R /Y</Command
     <ClInclude Include="Button.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="EnemyBehaviour.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GameComponentType.h" />
     <ClInclude Include="Health.h" />

@@ -2,6 +2,7 @@
 #include <vector>
 #include "AnimationClip.h"
 #include "BaseComponent.h"
+#include <map>
 
 namespace divengine
 {
@@ -14,8 +15,8 @@ namespace divengine
 			Animator(const std::string& path, float clipHeight, float clipWidth);
 			~Animator();
 			void SetAnimation(AnimationClip* animation);
-			void SetAnimation(const std::string& name);
-			void AddAnimation(AnimationClip* animation);
+			void SetAnimation(unsigned int animId);
+			void AddAnimation(AnimationClip* animation, unsigned int id);
 
 			void Restart();
 			void Play();
@@ -35,7 +36,7 @@ namespace divengine
 		virtual void Start() override;
 
 		private:
-			std::vector<AnimationClip*> m_pAnimations;
+			std::map<unsigned int, AnimationClip*> m_Animations;
 			AnimationClip* m_pCurrentAnimation;
 
 			bool m_IsPlaying;

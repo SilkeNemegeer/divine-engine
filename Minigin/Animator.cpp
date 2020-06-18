@@ -7,8 +7,8 @@
 #include "GameObject.h"
 
 divengine::Animator::Animator(const std::string& path, float clipHeight, float clipWidth)
-	:m_pAnimations(std::vector<AnimationClip*>()),
-	m_AnimationSpeed{1.0f}
+	:m_Animations(std::map<unsigned int, AnimationClip*>())
+	,m_AnimationSpeed{1.0f}
 	,m_IsPlaying{false}
 	,m_pCurrentAnimation(nullptr)
 	,m_Path{path}
@@ -28,9 +28,9 @@ divengine::Animator::Animator(const std::string& path, float clipHeight, float c
 
 divengine::Animator::~Animator()
 {
-	for (auto pAnim : m_pAnimations)
+	for (auto pAnim : m_Animations)
 	{
-		SAFEDELETE(pAnim);
+		SAFEDELETE(pAnim.second);
 	}
 }
 
@@ -40,23 +40,28 @@ void divengine::Animator::SetAnimation(AnimationClip* animation)
 	m_pCurrentAnimation = animation;
 }
 
-void divengine::Animator::SetAnimation(const std::string& name)
+void divengine::Animator::SetAnimation(unsigned int animId)
 {
-	//Set current clip
-	std::vector<AnimationClip*>::iterator it = std::find_if(m_pAnimations.begin(), m_pAnimations.end(), [name](AnimationClip* clip) {return (clip->m_Name == name); });
-	if (it != m_pAnimations.end())
+
+	if (m_Animations.find(animId) == m_Animations.end())
 	{
-		SetAnimation(*it);
+		Debug::LogWarning("Animator::SetAnimation: invalid animation ID!");
+		return;
 	}
-	else
-	{
-		Debug::LogWarning("Animator::SetAnimation: no animations exists with name ", name.c_str(), "!");
-	}
+
+	SetAnimation(m_Animations[animId]);
 }
 
-void divengine::Animator::AddAnimation(AnimationClip *animation)
+
+void divengine::Animator::AddAnimation(AnimationClip *animation, unsigned int id)
 {
-	m_pAnimations.push_back(animation);
+	if (m_Animations.find(id) != m_Animations.end())
+	{
+		Debug::LogWarning("Animator::AddAnimation: an animation with this ID was already added!");
+		return;
+	}
+
+	m_Animations[id] = animation;
 	if (!m_pCurrentAnimation)
 		m_pCurrentAnimation = animation;
 }
@@ -119,7 +124,6 @@ void divengine::Animator::Render()
 
 void divengine::Animator::Start()
 {
-	//m_pRenderComp = new RenderComponent(m_Path);
 	m_pRenderComp = m_pGameObject->GetComponent<RenderComponent>();
 	if (!m_pRenderComp)
 	{

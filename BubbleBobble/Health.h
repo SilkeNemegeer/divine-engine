@@ -11,6 +11,7 @@ public:
 		m_CurrentHealth -= damage;
 		if (m_CurrentHealth <= 0)
 		{
+			m_CurrentHealth = 0;
 			if (!m_IsDead)
 				Kill();
 			return true;
@@ -22,13 +23,11 @@ public:
 	{
 		if (m_DeathCall)
 			m_DeathCall();
-		//die
-		m_CurrentHealth = 0;
 
 		m_IsDead = true;
 	}
 
-	int Lives() const
+	int GetHealth() const
 	{
 		return m_CurrentHealth;
 	}

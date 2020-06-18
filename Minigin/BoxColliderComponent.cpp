@@ -65,7 +65,8 @@ bool divengine::BoxColliderComponent::IsColliding(const Circlef& circle) const
 
 glm::vec2 divengine::BoxColliderComponent::ResolveCollision(const Rectf& rect, float restitution)
 {
-	auto newPosition = m_pTransform->GetPosition();
+//	auto newPosition = m_pTransform->GetPosition();
+	auto newPosition = m_pRigidbody->GetPosition();
 	auto newVelocity = m_pRigidbody->GetVelocity();
 
 	//Find centers
@@ -166,9 +167,11 @@ glm::vec2 divengine::BoxColliderComponent::ResolveCollision(const Rectf& rect, f
 	}
 
 	//m_pRigidbody->SetVelocity(newVelocity);
-	m_pTransform->SetPosition(newPosition);
+	m_pRigidbody->SetPosition(newPosition);
+	//m_pTransform->SetPosition(newPosition);
 
-	return glm::vec2(absX, absY);
+	return deltaCenterOffset;
+	//return glm::vec2(absX, absY);
 }
 
 glm::vec2 divengine::BoxColliderComponent::ResolveCollision(const Circlef& , float )

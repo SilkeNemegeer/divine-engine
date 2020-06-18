@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComponent.h"
+#include "EnemyBehaviour.h"
 
 namespace divengine
 {
@@ -10,10 +10,10 @@ namespace divengine
 
 class Health;
 
-class MaitaBehaviour : public divengine::BaseComponent
+class MaitaBehaviour : public EnemyBehaviour
 {
 public:
-	MaitaBehaviour();
+	MaitaBehaviour(int damage = 1);
 	~MaitaBehaviour();
 
 	MaitaBehaviour(const MaitaBehaviour& other) = delete;
@@ -25,6 +25,10 @@ protected:
 	virtual void Update() override;
 	virtual void Render() override {};
 	virtual void Initialize() override;
+	virtual void Start() override;
+
+	virtual void Die() override;
+	virtual void Attack() override {};
 
 private:
 	void SpawnFrenchFries();
