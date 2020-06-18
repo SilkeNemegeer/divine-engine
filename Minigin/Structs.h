@@ -7,6 +7,8 @@
 
 namespace divengine
 {
+	class ColliderComponent;
+
 	struct Vector2
 	{
 		Vector2(float X = 0.f, float Y = 0.f) : x{ X }, y{ Y }{}
@@ -71,4 +73,32 @@ namespace divengine
 	{
 		return abs(value1 - value2) < 0.001f;
 	}
+
+	inline float SquaredDistance(const glm::vec2& v1, const glm::vec2& v2)
+	{
+		float Xdist = v1.x - v2.x;
+		float YDist = v1.y - v2.y;
+		return { Square(Xdist) + Square(YDist) };
+	}
+
+	inline float Distance(const glm::vec2& v1, const glm::vec2& v2)
+	{
+		return sqrt(SquaredDistance(v1, v2));
+	}
+
+	struct HitInfo
+	{
+		//glm::vec2 IntersectPoint;
+		//glm::vec2 Normal;
+		float distance;
+		ColliderComponent* pCollider;
+	};
+
+	struct Line
+	{
+		glm::vec2 p1;
+		glm::vec2 p2;
+	};
+
+	bool HorizontalRaycast(const glm::vec2& origin, float rayLength, const glm::vec2& dir, HitInfo& hitInfo);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "AnimationsEnum.h"
 
 namespace divengine
 {
@@ -12,6 +13,11 @@ class Health;
 class PlayerController : public divengine::BaseComponent
 {
 public:
+	enum class PlayerType
+	{
+		bub, bob
+	};
+
 	enum class State
 	{
 		walkLeft, walkRight, idle, attack, dead

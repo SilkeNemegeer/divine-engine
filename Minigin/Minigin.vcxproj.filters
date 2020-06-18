@@ -192,6 +192,9 @@
     <ClInclude Include="AnimationClip.h">
       <Filter>Content</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationsEnum.h">
+      <Filter>Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -319,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="AnimationClip.cpp">
       <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Structs.cpp">
+      <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

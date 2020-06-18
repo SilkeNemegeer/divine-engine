@@ -34,6 +34,8 @@ namespace divengine
 		void SetCollider(ColliderComponent* collider);
 		void RemoveCollider(ColliderComponent* collider);
 		ColliderComponent* GetCollider() const { return m_pColliderComp; };
+		const glm::vec2& GetPosition() const { return m_Position; };
+		void SetPosition(const glm::vec2& pos) { m_Position = pos; };
 		std::unordered_set<ColliderComponent*> Colliders() const { return m_pCollidingObjects; };
 
 	protected:
@@ -50,6 +52,7 @@ namespace divengine
 		bool m_IsKinematic;
 		bool m_IsStatic;
 		ColliderComponent* m_pColliderComp;
+		glm::vec2 m_Position;
 		void HandleCollisions();
 		void NotifyCollisions(ColliderComponent* pCollider);
 		void UpdateCollidingObjects();

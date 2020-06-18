@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Health.h"
 
 BubbleBehaviour::BubbleBehaviour()
 	:m_MaxLifeTime{2.5f}
@@ -38,6 +39,7 @@ void BubbleBehaviour::Update()
 
 void BubbleBehaviour::Initialize()
 {
+	m_pGameObject->SetTag("Bubble");
 	m_pTransform = m_pGameObject->GetComponent<divengine::TransformComponent>();
 	m_pRigidbody = m_pGameObject->GetComponent<divengine::RigidbodyComponent>();
 }
@@ -45,10 +47,13 @@ void BubbleBehaviour::Initialize()
 void BubbleBehaviour::OnTriggerEnter(divengine::GameObject* trigger)
 {
 	if (strcmp(trigger->GetTag().c_str(), "Enemy") == 0)
-	{
-		std::cout << "Hit an enemy\n";
-		
+	{		
 		//call bubble hit on enemy behaviour component
+		auto enemyHealth = trigger->GetComponent<Health>();
+		if (enemyHealth)
+		{
+			enemyHealth->Damage(1);
+		}
 		divengine::SceneManager::GetInstance().GetCurrentScene()->DestroyObject(m_pGameObject);
 	}
 }

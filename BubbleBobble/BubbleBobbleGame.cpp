@@ -21,6 +21,9 @@
 #include "PhysicsMaterial2D.h"
 #include "ItemBehaviour.h"
 #include "HUD.h"
+#include "ZenChanBehaviour.h"
+#include "MaitaBehaviour.h"
+#include "AIController.h"
 
 BubbleBobbleGame::GameMode BubbleBobbleGame::m_GameMode = BubbleBobbleGame::GameMode::solo;
 
@@ -139,10 +142,11 @@ void LoadDemoLevel()
 	t->Start();
 	demoScene.AddObject(static_cast<std::shared_ptr<GameObject>>(t));*/
 
+
 	go = new GameObject(Vector3(100, 50, 0), 5.f);
 	auto animator = new Animator("sprites.png", 16, 16);
-	animator->AddAnimation(new AnimationClip(0, 2, 2, "MoveRight", 2));
-	animator->AddAnimation(new AnimationClip(0, 1, 2, "MoveLeft", 5));
+	animator->AddAnimation(new AnimationClip(0, 2, 2, "MoveRight", 2), CharacterAnimations::moveRight);
+	animator->AddAnimation(new AnimationClip(0, 1, 2, "MoveLeft", 5), CharacterAnimations::moveLeft);
 	go->AddComponent(animator);
 	animator->Play();
 	demoScene.AddObject(go);
@@ -263,10 +267,10 @@ void LoadLevel1()
 
 	pPlayer->AddComponent(new BoxColliderComponent(glm::vec2(32, 32), glm::vec2(), false, 0));
 	pPlayer->AddComponent(new PlayerController());
-	pPlayer->AddComponent(new Health(4));
+	pPlayer->AddComponent(new Health(1));
 	level1Scene.AddObject(pPlayer);
 
-
+	//Add pickup
 	GameObject* pPickUp = new GameObject(Vector3(250, 250, 0), 0.5f);
 	pPickUp->AddComponent(new RenderComponent("Items/Bubble_Bobble_item_french_fries.png"));
 	pPickUp->AddComponent(new RigidbodyComponent(true));
@@ -274,12 +278,51 @@ void LoadLevel1()
 	pPickUp->AddComponent(new ItemBehaviour(200));
 	level1Scene.AddObject(pPickUp);
 
+	//ADD hud
 	GameObject* pHud = new GameObject(Vector3(60, 20, 0));
 	auto font = ServiceLocator::GetResourceManager()->LoadFont("Fonts/Airstream.ttf", 30);
 	auto hudComp = new HUD(font, {0,0,0});
 	hudComp->LinkPlayer(pPlayer->GetComponent<PlayerController>());
 	pHud->AddComponent(hudComp);
 	level1Scene.AddObject(pHud);
+
+	//Add enemies
+	GameObject* pZenChan = new GameObject(Vector3(60, 200, 0),2);
+	pZenChan->AddComponent(new RigidbodyComponent());
+	pZenChan->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
+	renderComp = new RenderComponent("sprites.png");
+	pZenChan->AddComponent(renderComp);
+	animator = new Animator("sprites.png", 16, 16);
+	animator->AddAnimation(new AnimationClip(2, 4, 2, "WalkingLeft"), CharacterAnimations::moveLeft);
+	animator->AddAnimation(new AnimationClip(0, 4, 2, "WalkingRight"), CharacterAnimations::moveRight);
+	animator->AddAnimation(new AnimationClip(4, 4, 2, "WalkingRight"), CharacterAnimations::inBubble);
+	animator->Play();
+	pZenChan->AddComponent(animator);
+	auto zenChanBehaviour = new ZenChanBehaviour();
+	pZenChan->AddComponent(zenChanBehaviour);
+	pZenChan->AddComponent(new AIController(zenChanBehaviour));
+
+	//has ai controller -> so it moves to the enemy
+	level1Scene.AddObject(pZenChan);
+
+	//Add Maita
+	GameObject* pMaita = new GameObject(Vector3(150, 50, 0),2);
+	pMaita->AddComponent(new RigidbodyComponent());
+	pMaita->AddComponent(new BoxColliderComponent(glm::vec2(32, 32)));
+	renderComp = new RenderComponent("sprites.png");
+	pMaita->AddComponent(renderComp);
+	animator = new Animator("sprites.png", 16, 16);
+	animator->AddAnimation(new AnimationClip(4, 15, 2, "WalkingLeft"), CharacterAnimations::moveLeft);
+	animator->AddAnimation(new AnimationClip(2, 15, 2, "WalkingRight"), CharacterAnimations::moveRight);
+	animator->AddAnimation(new AnimationClip(6, 15, 4, "WalkingRight"), CharacterAnimations::inBubble);
+	animator->Play();
+	pMaita->AddComponent(animator);
+	auto maitaBehviour = new MaitaBehaviour();
+	pMaita->AddComponent(maitaBehviour);
+	pMaita->AddComponent(new AIController(maitaBehviour));
+
+	//has ai controller -> so it moves to the enemy
+	level1Scene.AddObject(pMaita);
 
 	//animator->Play();
 	//If works -> add all colliders

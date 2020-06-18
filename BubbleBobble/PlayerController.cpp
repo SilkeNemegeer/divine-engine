@@ -26,7 +26,7 @@ PlayerController::PlayerController(int id)
 	,m_FireBubbleForce{100.f}
 	,m_pHealth{nullptr}
 	,m_MaxLives{4}
-	,m_TotalRespawnTime{1.f}
+	,m_TotalRespawnTime{1.5f}
 	,m_CurrentDeadTime{0.f}
 	,m_Score{0.f}
 {
@@ -66,14 +66,20 @@ void PlayerController::Update()
 		m_CurrentDeadTime += Time::GetInstance().GetDeltaTime();
 		if (m_CurrentDeadTime > m_TotalRespawnTime)
 		{
-			if (m_pHealth->Lives() <= 0)
+			if (m_MaxLives <= 0)
 			{
 				//End level -> display end menu (check game mode to see who won, ...)
 				std::cout << "Game Over\n";
 				divengine::SceneManager::GetInstance().SetAsCurrentScene("MainMenu");
+				m_MaxLives = 4;
+				return;
 			}
+			std::cout << "die\n";
+			m_pHealth->ResetHealth();
+			m_pGameObject->SetPos(glm::vec2(250, 50));
+			m_pRigidbody->ClearForce();
+			m_pRigidbody->SetVelocity(glm::vec2(0.f, 0.f));
 			ChangeState(State::idle);
-			m_CurrentDeadTime = 0.f;
 		}
 		break;
 	default:
@@ -99,19 +105,19 @@ void PlayerController::Initialize()
 		divengine::Debug::LogError("No rigidbody found in player");
 		return;
 	}
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 2, "MoveLeft", 3)); //TODO: change strings to ints
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 2, "MoveRight", 3));
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 1, "IdleLeft", 1)); //TODO: change strings to ints
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 1, "IdleRight", 1));
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(4, 0, 2, "AttackRight", 5));
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(6, 0, 2, "AttackLeft", 3));
-	m_pAnimator->AddAnimation(new divengine::AnimationClip(8, 0, 4, "Dead", 5));
-	m_pAnimator->SetAnimation("IdleLeft");
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 2, "MoveLeft", 3), CharacterAnimations::moveLeft); //TODO: change strings to ints
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 2, "MoveRight", 3), CharacterAnimations::moveRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(2, 0, 1, "IdleLeft", 1), CharacterAnimations::idleLeft); //TODO: change strings to ints
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(0, 0, 1, "IdleRight", 1), CharacterAnimations::idleRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(4, 0, 2, "AttackRight", 5), CharacterAnimations::attackRight);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(6, 0, 2, "AttackLeft", 3), CharacterAnimations::attackLeft);
+	m_pAnimator->AddAnimation(new divengine::AnimationClip(8, 0, 4, "Dead", 5), CharacterAnimations::inBubble);
+	m_pAnimator->SetAnimation(CharacterAnimations::idleLeft);
 	m_IsFacingLeft = true;
 	m_pAnimator->Play();
-	m_pAnimator->SetAnimation("IdleLeft");
+//	m_pAnimator->SetAnimation("IdleLeft");
 	m_IsFacingLeft = true;
-	m_pAnimator->Play();
+	//m_pAnimator->Play();
 }
 
 void PlayerController::Start()
@@ -137,11 +143,17 @@ void PlayerController::Start()
 		{
 			Die();
 		});
+
+	m_pHealth->ResetHealth();
+	m_pGameObject->SetPos(glm::vec2(250, 50));
+	m_pRigidbody->ClearForce();
+	m_pRigidbody->SetVelocity(glm::vec2(0.f, 0.f));
+	ChangeState(State::idle);
 }
 
 void PlayerController::MoveLeft()
 {
-	if (!m_pRigidbody)
+	if (!m_pRigidbody || m_CurrentState == State::dead)
 		return;
 	divengine::Debug::Log("MoveLeft");
 	m_pRigidbody->AddForce(glm::vec2(-15.f, 0.f));
@@ -155,7 +167,7 @@ void PlayerController::MoveLeft()
 
 void PlayerController::MoveRight()
 {
-	if (!m_pRigidbody)
+	if (!m_pRigidbody || m_CurrentState == State::dead)
 		return;
 	divengine::Debug::Log("MoveRight");
 	m_pRigidbody->AddForce(glm::vec2(15.f, 0.f));
@@ -169,7 +181,7 @@ void PlayerController::MoveRight()
 
 void PlayerController::Jump()
 {
-	if (!m_pRigidbody)
+	if (!m_pRigidbody || m_CurrentState == State::dead)
 		return;
 
 	divengine::Debug::Log("Jump");
@@ -184,6 +196,8 @@ void PlayerController::Jump()
 
 void PlayerController::Attack()
 {
+	if (m_CurrentState == State::dead)
+		return;
 	divengine::Debug::Log("Attack");
 	ChangeState(State::attack);
 }
@@ -193,26 +207,35 @@ void PlayerController::SetAnimation(State anim)
 	switch (anim)
 	{
 	case PlayerController::State::walkLeft:
-			m_pAnimator->SetAnimation("MoveLeft");
+			//m_pAnimator->SetAnimation("MoveLeft");
+		m_pAnimator->SetAnimation(CharacterAnimations::moveLeft);
+
 		break;
 	case PlayerController::State::walkRight:
-		m_pAnimator->SetAnimation("MoveRight");
+		//m_pAnimator->SetAnimation("MoveRight");
+		m_pAnimator->SetAnimation(CharacterAnimations::moveRight);
+
 		break;
 
 	case PlayerController::State::idle:
 		if (m_IsFacingLeft)
-			m_pAnimator->SetAnimation("IdleLeft");
+			m_pAnimator->SetAnimation(CharacterAnimations::idleLeft);
+			//m_pAnimator->SetAnimation("IdleLeft");
 		else
-			m_pAnimator->SetAnimation("IdleRight");
+			m_pAnimator->SetAnimation(CharacterAnimations::idleRight);
+			//m_pAnimator->SetAnimation("IdleRight");
 		break;
 	case PlayerController::State::attack:
 		if (m_IsFacingLeft)
-			m_pAnimator->SetAnimation("AttackLeft");
+			m_pAnimator->SetAnimation(CharacterAnimations::attackLeft);
+			//m_pAnimator->SetAnimation("AttackLeft");
 		else
-			m_pAnimator->SetAnimation("AttackRight");
+			m_pAnimator->SetAnimation(CharacterAnimations::attackRight);
+			//m_pAnimator->SetAnimation("AttackRight");
 		break;
 	case PlayerController::State::dead:
-		m_pAnimator->SetAnimation("Dead");
+		m_pAnimator->SetAnimation(CharacterAnimations::inBubble);
+		//m_pAnimator->SetAnimation("Dead");
 		break;
 	default:
 		break;
@@ -221,6 +244,10 @@ void PlayerController::SetAnimation(State anim)
 
 void PlayerController::Die()
 {
+	m_MaxLives -= 1;
+	m_CurrentDeadTime = 0.f;
+	if(m_MaxLives > 0)
+		m_pGameObject->SetPos(glm::vec2(250, 50));
 	ChangeState(PlayerController::State::dead);
 }
 
@@ -271,7 +298,8 @@ void PlayerController::FireBubble()
 	pBubble->AddComponent(behaviour);
 
 	auto animator = new Animator("sprites.png", 16,16);
-	animator->AddAnimation(new AnimationClip(0, 12, 2, "GreenBubbles"));
+	//animator->AddAnimation(new AnimationClip(0, 12, 2, "GreenBubbles"));
+	animator->AddAnimation(new AnimationClip(0, 12, 2, "GreenBubbles"), 0);
 	//animator->AddAnimation(new AnimationClip(2, 12, 2, "BlueBubbles"));
 	animator->Play();
 	pBubble->AddComponent(animator);

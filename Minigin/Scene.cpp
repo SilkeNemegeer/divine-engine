@@ -47,6 +47,19 @@ void divengine::Scene::DestroyObject(GameObject* pObject)
 	m_ObjectsToDelete.push_back(pObject);
 }
 
+std::vector<GameObject*> divengine::Scene::FindObjectsWithTag(const std::string& tag)
+{
+	std::vector<GameObject*> objects;
+
+	for (auto pObject : m_Objects)
+	{
+		if (strcmp(pObject->GetTag().c_str(), tag.c_str()) == 0)
+			objects.push_back(pObject);
+	}
+
+	return objects;
+}
+
 void divengine::Scene::AddCollider(ColliderComponent* pCollider)
 {
 	const auto it = std::find(m_pColliders.begin(), m_pColliders.end(), pCollider);

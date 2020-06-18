@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseComponent.h"
+#include "EnemyBehaviour.h"
 
 namespace divengine
 {
@@ -9,10 +9,10 @@ namespace divengine
 }
 
 class Health;
-class ZenChanBehaviour : public divengine::BaseComponent
+class ZenChanBehaviour : public EnemyBehaviour
 {
 public:
-	ZenChanBehaviour();
+	ZenChanBehaviour(int damage = 1);
 	~ZenChanBehaviour();
 
 	ZenChanBehaviour(const ZenChanBehaviour& other) = delete;
@@ -20,10 +20,14 @@ public:
 	ZenChanBehaviour& operator=(const ZenChanBehaviour& other) = delete;
 	ZenChanBehaviour& operator=(ZenChanBehaviour&& other) = delete;
 
+	virtual void Attack() {};
+	virtual void Die(); 
+
 protected:
 	virtual void Update() override;
 	virtual void Render() override {};
 	virtual void Initialize() override;
+	virtual void Start() override;
 
 private:
 	void SpawnWaterMelon();
